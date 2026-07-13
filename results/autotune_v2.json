@@ -8,6 +8,213 @@
     }
   ],
   "env_bests": {
+    "LunarLander-v3": {
+      "best_eval_mean": -76.56,
+      "best_eval_std": 59.55,
+      "best_train_best": -76.56,
+      "best_round": 0,
+      "best_config": {
+        "n_inputs": 8,
+        "n_outputs": 4,
+        "input_activation": "relu",
+        "output_activation": "tanh",
+        "hidden_activation": "tanh",
+        "bias_enabled": true,
+        "forbid_loops": true,
+        "seed": 0,
+        "init": {
+          "n_conn_multiplier": 0.99,
+          "weight_init_multiplier": 1.08,
+          "n_neurons_range": [
+            0,
+            2
+          ]
+        },
+        "mutation": {
+          "weight_select": "pct_shuffled",
+          "weight_pct": 1.0,
+          "weight_mod": "gaussian",
+          "weight_std": 0.215,
+          "weight_prob": 1.0,
+          "conn_select": "pct_shuffled",
+          "conn_pct": 0.0,
+          "conn_mod": "gaussian",
+          "conn_std": 0.4,
+          "neuron_select": "pct_shuffled",
+          "neuron_pct": 0.0,
+          "neuron_mod": "incoming_one",
+          "prune_select": "pct_shuffled",
+          "prune_pct": 0.0,
+          "prune_prob": 0.0
+        },
+        "policy": {
+          "kind": "per_type",
+          "prune_prob": 0.03,
+          "neuron_prob": 0.13,
+          "conn_prob": 0.3,
+          "weight_prob": 1.0,
+          "single_prune": 0.05,
+          "single_neuron": 0.1,
+          "single_conn": 0.25,
+          "single_weight": 0.6,
+          "nested_schedule": []
+        },
+        "generation": {
+          "pop_size": 50,
+          "asexual_pct": 0.75,
+          "crossover_pct": 0.25,
+          "interspecies": 1,
+          "elitism": 1,
+          "cull_pct": 0.57
+        },
+        "crossover": {
+          "topology": "fitter",
+          "weights": "average"
+        },
+        "speciation": {
+          "kind": "purge",
+          "initial_kind": "purge",
+          "subsequent_kind": "standard",
+          "target_species": 10,
+          "min_threshold": 0.05,
+          "max_threshold": 0.5,
+          "threshold_step": 0.025,
+          "similarity": "percentage",
+          "c1": 1.0,
+          "c2": 1.0,
+          "c3": 0.4,
+          "purge_keep": 10,
+          "purge_extra_mutations": 3
+        },
+        "optimizer": {
+          "enabled": false,
+          "lr": 0.1,
+          "weight_decay_l2": 0.0,
+          "weight_decay_l1": 0.0,
+          "method": "adam",
+          "adam_beta1": 0.9,
+          "adam_beta2": 0.999,
+          "adam_eps": 1e-08,
+          "momentum": 0.9,
+          "rmsprop_decay": 0.99
+        }
+      },
+      "history": [
+        {
+          "round": 0,
+          "env": "LunarLander-v3",
+          "changes": {
+            "weight_std": 0.215,
+            "conn_std": 0.4,
+            "weight_prob": 1.0,
+            "conn_prob": 0.3,
+            "neuron_prob": 0.13,
+            "prune_prob": 0.03,
+            "elitism": 1,
+            "cull_pct": 0.57,
+            "target_species": 10,
+            "n_conn_multiplier": 0.99,
+            "weight_init_multiplier": 1.08,
+            "best_eval_mean": -76.56,
+            "best_eval_std": 59.55,
+            "best_round": 0
+          },
+          "train_best": -76.56,
+          "eval_mean": -76.56,
+          "eval_std": 59.55,
+          "eval_min": -136.11,
+          "eval_max": -17.010000000000005,
+          "solved": false,
+          "elapsed_s": 0.0,
+          "is_best": true,
+          "notes": "manual_seed"
+        },
+        {
+          "round": 31,
+          "env": "LunarLander-v3",
+          "changes": {
+            "weight_std": 0.18381603249159012
+          },
+          "train_best": 7.834453375561807,
+          "eval_mean": -156.2167725857219,
+          "eval_std": 163.43759311816538,
+          "eval_min": -710.5938423848187,
+          "eval_max": 29.778309336772537,
+          "solved": false,
+          "elapsed_s": 17.722779750823975,
+          "is_best": false,
+          "notes": "perturbed_best(1)"
+        },
+        {
+          "round": 32,
+          "env": "LunarLander-v3",
+          "changes": {
+            "elitism": 2,
+            "weight_init_multiplier": 1.220963465307237
+          },
+          "train_best": 347.32748172288126,
+          "eval_mean": -96.03510247615651,
+          "eval_std": 76.75727248071749,
+          "eval_min": -332.6238838497787,
+          "eval_max": 48.31115775859439,
+          "solved": false,
+          "elapsed_s": 18.44836139678955,
+          "is_best": false,
+          "notes": "perturbed_best(2)"
+        },
+        {
+          "round": 36,
+          "env": "LunarLander-v3",
+          "changes": {
+            "weight_std": 0.18381603249159012
+          },
+          "train_best": 146.62899066428614,
+          "eval_mean": -226.6679687595051,
+          "eval_std": 143.73187733135373,
+          "eval_min": -550.3218797858183,
+          "eval_max": 213.38930756706455,
+          "solved": false,
+          "elapsed_s": 22.768112182617188,
+          "is_best": false,
+          "notes": "perturbed_best(1)"
+        },
+        {
+          "round": 37,
+          "env": "LunarLander-v3",
+          "changes": {
+            "elitism": 2,
+            "weight_init_multiplier": 1.220963465307237
+          },
+          "train_best": 1091.4422742779318,
+          "eval_mean": -123.38308160292681,
+          "eval_std": 127.71827581142001,
+          "eval_min": -471.58687266544143,
+          "eval_max": 48.02456761035285,
+          "solved": false,
+          "elapsed_s": 23.724127054214478,
+          "is_best": false,
+          "notes": "perturbed_best(2)"
+        },
+        {
+          "round": 38,
+          "env": "LunarLander-v3",
+          "changes": {
+            "elitism": 4,
+            "target_species": 14,
+            "conn_prob": 0.3165844880996367
+          },
+          "train_best": 489.21531950152377,
+          "eval_mean": -98.97942659173293,
+          "eval_std": 72.9268410094845,
+          "eval_min": -351.32630067558955,
+          "eval_max": 44.348150372134455,
+          "solved": false,
+          "elapsed_s": 27.45087218284607,
+          "is_best": false,
+          "notes": "fresh_start"
+        }
+      ]
+    },
     "MountainCar-v0": {
       "best_eval_mean": -109.19,
       "best_eval_std": 13.34,
@@ -228,162 +435,6 @@
           "elapsed_s": 100,
           "is_best": true,
           "notes": "manual_aggressive"
-        }
-      ]
-    },
-    "LunarLander-v3": {
-      "best_eval_mean": -76.56,
-      "best_eval_std": 59.55,
-      "best_train_best": -76.56,
-      "best_round": 0,
-      "best_config": {
-        "n_inputs": 8,
-        "n_outputs": 4,
-        "input_activation": "relu",
-        "output_activation": "tanh",
-        "hidden_activation": "tanh",
-        "bias_enabled": true,
-        "forbid_loops": true,
-        "seed": 0,
-        "init": {
-          "n_conn_multiplier": 0.99,
-          "weight_init_multiplier": 1.08,
-          "n_neurons_range": [
-            0,
-            2
-          ]
-        },
-        "mutation": {
-          "weight_select": "pct_shuffled",
-          "weight_pct": 1.0,
-          "weight_mod": "gaussian",
-          "weight_std": 0.215,
-          "weight_prob": 1.0,
-          "conn_select": "pct_shuffled",
-          "conn_pct": 0.0,
-          "conn_mod": "gaussian",
-          "conn_std": 0.4,
-          "neuron_select": "pct_shuffled",
-          "neuron_pct": 0.0,
-          "neuron_mod": "incoming_one",
-          "prune_select": "pct_shuffled",
-          "prune_pct": 0.0,
-          "prune_prob": 0.0
-        },
-        "policy": {
-          "kind": "per_type",
-          "prune_prob": 0.03,
-          "neuron_prob": 0.13,
-          "conn_prob": 0.3,
-          "weight_prob": 1.0,
-          "single_prune": 0.05,
-          "single_neuron": 0.1,
-          "single_conn": 0.25,
-          "single_weight": 0.6,
-          "nested_schedule": []
-        },
-        "generation": {
-          "pop_size": 50,
-          "asexual_pct": 0.75,
-          "crossover_pct": 0.25,
-          "interspecies": 1,
-          "elitism": 1,
-          "cull_pct": 0.57
-        },
-        "crossover": {
-          "topology": "fitter",
-          "weights": "average"
-        },
-        "speciation": {
-          "kind": "purge",
-          "initial_kind": "purge",
-          "subsequent_kind": "standard",
-          "target_species": 10,
-          "min_threshold": 0.05,
-          "max_threshold": 0.5,
-          "threshold_step": 0.025,
-          "similarity": "percentage",
-          "c1": 1.0,
-          "c2": 1.0,
-          "c3": 0.4,
-          "purge_keep": 10,
-          "purge_extra_mutations": 3
-        },
-        "optimizer": {
-          "enabled": false,
-          "lr": 0.1,
-          "weight_decay_l2": 0.0,
-          "weight_decay_l1": 0.0,
-          "method": "adam",
-          "adam_beta1": 0.9,
-          "adam_beta2": 0.999,
-          "adam_eps": 1e-08,
-          "momentum": 0.9,
-          "rmsprop_decay": 0.99
-        }
-      },
-      "history": [
-        {
-          "round": 0,
-          "env": "LunarLander-v3",
-          "changes": {
-            "weight_std": 0.215,
-            "conn_std": 0.4,
-            "weight_prob": 1.0,
-            "conn_prob": 0.3,
-            "neuron_prob": 0.13,
-            "prune_prob": 0.03,
-            "elitism": 1,
-            "cull_pct": 0.57,
-            "target_species": 10,
-            "n_conn_multiplier": 0.99,
-            "weight_init_multiplier": 1.08,
-            "best_eval_mean": -76.56,
-            "best_eval_std": 59.55,
-            "best_round": 0
-          },
-          "train_best": -76.56,
-          "eval_mean": -76.56,
-          "eval_std": 59.55,
-          "eval_min": -136.11,
-          "eval_max": -17.010000000000005,
-          "solved": false,
-          "elapsed_s": 0.0,
-          "is_best": true,
-          "notes": "manual_seed"
-        },
-        {
-          "round": 31,
-          "env": "LunarLander-v3",
-          "changes": {
-            "weight_std": 0.18381603249159012
-          },
-          "train_best": 7.834453375561807,
-          "eval_mean": -156.2167725857219,
-          "eval_std": 163.43759311816538,
-          "eval_min": -710.5938423848187,
-          "eval_max": 29.778309336772537,
-          "solved": false,
-          "elapsed_s": 17.722779750823975,
-          "is_best": false,
-          "notes": "perturbed_best(1)"
-        },
-        {
-          "round": 32,
-          "env": "LunarLander-v3",
-          "changes": {
-            "elitism": 2,
-            "weight_init_multiplier": 1.220963465307237
-          },
-          "train_best": 347.32748172288126,
-          "eval_mean": -96.03510247615651,
-          "eval_std": 76.75727248071749,
-          "eval_min": -332.6238838497787,
-          "eval_max": 48.31115775859439,
-          "solved": false,
-          "elapsed_s": 18.44836139678955,
-          "is_best": false,
-          "notes": "perturbed_best(2)"
         }
       ]
     },
