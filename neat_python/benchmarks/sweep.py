@@ -180,6 +180,10 @@ def main():
     p.add_argument("--init-mult", type=float, default=None)
     p.add_argument("--target-species", type=int, default=None)
     p.add_argument("--threshold", type=float, default=None)
+    p.add_argument("--min-threshold", type=float, default=None)
+    p.add_argument("--max-threshold", type=float, default=None)
+    p.add_argument("--threshold-adjust", type=float, default=None)
+    p.add_argument("--similarity-method", type=str, default=None, choices=["percentage", "standard"])
     p.add_argument("--elitism", type=int, default=None)
     p.add_argument("--cull-pct", type=float, default=None)
     p.add_argument("--optimizer", action="store_true", default=None)
@@ -215,6 +219,10 @@ def main():
     if args.init_mult is not None: overrides["init_mult"] = args.init_mult
     if args.target_species is not None: overrides["target_species"] = args.target_species
     if args.threshold is not None: overrides["threshold"] = args.threshold
+    if args.min_threshold is not None: overrides["min_threshold"] = args.min_threshold
+    if args.max_threshold is not None: overrides["max_threshold"] = args.max_threshold
+    if args.threshold_adjust is not None: overrides["threshold_adjust"] = args.threshold_adjust
+    if args.similarity_method is not None: overrides["similarity_method"] = args.similarity_method
     if args.elitism is not None: overrides["elitism"] = args.elitism
     if args.cull_pct is not None: overrides["cull_pct"] = args.cull_pct
     if args.optimizer: overrides["optimizer_enabled"] = True

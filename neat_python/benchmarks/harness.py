@@ -252,8 +252,10 @@ def build_population(cfg: EnvConfig, hp: Dict) -> Population:
         speciation_policy="purge_then_standard",
         target_species=hp.get("target_species", 5),
         threshold=hp.get("threshold", 0.25),
-        min_threshold=0.05, max_threshold=0.5, threshold_adjust=0.025,
-        similarity_method="percentage",
+        min_threshold=hp.get("min_threshold", 0.05),
+        max_threshold=hp.get("max_threshold", 0.5),
+        threshold_adjust=hp.get("threshold_adjust", 0.025),
+        similarity_method=hp.get("similarity_method", "percentage"),
         # For continuous control: use identity output (we tanh-squash in eval).
         # For discrete: use tanh (default) so argmax is well-defined.
         output_activation="identity" if not cfg.discrete else "tanh",

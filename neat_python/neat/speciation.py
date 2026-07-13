@@ -213,25 +213,33 @@ class Speciator:
         return self.species
 
     def _try_merge_species(self) -> None:
-        """Merge species whose representatives are within threshold."""
-        sids = list(self.species.keys())
-        merged = set()
-        for i in range(len(sids)):
-            if sids[i] in merged:
-                continue
-            for j in range(i + 1, len(sids)):
-                if sids[j] in merged:
+        """Merge species whose representatives are within threshold.
+
+        Runs multiple merge passes until no more merges happen.
+        """
+        changed = True
+        passes = 0
+        while changed and passes < 5:
+            changed = False
+            passes += 1
+            sids = list(self.species.keys())
+            merged = set()
+            for i in range(len(sids)):
+                if sids[i] in merged:
                     continue
-                a = self.species[sids[i]]
-                b = self.species[sids[j]]
-                d = self._dist(a.representative, b.representative)
-                if d < self.threshold:
-                    # merge b into a
-                    for g in b.members:
-                        a.add(g)
-                    merged.add(sids[j])
-        for sid in merged:
-            del self.species[sid]
+                for j in range(i + 1, len(sids)):
+                    if sids[j] in merged:
+                        continue
+                    a = self.species[sids[i]]
+                    b = self.species[sids[j]]
+                    d = self._dist(a.representative, b.representative)
+                    if d < self.threshold:
+                        for g in b.members:
+                            a.add(g)
+                        merged.add(sids[j])
+                        changed = True
+            for sid in merged:
+                del self.species[sid]
 
     # ------------------------------------------------------ dispatch -------
     def speciate(self, population: List[Genome], generation: int, top_k_purge: int = 5) -> Dict[int, Species]:
