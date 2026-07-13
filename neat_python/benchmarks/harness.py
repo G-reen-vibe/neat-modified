@@ -120,15 +120,23 @@ ENVS: Dict[str, EnvConfig] = {
 }
 
 
-def shape_fitness(raw_reward: float, cfg: EnvConfig) -> float:
-    """Transform raw episode reward into a NEAT-friendly fitness."""
-    if cfg.fitness_mode == "raw":
-        return raw_reward
+def shape_fitness(raw_reward: float, cfg: EnvConfig, steps_alive: int = 0) -> float:
+    """Transform raw episode reward into a NEAT-friendly fitness.
+
+    For envs where agents fail early (BipedalWalker, LunarLander), we add
+    a small per-step survival bonus so that "staying alive longer" gives
+    a measurable fitness gradient even when the raw reward is identical.
+    """
+    base = raw_reward
     if cfg.fitness_mode == "shape_pos":
-        return raw_reward + cfg.abs_shift
-    if cfg.fitness_mode == "normalize":
-        return raw_reward / cfg.max_steps
-    return raw_reward
+        base = raw_reward + cfg.abs_shift
+    elif cfg.fitness_mode == "normalize":
+        base = raw_reward / cfg.max_steps
+    # survival bonus: +1 per step alive (only for envs where early failure
+    # is common and we need a gradient)
+    if cfg.name in ("BipedalWalker-v3", "LunarLander-v3"):
+        base += float(steps_alive) * 0.5
+    return base
 
 
 # ------------------------------------------------------------ evaluate ----
@@ -274,25 +282,34 @@ def run_round(
     obs_norm = ObsNormalizer(cfg.n_inputs)
 
     # Fitness function
+    raw_best_tracker = {"best": -float("inf")}  # mutable closure
     def fit(genome: Genome) -> float:
         rs = []
+        steps_total = 0
         for k in range(n_avg):
             res = evaluate_episode(genome, env, cfg, obs_norm,
                                     seed=env_seed + k * 1000)
             rs.append(res["reward"])
+            steps_total += res["steps"]
         raw = float(np.mean(rs))
-        return shape_fitness(raw, cfg)
+        if raw > raw_best_tracker["best"]:
+            raw_best_tracker["best"] = raw
+        avg_steps = steps_total / max(1, n_avg)
+        return shape_fitness(raw, cfg, steps_alive=int(avg_steps))
 
     result = RoundResult(env=env_name, round_id=round_id, hyperparams=dict(hp), notes=notes)
     t0 = time.time()
     for gen in range(n_gens):
         stats = pop.step(fit)
-        # convert shaped fitness back to raw for reporting
-        raw_best = stats["best_fitness"] - cfg.abs_shift if cfg.fitness_mode == "shape_pos" else stats["best_fitness"]
-        raw_mean = stats["mean_fitness"] - cfg.abs_shift if cfg.fitness_mode == "shape_pos" else stats["mean_fitness"]
+        raw_best_seen = raw_best_tracker["best"]
+        # mean: subtract abs_shift from shaped mean (approximate, ignores survival bonus)
+        raw_mean = stats["mean_fitness"] - cfg.abs_shift
+        if cfg.name in ("BipedalWalker-v3", "LunarLander-v3"):
+            # approximate: subtract average survival bonus (assume ~max_steps/2 for survivors)
+            raw_mean -= cfg.max_steps * 0.25  # rough correction
         result.history.append({
             "gen": stats["generation"],
-            "best": raw_best,  # report raw reward for comparison
+            "best": raw_best_seen,
             "mean": raw_mean,
             "best_shaped": stats["best_fitness"],
             "mean_shaped": stats["mean_fitness"],
@@ -302,14 +319,13 @@ def run_round(
             "threshold": stats["species_threshold"],
         })
         if result.solved_gen is None:
-            # check solved condition using raw reward
-            if cfg.solved_reward >= 0 and raw_best >= cfg.solved_reward:
+            if cfg.solved_reward >= 0 and raw_best_seen >= cfg.solved_reward:
                 result.solved_gen = stats["generation"]
-            elif cfg.solved_reward < 0 and raw_best >= cfg.solved_reward:
+            elif cfg.solved_reward < 0 and raw_best_seen >= cfg.solved_reward:
                 result.solved_gen = stats["generation"]
         if verbose:
             print(f"  [{env_name} R{round_id}] gen {stats['generation']:>3d}: "
-                  f"best={raw_best:>8.2f} mean={raw_mean:>8.2f} "
+                  f"best={raw_best_seen:>8.2f} mean={raw_mean:>8.2f} "
                   f"species={stats['n_species']:>2d} "
                   f"conns={stats['avg_conns']:>4.1f} "
                   f"({time.time()-t0:.1f}s)", flush=True)

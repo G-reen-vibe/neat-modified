@@ -78,16 +78,13 @@ class GRPOOptimizer:
             sigma = 1.0
         z = (rewards - mu) / sigma  # relative improvement
 
-        # partial gradients per genome
+        # partial gradients per genome: pg_i[innov] = weight_delta_i[innov] * z_i
         partial_grads: List[Dict[int, float]] = []
-        for g in species_members:
+        for idx, g in enumerate(species_members):
             pg: Dict[int, float] = {}
             if g.weight_delta:
                 for innov, delta in g.weight_delta.items():
-                    pg[innov] = delta * (rewards[list(species_members).index(g)] - mu) / sigma
-            # actually use z directly
-            idx = species_members.index(g)
-            pg = {innov: delta * z[idx] for innov, delta in g.weight_delta.items()} if g.weight_delta else {}
+                    pg[innov] = delta * z[idx]
             partial_grads.append(pg)
 
         # similarity matrix (genome x genome)
