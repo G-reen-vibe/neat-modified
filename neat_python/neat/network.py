@@ -75,14 +75,12 @@ def forward(genome: Genome, inputs: np.ndarray, node_param: Optional[Dict[int, f
     # init node values
     values: Dict[int, float] = {}
     for nid, node in genome.nodes.items():
-        if node.kind == "input":
-            values[nid] = float(inputs[nid])  # inputs are indexed by sorted id order
-        elif node.kind == "bias":
+        if node.kind == "bias":
             values[nid] = 1.0
         else:
             values[nid] = 0.0
 
-    # we need stable input ordering: input node ids in sorted order map to input[0..n_in-1]
+    # input node ids in sorted order map to input[0..n_in-1]
     input_ids_sorted = sorted(n.node_id for n in genome.nodes.values() if n.kind == "input")
     for i, nid in enumerate(input_ids_sorted):
         values[nid] = float(inputs[i])
