@@ -341,6 +341,11 @@ class AutoTuner:
         notes = ""
 
         # Decide: fresh start or perturb the best?
+        # After round 20, occasionally try enabling the optimizer
+        try_optimizer = (round_idx >= 18 and self.rng.random() < 0.25
+                         and env_name in ("Acrobot-v1", "MountainCar-v0",
+                                          "LunarLander-v3"))
+
         if env_best.best_config is None or self.rng.random() < fresh_start_prob:
             # Fresh start: use the default config for this env
             cfg = build_default_config(env_name, seed=self.seed + round_idx,
@@ -356,6 +361,15 @@ class AutoTuner:
             n_perturb = int(self.rng.integers(1, 3))   # 1-2 hps (was 1-3)
             cfg, changes = self._perturb_config_small(cfg, env_name, n_perturb)
             notes = f"perturbed_best({n_perturb})"
+
+        # Occasionally enable the optimizer
+        if try_optimizer:
+            cfg.optimizer.enabled = True
+            cfg.optimizer.lr = float(self.rng.uniform(0.05, 0.3))
+            # Pick method directly (avoid numpy str wrapper)
+            methods = ["adam", "momentum", "rmsprop"]
+            cfg.optimizer.method = methods[int(self.rng.integers(0, len(methods)))]
+            notes += " +optimizer"
 
         # Apply per-env algorithmic adjustments (set via log_algo_change)
         # These are versioned, so we can re-test
