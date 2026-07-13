@@ -1,0 +1,760 @@
+{
+  "algorithm_version": 2,
+  "algo_changes": [
+    {
+      "round": 0,
+      "version": 2,
+      "description": "Aggressive reward shaping for LunarLander; multi-seed training for Acrobot/MountainCar; stagnation penalty (15 gens); genome repair for output disconnected."
+    }
+  ],
+  "env_bests": {
+    "MountainCar-v0": {
+      "best_eval_mean": -109.19,
+      "best_eval_std": 13.34,
+      "best_train_best": -111.0,
+      "best_round": 35,
+      "best_config": {
+        "n_inputs": 2,
+        "n_outputs": 3,
+        "input_activation": "relu",
+        "output_activation": "tanh",
+        "hidden_activation": "tanh",
+        "bias_enabled": true,
+        "forbid_loops": true,
+        "seed": 2,
+        "init": {
+          "n_conn_multiplier": 3.0,
+          "weight_init_multiplier": 2.0,
+          "n_neurons_range": [
+            0,
+            2
+          ]
+        },
+        "mutation": {
+          "weight_select": "pct_shuffled",
+          "weight_pct": 1.0,
+          "weight_mod": "gaussian",
+          "weight_std": 0.6,
+          "weight_prob": 1.0,
+          "conn_select": "pct_shuffled",
+          "conn_pct": 0.0,
+          "conn_mod": "gaussian",
+          "conn_std": 0.8,
+          "neuron_select": "pct_shuffled",
+          "neuron_pct": 0.0,
+          "neuron_mod": "incoming_one",
+          "prune_select": "pct_shuffled",
+          "prune_pct": 0.0,
+          "prune_prob": 0.0
+        },
+        "policy": {
+          "kind": "per_type",
+          "prune_prob": 0.02,
+          "neuron_prob": 0.12,
+          "conn_prob": 0.5,
+          "weight_prob": 1.0,
+          "single_prune": 0.05,
+          "single_neuron": 0.1,
+          "single_conn": 0.25,
+          "single_weight": 0.6,
+          "nested_schedule": []
+        },
+        "generation": {
+          "pop_size": 50,
+          "asexual_pct": 0.75,
+          "crossover_pct": 0.25,
+          "interspecies": 1,
+          "elitism": 3,
+          "cull_pct": 0.6
+        },
+        "crossover": {
+          "topology": "fitter",
+          "weights": "average"
+        },
+        "speciation": {
+          "kind": "purge",
+          "initial_kind": "purge",
+          "subsequent_kind": "standard",
+          "target_species": 12,
+          "min_threshold": 0.05,
+          "max_threshold": 0.5,
+          "threshold_step": 0.025,
+          "similarity": "percentage",
+          "c1": 1.0,
+          "c2": 1.0,
+          "c3": 0.4,
+          "purge_keep": 10,
+          "purge_extra_mutations": 3
+        },
+        "optimizer": {
+          "enabled": false,
+          "lr": 0.1,
+          "weight_decay_l2": 0.0,
+          "weight_decay_l1": 0.0,
+          "method": "adam",
+          "adam_beta1": 0.9,
+          "adam_beta2": 0.999,
+          "adam_eps": 1e-08,
+          "momentum": 0.9,
+          "rmsprop_decay": 0.99
+        }
+      },
+      "history": [
+        {
+          "round": 0,
+          "env": "MountainCar-v0",
+          "changes": {
+            "weight_std": 0.5,
+            "conn_std": 0.7,
+            "weight_prob": 1.0,
+            "conn_prob": 0.5,
+            "neuron_prob": 0.1,
+            "prune_prob": 0.03,
+            "elitism": 2,
+            "cull_pct": 0.5,
+            "target_species": 12,
+            "n_conn_multiplier": 2.5,
+            "weight_init_multiplier": 1.5,
+            "best_eval_mean": -115.7,
+            "best_eval_std": 22.73,
+            "best_round": 0
+          },
+          "train_best": -115.7,
+          "eval_mean": -115.7,
+          "eval_std": 22.73,
+          "eval_min": -138.43,
+          "eval_max": -92.97,
+          "solved": false,
+          "elapsed_s": 0.0,
+          "is_best": true,
+          "notes": "manual_seed"
+        },
+        {
+          "round": 31,
+          "env": "MountainCar-v0",
+          "changes": {
+            "weight_std": 0.4274791453292794
+          },
+          "train_best": -111.0,
+          "eval_mean": -111.78,
+          "eval_std": 0.9008884503644167,
+          "eval_min": -114.0,
+          "eval_max": -110.0,
+          "solved": false,
+          "elapsed_s": 35.406798124313354,
+          "is_best": true,
+          "notes": "perturbed_best(1)"
+        },
+        {
+          "round": 32,
+          "env": "MountainCar-v0",
+          "changes": {
+            "elitism": 3,
+            "weight_init_multiplier": 1.6957825907044957
+          },
+          "train_best": -115.4,
+          "eval_mean": -136.56,
+          "eval_std": 33.903486546371596,
+          "eval_min": -181.0,
+          "eval_max": -90.0,
+          "solved": false,
+          "elapsed_s": 38.94753932952881,
+          "is_best": false,
+          "notes": "perturbed_best(2)"
+        },
+        {
+          "round": 33,
+          "env": "MountainCar-v0",
+          "changes": {
+            "elitism": 4,
+            "target_species": 14,
+            "conn_prob": 0.424876732149455
+          },
+          "train_best": -102.4,
+          "eval_mean": -126.96,
+          "eval_std": 30.338068494879497,
+          "eval_min": -178.0,
+          "eval_max": -84.0,
+          "solved": false,
+          "elapsed_s": 40.30012488365173,
+          "is_best": false,
+          "notes": "fresh_start"
+        },
+        {
+          "round": 34,
+          "env": "MountainCar-v0",
+          "changes": {
+            "weight_std": 0.3654768393829023
+          },
+          "train_best": -102.0,
+          "eval_mean": -119.66,
+          "eval_std": 25.046045596061667,
+          "eval_min": -174.0,
+          "eval_max": -84.0,
+          "solved": false,
+          "elapsed_s": 38.51021671295166,
+          "is_best": false,
+          "notes": "perturbed_best(1)"
+        },
+        {
+          "round": 35,
+          "env": "MountainCar-v0",
+          "changes": {
+            "elitism": 3,
+            "weight_init_multiplier": 1.6957825907044957
+          },
+          "train_best": -104.0,
+          "eval_mean": -130.22,
+          "eval_std": 33.746875410917674,
+          "eval_min": -188.0,
+          "eval_max": -87.0,
+          "solved": false,
+          "elapsed_s": 36.36007499694824,
+          "is_best": false,
+          "notes": "perturbed_best(2)"
+        },
+        {
+          "round": 35,
+          "env": "MountainCar-v0",
+          "changes": {
+            "train_seeds": 8
+          },
+          "train_best": -106.38,
+          "eval_mean": -109.19,
+          "eval_std": 13.34,
+          "eval_min": -200,
+          "eval_max": -100,
+          "solved": true,
+          "elapsed_s": 100,
+          "is_best": true,
+          "notes": "manual_aggressive"
+        }
+      ]
+    },
+    "LunarLander-v3": {
+      "best_eval_mean": -76.56,
+      "best_eval_std": 59.55,
+      "best_train_best": -76.56,
+      "best_round": 0,
+      "best_config": {
+        "n_inputs": 8,
+        "n_outputs": 4,
+        "input_activation": "relu",
+        "output_activation": "tanh",
+        "hidden_activation": "tanh",
+        "bias_enabled": true,
+        "forbid_loops": true,
+        "seed": 0,
+        "init": {
+          "n_conn_multiplier": 0.99,
+          "weight_init_multiplier": 1.08,
+          "n_neurons_range": [
+            0,
+            2
+          ]
+        },
+        "mutation": {
+          "weight_select": "pct_shuffled",
+          "weight_pct": 1.0,
+          "weight_mod": "gaussian",
+          "weight_std": 0.215,
+          "weight_prob": 1.0,
+          "conn_select": "pct_shuffled",
+          "conn_pct": 0.0,
+          "conn_mod": "gaussian",
+          "conn_std": 0.4,
+          "neuron_select": "pct_shuffled",
+          "neuron_pct": 0.0,
+          "neuron_mod": "incoming_one",
+          "prune_select": "pct_shuffled",
+          "prune_pct": 0.0,
+          "prune_prob": 0.0
+        },
+        "policy": {
+          "kind": "per_type",
+          "prune_prob": 0.03,
+          "neuron_prob": 0.13,
+          "conn_prob": 0.3,
+          "weight_prob": 1.0,
+          "single_prune": 0.05,
+          "single_neuron": 0.1,
+          "single_conn": 0.25,
+          "single_weight": 0.6,
+          "nested_schedule": []
+        },
+        "generation": {
+          "pop_size": 50,
+          "asexual_pct": 0.75,
+          "crossover_pct": 0.25,
+          "interspecies": 1,
+          "elitism": 1,
+          "cull_pct": 0.57
+        },
+        "crossover": {
+          "topology": "fitter",
+          "weights": "average"
+        },
+        "speciation": {
+          "kind": "purge",
+          "initial_kind": "purge",
+          "subsequent_kind": "standard",
+          "target_species": 10,
+          "min_threshold": 0.05,
+          "max_threshold": 0.5,
+          "threshold_step": 0.025,
+          "similarity": "percentage",
+          "c1": 1.0,
+          "c2": 1.0,
+          "c3": 0.4,
+          "purge_keep": 10,
+          "purge_extra_mutations": 3
+        },
+        "optimizer": {
+          "enabled": false,
+          "lr": 0.1,
+          "weight_decay_l2": 0.0,
+          "weight_decay_l1": 0.0,
+          "method": "adam",
+          "adam_beta1": 0.9,
+          "adam_beta2": 0.999,
+          "adam_eps": 1e-08,
+          "momentum": 0.9,
+          "rmsprop_decay": 0.99
+        }
+      },
+      "history": [
+        {
+          "round": 0,
+          "env": "LunarLander-v3",
+          "changes": {
+            "weight_std": 0.215,
+            "conn_std": 0.4,
+            "weight_prob": 1.0,
+            "conn_prob": 0.3,
+            "neuron_prob": 0.13,
+            "prune_prob": 0.03,
+            "elitism": 1,
+            "cull_pct": 0.57,
+            "target_species": 10,
+            "n_conn_multiplier": 0.99,
+            "weight_init_multiplier": 1.08,
+            "best_eval_mean": -76.56,
+            "best_eval_std": 59.55,
+            "best_round": 0
+          },
+          "train_best": -76.56,
+          "eval_mean": -76.56,
+          "eval_std": 59.55,
+          "eval_min": -136.11,
+          "eval_max": -17.010000000000005,
+          "solved": false,
+          "elapsed_s": 0.0,
+          "is_best": true,
+          "notes": "manual_seed"
+        },
+        {
+          "round": 31,
+          "env": "LunarLander-v3",
+          "changes": {
+            "weight_std": 0.18381603249159012
+          },
+          "train_best": 7.834453375561807,
+          "eval_mean": -156.2167725857219,
+          "eval_std": 163.43759311816538,
+          "eval_min": -710.5938423848187,
+          "eval_max": 29.778309336772537,
+          "solved": false,
+          "elapsed_s": 17.722779750823975,
+          "is_best": false,
+          "notes": "perturbed_best(1)"
+        },
+        {
+          "round": 32,
+          "env": "LunarLander-v3",
+          "changes": {
+            "elitism": 2,
+            "weight_init_multiplier": 1.220963465307237
+          },
+          "train_best": 347.32748172288126,
+          "eval_mean": -96.03510247615651,
+          "eval_std": 76.75727248071749,
+          "eval_min": -332.6238838497787,
+          "eval_max": 48.31115775859439,
+          "solved": false,
+          "elapsed_s": 18.44836139678955,
+          "is_best": false,
+          "notes": "perturbed_best(2)"
+        }
+      ]
+    },
+    "CartPole-v1": {
+      "best_eval_mean": 500.0,
+      "best_eval_std": 0.0,
+      "best_train_best": 500.0,
+      "best_round": 1,
+      "best_config": {
+        "n_inputs": 4,
+        "n_outputs": 2,
+        "input_activation": "relu",
+        "output_activation": "tanh",
+        "hidden_activation": "tanh",
+        "bias_enabled": true,
+        "forbid_loops": true,
+        "seed": 0,
+        "init": {
+          "n_conn_multiplier": 1.0,
+          "weight_init_multiplier": 1.0,
+          "n_neurons_range": [
+            0,
+            1
+          ]
+        },
+        "mutation": {
+          "weight_select": "pct_shuffled",
+          "weight_pct": 1.0,
+          "weight_mod": "gaussian",
+          "weight_std": 0.3,
+          "weight_prob": 1.0,
+          "conn_select": "pct_shuffled",
+          "conn_pct": 0.0,
+          "conn_mod": "gaussian",
+          "conn_std": 0.5,
+          "neuron_select": "pct_shuffled",
+          "neuron_pct": 0.0,
+          "neuron_mod": "incoming_one",
+          "prune_select": "pct_shuffled",
+          "prune_pct": 0.0,
+          "prune_prob": 0.0
+        },
+        "policy": {
+          "kind": "per_type",
+          "prune_prob": 0.0,
+          "neuron_prob": 0.137,
+          "conn_prob": 0.471,
+          "weight_prob": 0.81,
+          "single_prune": 0.05,
+          "single_neuron": 0.1,
+          "single_conn": 0.25,
+          "single_weight": 0.6,
+          "nested_schedule": []
+        },
+        "generation": {
+          "pop_size": 50,
+          "asexual_pct": 0.75,
+          "crossover_pct": 0.25,
+          "interspecies": 1,
+          "elitism": 2,
+          "cull_pct": 0.5
+        },
+        "crossover": {
+          "topology": "fitter",
+          "weights": "average"
+        },
+        "speciation": {
+          "kind": "purge",
+          "initial_kind": "purge",
+          "subsequent_kind": "standard",
+          "target_species": 8,
+          "min_threshold": 0.05,
+          "max_threshold": 0.6,
+          "threshold_step": 0.025,
+          "similarity": "percentage",
+          "c1": 1.0,
+          "c2": 1.0,
+          "c3": 0.4,
+          "purge_keep": 10,
+          "purge_extra_mutations": 3
+        },
+        "optimizer": {
+          "enabled": false,
+          "lr": 0.1,
+          "weight_decay_l2": 0.0,
+          "weight_decay_l1": 0.0,
+          "method": "adam",
+          "adam_beta1": 0.9,
+          "adam_beta2": 0.999,
+          "adam_eps": 1e-08,
+          "momentum": 0.9,
+          "rmsprop_decay": 0.99
+        }
+      },
+      "history": [
+        {
+          "round": 0,
+          "env": "CartPole-v1",
+          "changes": {
+            "weight_std": 0.3,
+            "conn_std": 0.5,
+            "weight_prob": 0.81,
+            "conn_prob": 0.471,
+            "neuron_prob": 0.137,
+            "prune_prob": 0.0,
+            "elitism": 2,
+            "cull_pct": 0.5,
+            "target_species": 8,
+            "n_conn_multiplier": 1.0,
+            "weight_init_multiplier": 1.0,
+            "best_eval_mean": 500.0,
+            "best_eval_std": 0.0,
+            "best_round": 1
+          },
+          "train_best": 500.0,
+          "eval_mean": 500.0,
+          "eval_std": 0.0,
+          "eval_min": 500.0,
+          "eval_max": 500.0,
+          "solved": true,
+          "elapsed_s": 0.0,
+          "is_best": true,
+          "notes": "manual_seed"
+        }
+      ]
+    },
+    "Acrobot-v1": {
+      "best_eval_mean": -92.14,
+      "best_eval_std": 19.63,
+      "best_train_best": -92.14,
+      "best_round": 0,
+      "best_config": {
+        "n_inputs": 6,
+        "n_outputs": 3,
+        "input_activation": "relu",
+        "output_activation": "tanh",
+        "hidden_activation": "tanh",
+        "bias_enabled": true,
+        "forbid_loops": true,
+        "seed": 0,
+        "init": {
+          "n_conn_multiplier": 1.13,
+          "weight_init_multiplier": 2.0,
+          "n_neurons_range": [
+            0,
+            2
+          ]
+        },
+        "mutation": {
+          "weight_select": "pct_shuffled",
+          "weight_pct": 1.0,
+          "weight_mod": "gaussian",
+          "weight_std": 0.3,
+          "weight_prob": 1.0,
+          "conn_select": "pct_shuffled",
+          "conn_pct": 0.0,
+          "conn_mod": "gaussian",
+          "conn_std": 0.5,
+          "neuron_select": "pct_shuffled",
+          "neuron_pct": 0.0,
+          "neuron_mod": "incoming_one",
+          "prune_select": "pct_shuffled",
+          "prune_pct": 0.0,
+          "prune_prob": 0.0
+        },
+        "policy": {
+          "kind": "per_type",
+          "prune_prob": 0.04,
+          "neuron_prob": 0.1,
+          "conn_prob": 0.3,
+          "weight_prob": 0.9,
+          "single_prune": 0.05,
+          "single_neuron": 0.1,
+          "single_conn": 0.25,
+          "single_weight": 0.6,
+          "nested_schedule": []
+        },
+        "generation": {
+          "pop_size": 50,
+          "asexual_pct": 0.75,
+          "crossover_pct": 0.25,
+          "interspecies": 1,
+          "elitism": 2,
+          "cull_pct": 0.5
+        },
+        "crossover": {
+          "topology": "fitter",
+          "weights": "average"
+        },
+        "speciation": {
+          "kind": "purge",
+          "initial_kind": "purge",
+          "subsequent_kind": "standard",
+          "target_species": 10,
+          "min_threshold": 0.05,
+          "max_threshold": 0.5,
+          "threshold_step": 0.025,
+          "similarity": "percentage",
+          "c1": 1.0,
+          "c2": 1.0,
+          "c3": 0.4,
+          "purge_keep": 10,
+          "purge_extra_mutations": 3
+        },
+        "optimizer": {
+          "enabled": false,
+          "lr": 0.1,
+          "weight_decay_l2": 0.0,
+          "weight_decay_l1": 0.0,
+          "method": "adam",
+          "adam_beta1": 0.9,
+          "adam_beta2": 0.999,
+          "adam_eps": 1e-08,
+          "momentum": 0.9,
+          "rmsprop_decay": 0.99
+        }
+      },
+      "history": [
+        {
+          "round": 0,
+          "env": "Acrobot-v1",
+          "changes": {
+            "weight_std": 0.3,
+            "conn_std": 0.5,
+            "weight_prob": 0.9,
+            "conn_prob": 0.3,
+            "neuron_prob": 0.1,
+            "prune_prob": 0.04,
+            "elitism": 2,
+            "cull_pct": 0.5,
+            "target_species": 10,
+            "n_conn_multiplier": 1.13,
+            "weight_init_multiplier": 2.0,
+            "best_eval_mean": -92.14,
+            "best_eval_std": 19.63,
+            "best_round": 0
+          },
+          "train_best": -92.14,
+          "eval_mean": -92.14,
+          "eval_std": 19.63,
+          "eval_min": -111.77,
+          "eval_max": -72.51,
+          "solved": true,
+          "elapsed_s": 0.0,
+          "is_best": true,
+          "notes": "manual_seed"
+        }
+      ]
+    },
+    "Blackjack-v1": {
+      "best_eval_mean": 0.01,
+      "best_eval_std": 0.95,
+      "best_train_best": 0.01,
+      "best_round": 0,
+      "best_config": {
+        "n_inputs": 3,
+        "n_outputs": 2,
+        "input_activation": "relu",
+        "output_activation": "sigmoid",
+        "hidden_activation": "tanh",
+        "bias_enabled": true,
+        "forbid_loops": true,
+        "seed": 0,
+        "init": {
+          "n_conn_multiplier": 1.5,
+          "weight_init_multiplier": 2.0,
+          "n_neurons_range": [
+            0,
+            2
+          ]
+        },
+        "mutation": {
+          "weight_select": "pct_shuffled",
+          "weight_pct": 1.0,
+          "weight_mod": "gaussian",
+          "weight_std": 0.3,
+          "weight_prob": 1.0,
+          "conn_select": "pct_shuffled",
+          "conn_pct": 0.0,
+          "conn_mod": "gaussian",
+          "conn_std": 0.665,
+          "neuron_select": "pct_shuffled",
+          "neuron_pct": 0.0,
+          "neuron_mod": "incoming_one",
+          "prune_select": "pct_shuffled",
+          "prune_pct": 0.0,
+          "prune_prob": 0.0
+        },
+        "policy": {
+          "kind": "per_type",
+          "prune_prob": 0.036,
+          "neuron_prob": 0.069,
+          "conn_prob": 0.3,
+          "weight_prob": 1.0,
+          "single_prune": 0.05,
+          "single_neuron": 0.1,
+          "single_conn": 0.25,
+          "single_weight": 0.6,
+          "nested_schedule": []
+        },
+        "generation": {
+          "pop_size": 50,
+          "asexual_pct": 0.75,
+          "crossover_pct": 0.25,
+          "interspecies": 1,
+          "elitism": 2,
+          "cull_pct": 0.33
+        },
+        "crossover": {
+          "topology": "fitter",
+          "weights": "average"
+        },
+        "speciation": {
+          "kind": "purge",
+          "initial_kind": "purge",
+          "subsequent_kind": "standard",
+          "target_species": 8,
+          "min_threshold": 0.05,
+          "max_threshold": 0.5,
+          "threshold_step": 0.025,
+          "similarity": "percentage",
+          "c1": 1.0,
+          "c2": 1.0,
+          "c3": 0.4,
+          "purge_keep": 10,
+          "purge_extra_mutations": 3
+        },
+        "optimizer": {
+          "enabled": false,
+          "lr": 0.1,
+          "weight_decay_l2": 0.0,
+          "weight_decay_l1": 0.0,
+          "method": "adam",
+          "adam_beta1": 0.9,
+          "adam_beta2": 0.999,
+          "adam_eps": 1e-08,
+          "momentum": 0.9,
+          "rmsprop_decay": 0.99
+        }
+      },
+      "history": [
+        {
+          "round": 0,
+          "env": "Blackjack-v1",
+          "changes": {
+            "weight_std": 0.3,
+            "conn_std": 0.665,
+            "weight_prob": 1.0,
+            "conn_prob": 0.3,
+            "neuron_prob": 0.069,
+            "prune_prob": 0.036,
+            "elitism": 2,
+            "cull_pct": 0.33,
+            "target_species": 8,
+            "n_conn_multiplier": 1.5,
+            "weight_init_multiplier": 2.0,
+            "best_eval_mean": 0.01,
+            "best_eval_std": 0.95,
+            "best_round": 0
+          },
+          "train_best": 0.01,
+          "eval_mean": 0.01,
+          "eval_std": 0.95,
+          "eval_min": -0.94,
+          "eval_max": 0.96,
+          "solved": true,
+          "elapsed_s": 0.0,
+          "is_best": true,
+          "notes": "manual_seed"
+        }
+      ]
+    }
+  }
+}
