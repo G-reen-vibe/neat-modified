@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+*.egg-info/
+dist/
+build/
+.DS_Store
+*.log
+checkpoints/
+results/
+*.mp4
+*.gif
+.env
