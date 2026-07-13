@@ -85,6 +85,8 @@ class Population:
         # 1. Evaluate is assumed done by caller before .step()
         # 2. Speciate
         self.speciator.speciate(self.genomes)
+        # 2b. Stagnation: penalize species that haven't improved in N generations
+        self._apply_stagnation_penalty()
         # 3. Optimizer: compute partial gradients & revert weight mutations
         #    (per-species; only if enabled)
         if self.cfg.optimizer.enabled:
@@ -128,6 +130,26 @@ class Population:
             n_keep = max(1, int(round(len(members) * (1 - cull_pct))))
             survivors[sid] = members[:n_keep]
         return survivors
+
+    # ------------------------------------------------------------------
+    def _apply_stagnation_penalty(self, stagnation_gens: int = 15,
+                                   penalty_factor: float = 0.5) -> None:
+        """Penalize species that haven't improved in `stagnation_gens` generations.
+
+        Per the standard NEAT improvement: species whose best fitness hasn't
+        improved in N generations have their members' fitness multiplied by
+        `penalty_factor`.  This effectively starves stagnant species of
+        reproductive slots without killing them outright.
+        """
+        cur_gen = self.generation
+        for s in self.speciator.species.values():
+            if cur_gen - s.last_improved >= stagnation_gens:
+                # Penalize all members of this stagnant species
+                for gid in s.members:
+                    for g in self.genomes:
+                        if g.id == gid:
+                            g.fitness *= penalty_factor
+                            break
 
     # ------------------------------------------------------------------
     def _roulette(self, candidates: List[Genome], n: int,
