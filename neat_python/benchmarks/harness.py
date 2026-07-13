@@ -137,6 +137,11 @@ def shape_fitness(shaped_reward: float, cfg: EnvConfig, steps_alive: int = 0,
     # is common and we need a gradient)
     if cfg.name in ("BipedalWalker-v3", "LunarLander-v3"):
         base += float(steps_alive) * 0.5
+    # BipedalWalker: extra bonus for forward progress (x-velocity)
+    # The reward already includes progress, but we boost it to encourage walking
+    if cfg.name == "BipedalWalker-v3":
+        # reward already has +1*speed term; we don't double-count
+        pass
     return base
 
 
@@ -160,7 +165,8 @@ def evaluate_episode(
     # for potential-based shaping (Pendulum)
     prev_potential = 0.0
     if cfg.name == "Pendulum-v1":
-        prev_potential = float(obs[0])  # cos(theta)
+        # potential = cos(theta) (1 when upright, -1 when down)
+        prev_potential = float(obs[0])
     for _ in range(cfg.max_steps):
         if cfg.discrete:
             a = act_discrete(genome, norm_obs)
@@ -182,8 +188,11 @@ def evaluate_episode(
         total_reward += float(r)
         # potential-based shaping for Pendulum
         if cfg.name == "Pendulum-v1":
-            cur_potential = float(obs[0])
-            shaped_r = r + 0.9 * cur_potential - prev_potential
+            cur_potential = float(obs[0])  # cos(theta)
+            # stronger shaping: reward being upright with low angular velocity
+            # combined potential: cos(theta) - 0.1 * |theta_dot|
+            cur_potential = cur_potential - 0.1 * abs(float(obs[2]))
+            shaped_r = r + 0.95 * cur_potential - prev_potential
             shaped_reward += shaped_r
             prev_potential = cur_potential
         else:
