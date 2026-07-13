@@ -276,15 +276,15 @@ class AutoTuner:
         self.env_reward_shaping = {
             "CartPole-v1": None,
             "Acrobot-v1": None,
-            "MountainCar-v0": "mountaincar_aggressive",
+            "MountainCar-v0": None,    # was "mountaincar_aggressive" - caused overfitting
             "LunarLander-v3": "lunarlander_aggressive",
             "Blackjack-v1": None,
         }
         # Per-env # of training seeds per genome (more = more stable signal)
         self.env_train_seeds = {
             "CartPole-v1": 1,
-            "Acrobot-v1": 1,
-            "MountainCar-v0": 1,
+            "Acrobot-v1": 3,        # multi-seed for stability
+            "MountainCar-v0": 5,    # multi-seed to reduce overfitting
             "LunarLander-v3": 3,    # reduce overfitting
             "Blackjack-v1": 10,     # stochastic env
         }
