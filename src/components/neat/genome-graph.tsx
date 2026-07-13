@@ -181,7 +181,7 @@ export function GenomeGraph({ genome, showWeights = true, height = 320 }: Props)
       <text x={60} y={20} textAnchor="middle" fontSize="10" fill="#64748b" className="uppercase tracking-wider">
         Inputs
       </text>
-      {hidden.length > 0 && (
+      {Object.values(genome.nodes).some((n) => n.kind === 'hidden') && (
         <text x={layout.W / 2} y={20} textAnchor="middle" fontSize="10" fill="#64748b" className="uppercase tracking-wider">
           Hidden
         </text>

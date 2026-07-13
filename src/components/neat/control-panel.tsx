@@ -10,7 +10,7 @@ import { Play, Square, Loader2, Settings } from 'lucide-react';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from '@/components/ui/dialog';
-import { getNeatClient } from '@/lib/neat-client';
+import { getPlaybackClient } from '@/lib/neat-client';
 
 type Props = {
   running: boolean;
@@ -43,7 +43,7 @@ export function ControlPanel({ running, onRunningChange }: Props) {
     seed: 0,
   });
 
-  const client = getNeatClient();
+  const client = getPlaybackClient();
 
   const handleStart = async () => {
     setStarting(true);
@@ -63,7 +63,13 @@ export function ControlPanel({ running, onRunningChange }: Props) {
   const handleSpeedChange = async (val: number[]) => {
     const v = val[0];
     setSpeed(v);
-    await client.setDelay(v === 0 ? 0 : 1.0 / v);
+    // In playback mode, speed slider controls generations per second
+    // v=0 means max speed (no delay), v=N means N gens per second
+    if (v === 0) {
+      await client.setSpeed(100);
+    } else {
+      await client.setSpeed(v);
+    }
   };
 
   return (
@@ -76,7 +82,7 @@ export function ControlPanel({ running, onRunningChange }: Props) {
           className="bg-emerald-600 hover:bg-emerald-700 text-white"
         >
           {starting ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <Play className="w-4 h-4 mr-1" />}
-          Start Training
+          Play Training
         </Button>
       ) : (
         <Button
@@ -95,12 +101,12 @@ export function ControlPanel({ running, onRunningChange }: Props) {
           value={[speed]}
           onValueChange={handleSpeedChange}
           min={0}
-          max={20}
+          max={10}
           step={1}
           className="w-32"
         />
         <span className="text-xs text-slate-300 font-mono w-12">
-          {speed === 0 ? 'max' : `${speed}/s`}
+          {speed === 0 ? 'max' : `${speed}gen/s`}
         </span>
       </div>
 
@@ -156,7 +162,7 @@ export function ControlPanel({ running, onRunningChange }: Props) {
             )}
           </div>
           <div className="text-xs text-slate-500 py-2">
-            Note: changes apply only when starting a new training run.
+            Note: this is playback mode. Settings are pre-recorded. Click &ldquo;Play Training&rdquo; to replay.
           </div>
         </DialogContent>
       </Dialog>

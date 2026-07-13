@@ -1,0 +1,1 @@
+{"pop_size": 20, "generations": 50, "n_avg": 1, "init_neurons": 0, "weight_prob": 0.8, "weight_pct": 0.3, "weight_std": 0.05, "connection_prob": 0.1, "neuron_prob": 0.05, "pruning_prob": 0.02, "target_species": 4, "threshold": 0.25, "elitism": 2, "cull_pct": 0.5, "optimizer_enabled": false, "seed": 0, "delay": 0.5}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { getNeatClient, type Snapshot, type EpisodeTrace, type GenomeDict } from '@/lib/neat-client';
+import { getPlaybackClient, type Snapshot, type EpisodeTrace, type GenomeDict } from '@/lib/neat-client';
 import { CartPoleCanvas } from '@/components/neat/cartpole-canvas';
 import { GenomeGraph } from '@/components/neat/genome-graph';
 import { SpeciesPanel } from '@/components/neat/species-panel';
@@ -10,35 +10,38 @@ import { ControlPanel } from '@/components/neat/control-panel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Brain, Activity, Zap, GitBranch, Wifi, WifiOff } from 'lucide-react';
+import { Brain, Activity, Zap, GitBranch, Film } from 'lucide-react';
 
 export default function Home() {
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null);
   const [running, setRunning] = useState(false);
-  const [connected, setConnected] = useState(false);
+  const [loaded, setLoaded] = useState(false);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
   const [episodePlaying, setEpisodePlaying] = useState(true);
   const [episodeSpeed, setEpisodeSpeed] = useState(30);
-  const clientRef = useRef(getNeatClient());
+  const clientRef = useRef(getPlaybackClient());
+
+  const [totalGens, setTotalGens] = useState(0);
+  const currentGen = snapshot?.generation ?? 0;
 
   useEffect(() => {
     const client = clientRef.current;
     const unsubSnap = client.onSnapshot((snap) => {
       setSnapshot(snap);
-      if (typeof snap.running === 'boolean') setRunning(snap.running);
     });
     const unsubStatus = client.onStatus((r) => setRunning(r));
-    client.connect();
-
-    // poll connection state
-    const interval = setInterval(() => {
-      setConnected(client.connected);
-    }, 1000);
-
+    // load playback data on mount
+    client.load().then(() => {
+      setLoaded(true);
+      setTotalGens(client.snapshots.length);
+      if (client.snapshots.length > 0) {
+        setSnapshot(client.snapshots[0]);
+      }
+    });
     return () => {
       unsubSnap();
       unsubStatus();
-      clearInterval(interval);
+      client.pause();
     };
   }, []);
 
@@ -77,14 +80,14 @@ export default function Home() {
             </div>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
-            <Badge variant="outline" className={`gap-1 ${connected ? 'border-emerald-500 text-emerald-400' : 'border-rose-500 text-rose-400'}`}>
-              {connected ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
-              {connected ? 'connected' : 'offline'}
+            <Badge variant="outline" className={`gap-1 ${loaded ? 'border-emerald-500 text-emerald-400' : 'border-amber-500 text-amber-400'}`}>
+              <Film className="w-3 h-3" />
+              {loaded ? `${totalGens} gens recorded` : 'loading...'}
             </Badge>
             {running && (
               <Badge variant="outline" className="gap-1 border-cyan-500 text-cyan-400">
                 <Activity className="w-3 h-3 animate-pulse" />
-                training
+                playing
               </Badge>
             )}
             <ControlPanel running={running} onRunningChange={setRunning} />

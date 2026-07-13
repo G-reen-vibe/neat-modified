@@ -71,12 +71,14 @@ const BACKEND_PORT = 8000;
 
 function wsUrl() {
   if (typeof window === 'undefined') return '';
+  // Use relative path - Next.js rewrites will proxy /ws to the backend.
   const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  return `${proto}//${window.location.host}/?XTransformPort=${BACKEND_PORT}`;
+  return `${proto}//${window.location.host}/ws`;
 }
 
 export function httpUrl(path: string) {
-  return `${path}?XTransformPort=${BACKEND_PORT}`;
+  // Use relative path - Next.js rewrites will proxy /api/* to the backend.
+  return path;
 }
 
 export class NeatClient {
@@ -89,15 +91,22 @@ export class NeatClient {
   connect() {
     if (typeof window === 'undefined') return;
     if (this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) return;
+    const url = wsUrl();
+    console.log('[NeatClient] connecting to', url);
     try {
-      this.ws = new WebSocket(wsUrl());
+      this.ws = new WebSocket(url);
     } catch (e) {
-      console.error('ws connect failed', e);
-      this.scheduleReconnect();
+      console.error('[NeatClient] ws connect failed', e);
+      this.startPolling();
       return;
     }
+    let wsConnected = false;
     this.ws.onopen = () => {
       this.connected = true;
+      wsConnected = true;
+      console.log('[NeatClient] connected');
+      // stop polling if it was running
+      this.stopPolling();
     };
     this.ws.onmessage = (ev) => {
       try {
@@ -111,16 +120,58 @@ export class NeatClient {
           this.statusListeners.forEach((l) => l(data.running));
         }
       } catch (e) {
-        console.error('parse error', e);
+        console.error('[NeatClient] parse error', e);
       }
     };
-    this.ws.onclose = () => {
+    this.ws.onclose = (ev) => {
       this.connected = false;
-      this.scheduleReconnect();
+      console.log('[NeatClient] closed', ev.code, ev.reason);
+      // fall back to polling if WS doesn't work
+      if (!wsConnected) {
+        console.log('[NeatClient] falling back to polling');
+        this.startPolling();
+      } else {
+        this.scheduleReconnect();
+      }
     };
-    this.ws.onerror = () => {
+    this.ws.onerror = (e) => {
+      console.error('[NeatClient] ws error', e);
       try { this.ws?.close(); } catch {}
     };
+    // safety: if WS doesn't connect within 3s, start polling
+    setTimeout(() => {
+      if (!wsConnected && (!this.ws || this.ws.readyState !== WebSocket.OPEN)) {
+        console.log('[NeatClient] WS timeout, starting polling fallback');
+        this.startPolling();
+      }
+    }, 3000);
+  }
+
+  pollingTimer: ReturnType<typeof setInterval> | null = null;
+
+  startPolling() {
+    if (this.pollingTimer) return;
+    this.pollingTimer = setInterval(async () => {
+      try {
+        const res = await fetch(httpUrl('/api/state'));
+        if (res.ok) {
+          const data = await res.json();
+          this.listeners.forEach((l) => l(data as Snapshot));
+          if (typeof data.running === 'boolean') {
+            this.statusListeners.forEach((l) => l(data.running));
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+    }, 1000);
+  }
+
+  stopPolling() {
+    if (this.pollingTimer) {
+      clearInterval(this.pollingTimer);
+      this.pollingTimer = null;
+    }
   }
 
   scheduleReconnect() {
@@ -136,6 +187,7 @@ export class NeatClient {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
+    this.stopPolling();
     if (this.ws) {
       try { this.ws.close(); } catch {}
       this.ws = null;
@@ -191,4 +243,126 @@ let _client: NeatClient | null = null;
 export function getNeatClient() {
   if (!_client) _client = new NeatClient();
   return _client;
+}
+
+// ----------------------------------------------------------------- Playback -
+/**
+ * Playback client: loads pre-recorded training data from /training-data.json
+ * and plays through snapshots at a configurable speed. Used when the live
+ * Python backend cannot run (e.g. in restricted sandbox environments).
+ */
+export class PlaybackClient {
+  snapshots: Snapshot[] = [];
+  index: number = 0;
+  listeners: Set<(snap: Snapshot) => void> = new Set();
+  statusListeners: Set<(running: boolean) => void> = new Set();
+  playing: boolean = false;
+  speed: number = 1; // generations per second
+  timer: ReturnType<typeof setInterval> | null = null;
+  loaded: boolean = false;
+  config: Record<string, unknown> = {};
+
+  async load() {
+    if (this.loaded) return;
+    try {
+      const res = await fetch('/training-data.json');
+      const data = await res.json();
+      this.snapshots = data.snapshots || [];
+      this.config = data.config || {};
+      this.loaded = true;
+      console.log(`[PlaybackClient] loaded ${this.snapshots.length} snapshots`);
+    } catch (e) {
+      console.error('[PlaybackClient] failed to load training data', e);
+    }
+  }
+
+  onSnapshot(cb: (snap: Snapshot) => void) {
+    this.listeners.add(cb);
+    // send current snapshot immediately if loaded
+    if (this.loaded && this.snapshots.length > 0) {
+      cb(this.snapshots[this.index]);
+    }
+    return () => this.listeners.delete(cb);
+  }
+
+  onStatus(cb: (running: boolean) => void) {
+    this.statusListeners.add(cb);
+    return () => this.statusListeners.delete(cb);
+  }
+
+  play() {
+    if (!this.loaded || this.snapshots.length === 0) return;
+    this.playing = true;
+    this.statusListeners.forEach((l) => l(true));
+    const intervalMs = 1000 / Math.max(0.1, this.speed);
+    if (this.timer) clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      if (this.index >= this.snapshots.length - 1) {
+        this.pause();
+        return;
+      }
+      this.index++;
+      const snap = this.snapshots[this.index];
+      this.listeners.forEach((l) => l(snap));
+    }, intervalMs);
+  }
+
+  pause() {
+    this.playing = false;
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+    this.statusListeners.forEach((l) => l(false));
+  }
+
+  setSpeed(speed: number) {
+    this.speed = speed;
+    if (this.playing) {
+      this.play(); // restart with new speed
+    }
+  }
+
+  seek(index: number) {
+    this.index = Math.max(0, Math.min(index, this.snapshots.length - 1));
+    if (this.snapshots[this.index]) {
+      this.listeners.forEach((l) => l(this.snapshots[this.index]));
+    }
+  }
+
+  async start(_config: Record<string, unknown>) {
+    await this.load();
+    this.index = 0;
+    if (this.snapshots.length > 0) {
+      this.listeners.forEach((l) => l(this.snapshots[0]));
+    }
+    this.play();
+    return { status: 'started' };
+  }
+
+  async stop() {
+    this.pause();
+    return { status: 'stopped' };
+  }
+
+  async setDelay(delay: number) {
+    // delay in seconds = 1/speed
+    if (delay <= 0) {
+      this.setSpeed(1000); // very fast
+    } else {
+      this.setSpeed(1 / delay);
+    }
+    return { delay };
+  }
+
+  async getState(): Promise<Snapshot | null> {
+    if (!this.loaded || this.snapshots.length === 0) return null;
+    return this.snapshots[this.index];
+  }
+}
+
+let _playbackClient: PlaybackClient | null = null;
+export function getPlaybackClient() {
+  if (!_playbackClient) _playbackClient = new PlaybackClient();
+  return _playbackClient;
 }
