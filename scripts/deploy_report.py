@@ -1,5 +1,7 @@
 """
 Deploy the HTML report to GitHub Pages (gh-pages branch).
+
+Reads the GitHub token from the GH_TOKEN environment variable.
 """
 import os
 import sys
@@ -7,7 +9,11 @@ import subprocess
 import shutil
 import base64
 
-REPO = "https://G-reen-vibe:REDACTED_TOKEN@github.com/G-reen-vibe/neat-modified.git"
+TOKEN = os.environ.get("GH_TOKEN", "")
+if not TOKEN:
+    print("ERROR: set GH_TOKEN env var first")
+    sys.exit(1)
+REPO = f"https://G-reen-vibe:{TOKEN}@github.com/G-reen-vibe/neat-modified.git"
 REPORT = "/home/z/my-project/download/report.html"
 WORK = "/home/z/my-project/.zscripts/gh-pages-work"
 
