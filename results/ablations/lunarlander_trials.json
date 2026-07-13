@@ -1,0 +1,26 @@
+[
+  {
+    "name": "LunarLander-v3_trial0",
+    "trial": 0,
+    "train_best": 35.39449561181933,
+    "eval_mean": -144.0874708380227,
+    "eval_std": 71.94320810777515,
+    "solved": false
+  },
+  {
+    "name": "LunarLander-v3_trial1",
+    "trial": 1,
+    "train_best": -30.27408955462421,
+    "eval_mean": -126.75268264320121,
+    "eval_std": 63.786329651739095,
+    "solved": false
+  },
+  {
+    "name": "LunarLander-v3_trial2",
+    "trial": 2,
+    "train_best": 71.63869706989304,
+    "eval_mean": -204.99913143264394,
+    "eval_std": 161.07268734254856,
+    "solved": false
+  }
+]

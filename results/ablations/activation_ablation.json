@@ -1,0 +1,37 @@
+[
+  {
+    "name": "CartPole-v1_act_relu",
+    "activation": "relu",
+    "eval_mean": 426.4,
+    "eval_std": 110.23992017413656,
+    "solved": false
+  },
+  {
+    "name": "CartPole-v1_act_tanh",
+    "activation": "tanh",
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "solved": true
+  },
+  {
+    "name": "CartPole-v1_act_sigmoid",
+    "activation": "sigmoid",
+    "eval_mean": 369.4,
+    "eval_std": 123.35088163446584,
+    "solved": false
+  },
+  {
+    "name": "CartPole-v1_act_uaf",
+    "activation": "uaf",
+    "eval_mean": 498.4,
+    "eval_std": 4.8,
+    "solved": true
+  },
+  {
+    "name": "CartPole-v1_act_pswish",
+    "activation": "pswish",
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "solved": true
+  }
+]
