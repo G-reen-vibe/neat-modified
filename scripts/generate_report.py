@@ -478,6 +478,7 @@ footer {{
         anchor = env_name.lower().replace("-", "_")
         html_parts.append(f'<li><a href="#{anchor}">{env_name} Ablations</a></li>\n')
     html_parts.append("""
+<li><a href="#mutation-types">Mutation-Type Ablation</a></li>
 <li><a href="#key-findings">Key Findings &amp; Insights</a></li>
 <li><a href="#visualizations">Genome Visualizations</a></li>
 <li><a href="#behavior">Agent Behavior Captures</a></li>
@@ -614,6 +615,41 @@ dashed line is the solved threshold.</p>
         if sc and os.path.exists(sc):
             html_parts.append(f'<h4>Species Count Over Generations</h4>')
             html_parts.append(f'<img src="{b64_image(sc)}" alt="{env_name} species curves">')
+
+    # --- Mutation-type ablation ---
+    mut_summary_path = "results/ablations/mutation_type_summary.json"
+    if os.path.exists(mut_summary_path):
+        with open(mut_summary_path) as f:
+            mut_results = json.load(f)
+        html_parts.append(f"""
+<h2 id="mutation-types">5b. Mutation-Type Ablation (CartPole-v1)</h2>
+<p>To understand which mutation types are essential, we ran 5 ablations on CartPole-v1, each
+disabling one or more mutation types:</p>
+<table>
+<tr><th>Ablation</th><th>Description</th><th>Eval Mean</th><th>Std</th><th>Solved</th></tr>
+""")
+        for r in sorted(mut_results, key=lambda x: -x["eval_mean"]):
+            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
+            html_parts.append(f"""
+<tr>
+<td>{r['name'].replace('CartPole-v1_mut_', '')}</td>
+<td>{r['description']}</td>
+<td>{r['eval_mean']:.2f}</td>
+<td>± {r['eval_std']:.2f}</td>
+<td>{marker}</td>
+</tr>
+""")
+        html_parts.append("""
+</table>
+<div class="callout callout-info">
+<h4>Insight: Topology mutation is essential</h4>
+<p>Weight-only mutation (no topology changes) gets stuck at <b>356.10</b> — it can never grow
+new connections or neurons, so it's limited by the initial random topology. Adding any topology
+mutation (conn, neuron, or both) solves the env at 500. Even <b>conn-only</b> (no weight
+mutation!) reaches 484.80 — NEAT can find solutions through topology alone, since crossover
+still averages weights from parents.</p>
+</div>
+""")
 
     # --- Key findings ---
     html_parts.append("""
