@@ -267,10 +267,10 @@ class AutoTuner:
         # Per-env eval episodes (Blackjack needs more for stochasticity)
         self.env_eval_episodes = {
             "CartPole-v1": 30,
-            "Acrobot-v1": 30,
-            "MountainCar-v0": 30,
-            "LunarLander-v3": 30,
-            "Blackjack-v1": 100,
+            "Acrobot-v1": 50,        # increased for stability
+            "MountainCar-v0": 50,    # increased for stability
+            "LunarLander-v3": 50,    # increased for stability
+            "Blackjack-v1": 200,     # increased for stochasticity
         }
         # Per-env reward shaping during training (None = raw rewards)
         self.env_reward_shaping = {
@@ -305,6 +305,34 @@ class AutoTuner:
         return self.env_eval_episodes.get(env_name, self.eval_episodes)
 
     # ------------------------------------------------------------------
+    def _perturb_config_small(self, cfg: Config, env_name: str,
+                               n_hps: int) -> Tuple[Config, Dict[str, Any]]:
+        """Perturb `n_hps` hyperparameters by a SMALL amount (±15%).
+
+        This is for fine-tuning the best config; large jumps tend to break
+        already-good configs.
+        """
+        new_cfg = cfg.copy()
+        space = SEARCH_SPACES[env_name]
+        n = min(n_hps, len(space))
+        hps_to_change = self.rng.choice(list(space.keys()), size=n, replace=False)
+        changes = {}
+        for hp in hps_to_change:
+            low, high, step = space[hp]
+            current = get_hp_value(new_cfg, hp)
+            if step is not None:
+                # Integer: ±1 or ±2
+                delta = int(self.rng.choice([-2, -1, 1, 2]))
+                new_val = int(np.clip(current + delta, low, high))
+            else:
+                # Continuous: ±15% of current
+                delta = float(self.rng.uniform(-0.15, 0.15)) * float(current)
+                new_val = float(np.clip(current + delta, low, high))
+            set_hp_value(new_cfg, hp, new_val)
+            changes[hp] = new_val
+        return new_cfg, changes
+
+    # ------------------------------------------------------------------
     def run_round(self, env_name: str, round_idx: int,
                   fresh_start_prob: float = 0.1) -> TuningResult:
         """Run one tuning round for one env."""
@@ -322,12 +350,11 @@ class AutoTuner:
                                            n_hps_to_perturb=int(self.rng.integers(2, 5)))
             notes = "fresh_start"
         else:
-            # Perturb the best config
+            # Perturb the best config - use SMALL perturbations (±15%)
             cfg = env_best.best_config.copy()
             cfg.seed = self.seed + round_idx
-            n_perturb = int(self.rng.integers(1, 4))
-            cfg, changes = perturb_config(cfg, env_name, self.rng,
-                                           n_hps_to_perturb=n_perturb)
+            n_perturb = int(self.rng.integers(1, 3))   # 1-2 hps (was 1-3)
+            cfg, changes = self._perturb_config_small(cfg, env_name, n_perturb)
             notes = f"perturbed_best({n_perturb})"
 
         # Apply per-env algorithmic adjustments (set via log_algo_change)
