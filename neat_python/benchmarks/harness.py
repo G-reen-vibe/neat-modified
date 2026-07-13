@@ -268,6 +268,7 @@ def build_population(cfg: EnvConfig, hp: Dict) -> Population:
         # For continuous control: use identity output (we tanh-squash in eval).
         # For discrete: use tanh (default) so argmax is well-defined.
         output_activation="identity" if not cfg.discrete else "tanh",
+        use_bias=hp.get("use_bias", False),
         seed=hp.get("seed", 0),
     )
     return pop

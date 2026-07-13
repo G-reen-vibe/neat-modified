@@ -193,13 +193,18 @@ class Population:
         mutation_policy: Optional[MutationPolicy] = None,
         # output activation override (default "tanh"; use "identity" for continuous control)
         output_activation: str = "tanh",
+        # add a bias node (always outputs 1.0) connected to all outputs
+        use_bias: bool = False,
         # seed
         seed: int = 0,
     ) -> None:
         from .registry import InnovationRegistry
         self.registry = InnovationRegistry()
-        # reserve input/output node ids
+        # reserve input/output node ids (and bias id if used)
         all_ids = list(range(n_inputs + n_outputs))
+        if use_bias:
+            bias_id = n_inputs + n_outputs
+            all_ids.append(bias_id)
         self.registry.reserve_node_ids(all_ids)
         self.n_inputs = n_inputs
         self.n_outputs = n_outputs
@@ -214,6 +219,7 @@ class Population:
         self.topology_method = topology_method
         self.weight_method = weight_method
         self.output_activation = output_activation
+        self.use_bias = use_bias
         self.optimizer = optimizer or GRPOOptimizer(enabled=False, similarity_method=similarity_method)
         self.mutation_policy = mutation_policy or MutationPolicy()
         self.speciator = Speciator(
@@ -242,12 +248,15 @@ class Population:
         g = Genome(self.registry, self.n_inputs, self.n_outputs)
         for i in range(self.n_inputs):
             g.add_node(NodeGene(i, "input", "identity"))
+        # bias node (always outputs 1.0) — id = n_inputs + n_outputs
+        bias_id = self.n_inputs + self.n_outputs
+        if self.use_bias:
+            g.add_node(NodeGene(bias_id, "bias", "identity"))
         for j in range(self.n_outputs):
             g.add_node(NodeGene(self.n_inputs + j, "output", self.output_activation))
         # number of weights: total possible = n_inputs * n_outputs (no extra nodes yet)
+        # if bias: + n_outputs extra connections
         n_conns = int(self.n_inputs * self.n_outputs * self.init_conns_multiplier)
-        # add base connections (all input-output pairs, possibly with multiplier repeats -> but
-        # we don't allow parallel connections; so cap at n_inputs*n_outputs)
         base_conns = min(n_conns, self.n_inputs * self.n_outputs)
         for i in range(self.n_inputs):
             for j in range(self.n_outputs):
@@ -256,6 +265,13 @@ class Population:
                 innov = self.registry.get_connection_innov(i, self.n_inputs + j)
                 w = self.rng.gauss(0.0, 0.5) * self.init_conns_multiplier
                 g.add_connection(ConnectionGene(innov, i, self.n_inputs + j, w))
+                self.registry.bump_presence(innov, +1)
+        # add bias->output connections
+        if self.use_bias:
+            for j in range(self.n_outputs):
+                innov = self.registry.get_connection_innov(bias_id, self.n_inputs + j)
+                w = self.rng.gauss(0.0, 0.5) * self.init_conns_multiplier
+                g.add_connection(ConnectionGene(innov, bias_id, self.n_inputs + j, w))
                 self.registry.bump_presence(innov, +1)
         # add 0-2 neurons via splitting
         n_neurons = self.rng.randint(*self.init_neuron_range)

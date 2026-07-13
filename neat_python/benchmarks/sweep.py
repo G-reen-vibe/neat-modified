@@ -190,6 +190,7 @@ def main():
     p.add_argument("--no-optimizer", action="store_true", default=None)
     p.add_argument("--opt-lr", type=float, default=None)
     p.add_argument("--opt-method", type=str, default=None, choices=["sgd", "momentum", "rmsprop", "adam"])
+    p.add_argument("--use-bias", action="store_true", default=None)
     # actions
     p.add_argument("--analyze", type=str, default=None, help="analyze one env and exit")
     p.add_argument("--analyze-all", action="store_true")
@@ -229,6 +230,7 @@ def main():
     if args.no_optimizer: overrides["optimizer_enabled"] = False
     if args.opt_lr is not None: overrides["opt_lr"] = args.opt_lr
     if args.opt_method is not None: overrides["opt_method"] = args.opt_method
+    if args.use_bias: overrides["use_bias"] = True
     overrides["seed"] = args.seed
 
     hp = merge_hp(overrides)
