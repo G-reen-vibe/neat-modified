@@ -465,13 +465,31 @@ class AutoTuner:
 
     # ------------------------------------------------------------------
     def save_state(self) -> None:
-        """Save the entire tuning state to JSON."""
+        """Save the entire tuning state to JSON.
+
+        Preserves envs from existing state file that aren't in self.env_bests
+        (so we don't lose data when running with --envs subset).
+        """
         os.makedirs(os.path.dirname(self.output_path) or ".", exist_ok=True)
+        # Load existing state to preserve envs not being tuned right now
+        existing_envs = {}
+        if os.path.exists(self.output_path):
+            try:
+                with open(self.output_path) as f:
+                    old_state = json.load(f)
+                existing_envs = old_state.get("env_bests", {})
+            except Exception:
+                pass
+
         state = {
             "algorithm_version": self.algorithm_version,
             "algo_changes": self.algo_changes,
             "env_bests": {},
         }
+        # Preserve existing envs not in self.env_bests
+        for name, eb_data in existing_envs.items():
+            if name not in self.env_bests:
+                state["env_bests"][name] = eb_data
         for name, eb in self.env_bests.items():
             # Convert numpy strings to plain strings for JSON serialization
             def _clean(d):
@@ -510,7 +528,11 @@ class AutoTuner:
 
     # ------------------------------------------------------------------
     def load_state(self, path: Optional[str] = None) -> bool:
-        """Load tuning state from JSON.  Returns True if loaded."""
+        """Load tuning state from JSON.  Returns True if loaded.
+
+        Loads state for ALL envs in the file, even those not currently
+        being tuned (so we can preserve them on save).
+        """
         path = path or self.output_path
         if not os.path.exists(path):
             return False
@@ -519,8 +541,10 @@ class AutoTuner:
         self.algorithm_version = state.get("algorithm_version", 1)
         self.algo_changes = state.get("algo_changes", [])
         for name, eb_data in state.get("env_bests", {}).items():
+            # Create EnvBestConfig entry if it doesn't exist (so we can
+            # preserve it on save even if not actively tuning it)
             if name not in self.env_bests:
-                continue
+                self.env_bests[name] = EnvBestConfig(env_name=name)
             eb = self.env_bests[name]
             eb.best_eval_mean = eb_data.get("best_eval_mean", -float("inf"))
             eb.best_eval_std = eb_data.get("best_eval_std", 0.0)
