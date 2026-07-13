@@ -71,9 +71,14 @@ class EnvConfig:
     action_high: Optional[Tuple[float, ...]] = None
     solved_reward: float = 0.0       # reward threshold to consider "solved"
     max_steps: int = 500
-    # fitness shaping: transform raw reward into something NEAT can optimize
-    # 'raw' = sum of rewards; 'shift' = sum + abs(min); 'normalize' = sum / max_steps
+    # fitness shaping: how to transform raw episode reward into NEAT fitness
+    # 'raw'       = sum of rewards (good when rewards are positive)
+    # 'shift'     = sum - min_possible (shifts to be >= 0)
+    # 'normalize' = sum / max_steps (in [-1, 0] for penalty envs)
+    # 'shape_pos' = sum + abs_shift (shifts to be >= 0, useful for negative rewards)
     fitness_mode: str = "raw"
+    # absolute shift applied in 'shape_pos' mode
+    abs_shift: float = 0.0
     # for envs like MountainCar where sparse reward is bad, add a shaping bonus
     shape_bonus: float = 0.0  # bonus per step closer to goal
 
@@ -82,31 +87,48 @@ ENVS: Dict[str, EnvConfig] = {
     "MountainCar-v0": EnvConfig(
         name="MountainCar-v0", n_inputs=2, n_outputs=3, discrete=True,
         solved_reward=-110.0, max_steps=200,
-        fitness_mode="raw",  # reward is -1 per step; minimize steps to goal
+        fitness_mode="shape_pos", abs_shift=200.0,
+        # raw reward is -1 per step; max -200. Shift by +200 to make [0, +200].
+        # higher = fewer steps to goal = better.
     ),
     "Acrobot-v1": EnvConfig(
         name="Acrobot-v1", n_inputs=6, n_outputs=3, discrete=True,
         solved_reward=-100.0, max_steps=500,
-        fitness_mode="raw",
+        fitness_mode="shape_pos", abs_shift=500.0,
+        # raw is -1 per step; max -500. Shift +500 to make [0, +500].
     ),
     "Pendulum-v1": EnvConfig(
         name="Pendulum-v1", n_inputs=3, n_outputs=1, discrete=False,
         action_low=(-2.0,), action_high=(2.0,),
         solved_reward=-200.0, max_steps=200,
-        fitness_mode="raw",  # reward is negative cost; closer to 0 better
+        fitness_mode="shape_pos", abs_shift=1700.0,
+        # raw is roughly [-1700, 0]. Shift +1700 to make [0, +1700].
     ),
     "LunarLander-v3": EnvConfig(
         name="LunarLander-v3", n_inputs=8, n_outputs=4, discrete=True,
         solved_reward=200.0, max_steps=1000,
-        fitness_mode="raw",
+        fitness_mode="shape_pos", abs_shift=300.0,
+        # rewards can go slightly negative on crash; shift to ensure >= 0.
     ),
     "BipedalWalker-v3": EnvConfig(
         name="BipedalWalker-v3", n_inputs=24, n_outputs=4, discrete=False,
         action_low=(-1.0, -1.0, -1.0, -1.0), action_high=(1.0, 1.0, 1.0, 1.0),
         solved_reward=300.0, max_steps=1600,
-        fitness_mode="raw",
+        fitness_mode="shape_pos", abs_shift=100.0,
+        # rewards can go very negative on falls; shift to ensure >= 0.
     ),
 }
+
+
+def shape_fitness(raw_reward: float, cfg: EnvConfig) -> float:
+    """Transform raw episode reward into a NEAT-friendly fitness."""
+    if cfg.fitness_mode == "raw":
+        return raw_reward
+    if cfg.fitness_mode == "shape_pos":
+        return raw_reward + cfg.abs_shift
+    if cfg.fitness_mode == "normalize":
+        return raw_reward / cfg.max_steps
+    return raw_reward
 
 
 # ------------------------------------------------------------ evaluate ----
@@ -258,30 +280,36 @@ def run_round(
             res = evaluate_episode(genome, env, cfg, obs_norm,
                                     seed=env_seed + k * 1000)
             rs.append(res["reward"])
-        return float(np.mean(rs))
+        raw = float(np.mean(rs))
+        return shape_fitness(raw, cfg)
 
     result = RoundResult(env=env_name, round_id=round_id, hyperparams=dict(hp), notes=notes)
     t0 = time.time()
     for gen in range(n_gens):
         stats = pop.step(fit)
+        # convert shaped fitness back to raw for reporting
+        raw_best = stats["best_fitness"] - cfg.abs_shift if cfg.fitness_mode == "shape_pos" else stats["best_fitness"]
+        raw_mean = stats["mean_fitness"] - cfg.abs_shift if cfg.fitness_mode == "shape_pos" else stats["mean_fitness"]
         result.history.append({
             "gen": stats["generation"],
-            "best": stats["best_fitness"],
-            "mean": stats["mean_fitness"],
+            "best": raw_best,  # report raw reward for comparison
+            "mean": raw_mean,
+            "best_shaped": stats["best_fitness"],
+            "mean_shaped": stats["mean_fitness"],
             "species": stats["n_species"],
             "conns": stats["avg_conns"],
             "nodes": stats["avg_nodes"],
             "threshold": stats["species_threshold"],
         })
         if result.solved_gen is None:
-            # check solved condition
-            if cfg.solved_reward >= 0 and stats["best_fitness"] >= cfg.solved_reward:
+            # check solved condition using raw reward
+            if cfg.solved_reward >= 0 and raw_best >= cfg.solved_reward:
                 result.solved_gen = stats["generation"]
-            elif cfg.solved_reward < 0 and stats["best_fitness"] >= cfg.solved_reward:
+            elif cfg.solved_reward < 0 and raw_best >= cfg.solved_reward:
                 result.solved_gen = stats["generation"]
         if verbose:
             print(f"  [{env_name} R{round_id}] gen {stats['generation']:>3d}: "
-                  f"best={stats['best_fitness']:>8.2f} mean={stats['mean_fitness']:>8.2f} "
+                  f"best={raw_best:>8.2f} mean={raw_mean:>8.2f} "
                   f"species={stats['n_species']:>2d} "
                   f"conns={stats['avg_conns']:>4.1f} "
                   f"({time.time()-t0:.1f}s)", flush=True)
