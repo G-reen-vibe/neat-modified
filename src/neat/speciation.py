@@ -143,14 +143,35 @@ class Speciator:
             s.add(g.id)
 
         # ---- Adaptive threshold ----
+        # Per spec: "If there are extra species above a set threshold, try to
+        # merge any species that are too similar".  We make the adaptation
+        # *direct*: if we have N species and want T, compute the (T)-th smallest
+        # pairwise representative distance and use that as the new threshold,
+        # so the next round of merging gives us approximately T species.
         n_species = len(self.species)
         target = cfg.speciation.target_species
         if n_species > target:
-            self.threshold = min(cfg.speciation.max_threshold,
-                                 self.threshold + cfg.speciation.threshold_step)
-            # Try to merge similar species (representative distance < new threshold)
+            # Compute pairwise distances between representatives
+            reps = [s.representative for s in self.species.values()]
+            if len(reps) >= 2:
+                dists = []
+                for i in range(len(reps)):
+                    for j in range(i+1, len(reps)):
+                        dists.append(similarity(reps[i], reps[j], cfg))
+                dists.sort()
+                # The threshold that would merge us down to ~target species:
+                # we want to keep merging the closest pairs until we have target.
+                # The (n_species - target)-th smallest distance is the threshold.
+                idx = min(len(dists) - 1, max(0, n_species - target))
+                new_thresh = dists[idx]
+                # Move threshold toward this value (with some smoothing)
+                self.threshold = min(cfg.speciation.max_threshold,
+                                     max(cfg.speciation.min_threshold,
+                                         0.5 * self.threshold + 0.5 * new_thresh))
+            # Always try to merge similar species
             self._merge_similar()
         elif n_species < target:
+            # Lower threshold to encourage splitting
             self.threshold = max(cfg.speciation.min_threshold,
                                  self.threshold - cfg.speciation.threshold_step)
 
@@ -165,8 +186,15 @@ class Speciator:
         return self.species
 
     def _merge_similar(self) -> None:
-        """Merge species whose representatives are within the threshold."""
+        """Merge species whose representatives are within the threshold.
+
+        Also, if we still have more than 2x the target species, keep merging
+        the closest pairs until we get down to target.
+        """
         cfg = self.cfg
+        target = cfg.speciation.target_species
+
+        # First, do threshold-based merging
         sids = list(self.species.keys())
         merged: Set[int] = set()
         for i, sid1 in enumerate(sids):
@@ -179,12 +207,35 @@ class Speciator:
                 s2 = self.species[sid2]
                 d = similarity(s1.representative, s2.representative, cfg)
                 if d < self.threshold:
-                    # Merge s2 into s1; s1 keeps its representative
                     for gid in s2.members:
                         s1.add(gid)
                     merged.add(sid2)
         for sid in merged:
             del self.species[sid]
+
+        # If still way too many, iteratively merge closest pairs
+        while len(self.species) > target:
+            sids = list(self.species.keys())
+            best_d = float("inf")
+            best_pair = None
+            for i in range(len(sids)):
+                for j in range(i+1, len(sids)):
+                    s1 = self.species[sids[i]]
+                    s2 = self.species[sids[j]]
+                    d = similarity(s1.representative, s2.representative, cfg)
+                    if d < best_d:
+                        best_d = d
+                        best_pair = (sids[i], sids[j])
+            if best_pair is None:
+                break
+            # Merge best_pair[1] into best_pair[0]
+            s1 = self.species[best_pair[0]]
+            s2 = self.species[best_pair[1]]
+            for gid in s2.members:
+                s1.add(gid)
+            del self.species[best_pair[1]]
+            # Update threshold to reflect this merge distance
+            self.threshold = max(self.threshold, best_d)
 
     def _lookup(self, gid: int, genomes: List[Genome]) -> Genome:
         for g in genomes:

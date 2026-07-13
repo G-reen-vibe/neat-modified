@@ -354,7 +354,12 @@ def _prunable_conns(g: Genome) -> List[Connection]:
 
 
 def mutate_prune(g: Genome, cfg: MutationCfg, rng: np.random.Generator) -> bool:
-    """Prune non-essential connections and merge linear paths."""
+    """Prune non-essential connections and merge linear paths.
+
+    Per spec: a connection is prunable iff it is non-essential both ways
+    (its src has other outgoing, its dst has other incoming).  We re-check
+    essentiality *after each removal* so we never break the network.
+    """
     prunable = _prunable_conns(g)
     if not prunable:
         return False
@@ -365,8 +370,6 @@ def mutate_prune(g: Genome, cfg: MutationCfg, rng: np.random.Generator) -> bool:
     elif cfg.prune_select == PruneSelect.INDEPENDENT:
         sel = _select_independent(prunable, cfg.prune_prob, rng, floor_one=True)
     elif cfg.prune_select == PruneSelect.INVERSE_ROULETTE:
-        # Higher weight -> lower selection chance
-        # p_i ∝ 1 / (|w_i| + eps)
         eps = 1e-3
         weights = np.array([1.0 / (abs(c.weight) + eps) for c in prunable])
         if weights.sum() <= 0:
@@ -381,34 +384,35 @@ def mutate_prune(g: Genome, cfg: MutationCfg, rng: np.random.Generator) -> bool:
         raise ValueError(f"Unknown prune select: {cfg.prune_select}")
 
     any_change = False
+    # Remove sequentially, re-checking essentiality each time
     for c in sel:
+        if c.innov not in g.conns:
+            continue  # already removed
+        cur = g.conns[c.innov]
+        if g.is_essential_incoming(cur) or g.is_essential_outgoing(cur):
+            continue  # became essential after previous removal
         g.index.register_prune(c.innov)
         g.remove_conn(c.innov)
         any_change = True
 
-    # After pruning, also merge any newly-created linear paths (one pass)
+    # After pruning, also merge any newly-created linear paths
     if any_change:
-        # Repeatedly merge linear paths until none remain (or limit passes)
         for _ in range(5):
             paths = _find_linear_paths(g)
             if not paths:
                 break
             for (in_innov, mid_node, out_innov) in paths:
-                # Merge: remove in & out, add direct (in.src -> out.dst) with combined weight
                 if in_innov not in g.conns or out_innov not in g.conns:
                     continue
                 in_c = g.conns[in_innov]
                 out_c = g.conns[out_innov]
                 combined_w = in_c.weight * out_c.weight
                 src, dst = in_c.src, out_c.dst
-                # Remove the two conns and the middle node (if it has no other conns)
                 g.remove_conn(in_innov)
                 g.remove_conn(out_innov)
-                # Remove the middle hidden node if it now has no connections
                 if not g.incoming(mid_node) and not g.outgoing(mid_node):
                     g.nodes.pop(mid_node, None)
                     g.index.unregister_node(mid_node)
-                # Add the direct connection (might already exist; if so, add to its weight)
                 existing_iv = g.index.conn_innov_of(src, dst)
                 if existing_iv is not None and existing_iv in g.conns:
                     g.conns[existing_iv].weight += combined_w

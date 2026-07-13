@@ -98,12 +98,11 @@ class Population:
         # 4. Cull bottom C% of each species (they cannot reproduce)
         survivors_per_species = self._cull()
         # 5. Reproduce
-        new_genomes = self._reproduce(survivors_per_species)
-        # 6. Mutations applied at the very end (per spec)
+        new_genomes, elite_ids = self._reproduce(survivors_per_species)
+        # 6. Mutations applied at the very end (per spec); elites are exempt
         for g in new_genomes:
-            if g.parent_species is None and g.id in {gg.id for gg in self.genomes}:
-                # It's an elite (carried over); skip mutation
-                continue
+            if g.id in elite_ids:
+                continue  # elitism: don't mutate
             apply_mutation_policy(g, self.cfg, self.rng)
         # Replace population
         self.genomes = new_genomes
@@ -149,8 +148,12 @@ class Population:
         return chosen
 
     # ------------------------------------------------------------------
-    def _reproduce(self, survivors_per_species: Dict[int, List[Genome]]) -> List[Genome]:
-        """Produce next generation per the spec's generation policy."""
+    def _reproduce(self, survivors_per_species: Dict[int, List[Genome]]) -> Tuple[List[Genome], set]:
+        """Produce next generation per the spec's generation policy.
+
+        Returns (new_genomes, elite_ids) where elite_ids is the set of new
+        genome ids that were carried over as elites (and should not be mutated).
+        """
         cfg = self.cfg
         pop_size = cfg.generation.pop_size
         n_asexual = int(round(pop_size * cfg.generation.asexual_pct))
@@ -178,14 +181,18 @@ class Population:
 
         new_genomes: List[Genome] = []
 
-        # --- Elitism: carry over the best `n_elite` genomes from each species ---
+        # --- Elitism: carry over the best `n_elite` genomes (unchanged) ---
         # Per spec, "hold Z genomes (elitism)"; we interpret this as Z total
-        # (the absolute best Z across all species).
+        # (the absolute best Z across all species).  Elites are NOT mutated.
         all_survivors = [g for slist in survivors_per_species.values() for g in slist]
         all_survivors.sort(key=lambda g: g.fitness, reverse=True)
+        elite_ids: set = set()
         for g in all_survivors[:n_elite]:
             child = g.clone()
             child.parent_species = g.parent_species
+            child.id = self._next_gid
+            self._next_gid += 1
+            elite_ids.add(child.id)
             new_genomes.append(child)
 
         # --- Asexual reproduction per species ---
@@ -269,7 +276,7 @@ class Population:
             new_genomes.append(child)
 
         # Truncate if over
-        return new_genomes[:pop_size]
+        return new_genomes[:pop_size], elite_ids
 
     # ------------------------------------------------------------------
     def _compute_stats(self) -> Dict[str, Any]:
