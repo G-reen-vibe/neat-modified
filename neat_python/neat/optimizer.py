@@ -110,8 +110,7 @@ class GRPOOptimizer:
                 if not pg:
                     continue
                 s = sim[i, j]
-                total_mass += abs(s) * sum(abs(v) for v in pg.values()) ** 0  # mass = sum of |sim|
-                # Actually use just sum of |s| over contributors with non-empty pg
+                # mass = sum of |sim| over contributors with non-empty pg
                 if s == 0:
                     continue
                 for innov, v in pg.items():
@@ -147,6 +146,25 @@ class GRPOOptimizer:
                     g.v[innov] = v
                     update = update / (math.sqrt(v) + self.eps)
                 # SGD: just use update as is
+                # We need to apply to PRE-mutation weight. Since we're going to
+                # revert the mutation next, store the update and apply after revert.
+                if not hasattr(g, '_pending_grad'):
+                    g._pending_grad = {}
+                g._pending_grad[innov] = g._pending_grad.get(innov, 0.0) + update
+
+        # revert weight mutations (per spec) - now that we've used the delta.
+        # After revert, weights are back to pre-mutation values.
+        for g in species_members:
+            if g.weight_delta:
+                M.revert_last_mutation(g)
+
+        # apply pending gradients to PRE-mutation weights (post-revert)
+        for g in species_members:
+            if not hasattr(g, '_pending_grad') or not g._pending_grad:
+                continue
+            for innov, update in g._pending_grad.items():
+                if innov not in g.conns:
+                    continue
                 new_w = g.conns[innov].weight + update
                 # weight decay
                 if self.l2 > 0:
@@ -154,8 +172,4 @@ class GRPOOptimizer:
                 if self.l1 > 0:
                     new_w -= self.l1 * (1.0 if g.conns[innov].weight > 0 else -1.0)
                 g.conns[innov].weight = new_w
-
-        # revert weight mutations (per spec) - now that we've used the delta
-        for g in species_members:
-            if g.weight_delta:
-                M.revert_last_mutation(g)
+            g._pending_grad = {}

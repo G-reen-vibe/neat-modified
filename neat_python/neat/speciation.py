@@ -204,7 +204,7 @@ class Speciator:
             del self.species[sid]
 
         # adaptive threshold: if too many species, increase threshold & try to merge
-        if len(self.species) > self.target_species * 1.5:
+        if len(self.species) > self.target_species:
             self.threshold = min(self.max_threshold, self.threshold + self.adjust)
             self._try_merge_species()
         elif len(self.species) < self.target_species * 0.5:

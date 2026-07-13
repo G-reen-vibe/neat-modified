@@ -569,6 +569,8 @@ def revert_last_mutation(genome: Genome) -> bool:
 def _ensure_undo_log(genome: Genome) -> None:
     if not hasattr(genome, "_undo_log"):
         genome._undo_log = []
+    if not hasattr(genome, "_pending_grad"):
+        genome._pending_grad = {}
 
 
 # monkey patch the Genome class to ensure _undo_log always exists
@@ -576,4 +578,5 @@ _orig_init = Genome.__init__
 def _patched_init(self, *a, **kw):
     _orig_init(self, *a, **kw)
     self._undo_log = []
+    self._pending_grad = {}
 Genome.__init__ = _patched_init
