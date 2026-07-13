@@ -479,6 +479,7 @@ footer {{
         html_parts.append(f'<li><a href="#{anchor}">{env_name} Ablations</a></li>\n')
     html_parts.append("""
 <li><a href="#mutation-types">Mutation-Type Ablation</a></li>
+<li><a href="#optimizer-ablation">Optimizer Ablation (Blackjack)</a></li>
 <li><a href="#key-findings">Key Findings &amp; Insights</a></li>
 <li><a href="#visualizations">Genome Visualizations</a></li>
 <li><a href="#behavior">Agent Behavior Captures</a></li>
@@ -648,6 +649,41 @@ new connections or neurons, so it's limited by the initial random topology. Addi
 mutation (conn, neuron, or both) solves the env at 500. Even <b>conn-only</b> (no weight
 mutation!) reaches 484.80 — NEAT can find solutions through topology alone, since crossover
 still averages weights from parents.</p>
+</div>
+""")
+
+    # --- Optimizer ablation (Blackjack) ---
+    opt_summary_path = "results/ablations/blackjack_optimizer_ablation.json"
+    if os.path.exists(opt_summary_path):
+        with open(opt_summary_path) as f:
+            opt_results = json.load(f)
+        html_parts.append("""
+<h2 id="optimizer-ablation">5c. Optimizer Ablation (Blackjack-v1)</h2>
+<p>For the OpenAI-ES-style GRPO optimizer, we tested 4 methods (Adam, Momentum, RMSProp, SGD)
+× 3 learning rates (0.05, 0.2, 0.5) on Blackjack:</p>
+<table>
+<tr><th>Method</th><th>LR</th><th>Eval Mean</th><th>Std</th><th>Solved</th></tr>
+""")
+        for r in sorted(opt_results, key=lambda x: -x["eval_mean"]):
+            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
+            html_parts.append(f"""
+<tr>
+<td>{r['method']}</td>
+<td>{r['lr']}</td>
+<td>{r['eval_mean']:.3f}</td>
+<td>± {r['eval_std']:.3f}</td>
+<td>{marker}</td>
+</tr>
+""")
+        html_parts.append("""
+</table>
+<div class="callout callout-warning">
+<h4>Insight: SGD beats Adam for stochastic envs</h4>
+<p>On Blackjack (a stochastic env with high reward variance), <b>plain SGD with lr=0.05
+achieves +0.080</b> — the best result we've seen for any Blackjack config, and far better than
+Adam (-0.100). The adaptive moment estimation in Adam/RMSProp overfits to noisy gradient
+estimates, while SGD's simple update is more robust. High learning rates (0.5) consistently
+hurt across all methods. <b>For stochastic envs, simpler optimizers are better.</b></p>
 </div>
 """)
 
