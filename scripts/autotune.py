@@ -272,6 +272,22 @@ class AutoTuner:
             "LunarLander-v3": 30,
             "Blackjack-v1": 100,
         }
+        # Per-env reward shaping during training (None = raw rewards)
+        self.env_reward_shaping = {
+            "CartPole-v1": None,
+            "Acrobot-v1": None,
+            "MountainCar-v0": "mountaincar_aggressive",
+            "LunarLander-v3": "lunarlander_aggressive",
+            "Blackjack-v1": None,
+        }
+        # Per-env # of training seeds per genome (more = more stable signal)
+        self.env_train_seeds = {
+            "CartPole-v1": 1,
+            "Acrobot-v1": 1,
+            "MountainCar-v0": 1,
+            "LunarLander-v3": 3,    # reduce overfitting
+            "Blackjack-v1": 10,     # stochastic env
+        }
 
     # ------------------------------------------------------------------
     def log_algo_change(self, round_idx: int, description: str) -> None:
@@ -320,13 +336,14 @@ class AutoTuner:
 
         # Train
         max_steps = self.get_max_steps(env_name)
-        # For Blackjack, use multi-episode evaluation during training (since
-        # single-episode is too noisy)
-        n_eval = 5 if env_name == "Blackjack-v1" else 1
+        n_train_seeds = self.env_train_seeds.get(env_name, 1)
+        reward_shaping = self.env_reward_shaping.get(env_name)
         try:
             result = train(env_name, cfg, self.gens_per_round,
-                           max_steps=max_steps, n_eval_episodes=n_eval,
-                           verbose=False)
+                           max_steps=max_steps, n_eval_episodes=1,
+                           verbose=False,
+                           reward_shaping=reward_shaping,
+                           train_seeds_per_genome=n_train_seeds)
         except Exception as e:
             print(f"  ERROR during training: {e}")
             import traceback; traceback.print_exc()

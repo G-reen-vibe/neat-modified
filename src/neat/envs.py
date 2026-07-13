@@ -121,12 +121,43 @@ class DiscreteEnvWrapper:
             kinetic = velocity ** 2
             shaped = env_reward + potential * 0.01 + kinetic * 0.1
             return shaped
+        if self.reward_shaping == "mountaincar_aggressive":
+            # Strong shaping: big bonus for position progress + velocity magnitude
+            # This is what actually works for NEAT on MountainCar
+            if isinstance(obs, tuple):
+                return env_reward
+            position, velocity = obs[0], obs[1]
+            # Bonus for position (goal at 0.5); start at -0.5
+            position_bonus = max(0, position + 0.5) * 1.0  # +0 to +1.0 per step
+            # Bonus for high |velocity| (encourages swinging)
+            velocity_bonus = abs(velocity) * 5.0
+            # Big bonus for reaching the goal
+            goal_bonus = 100.0 if position >= 0.5 else 0.0
+            shaped = env_reward + position_bonus + velocity_bonus + goal_bonus
+            return shaped
         if self.reward_shaping == "lunarlander_closer":
             # Reward for being close to landing pad (x~0, y~0)
             if isinstance(obs, tuple):
                 return env_reward
             x, y = obs[0], obs[1]
             shaped = env_reward - (abs(x) * 0.1) - (abs(y) * 0.05)
+            return shaped
+        if self.reward_shaping == "lunarlander_aggressive":
+            # Strong shaping: reward for being upright, low, near center
+            if isinstance(obs, tuple):
+                return env_reward
+            x, y, vx, vy, angle, angular_vel, leg1, leg2 = obs
+            # Reward legs touching
+            leg_bonus = (leg1 + leg2) * 5.0
+            # Penalty for being far from center
+            center_penalty = abs(x) * 0.5
+            # Penalty for tilting
+            tilt_penalty = abs(angle) * 2.0
+            # Penalty for high velocity (encourage gentle landing)
+            vel_penalty = (abs(vx) + abs(vy)) * 0.2
+            # Reward for being low (closer to ground)
+            low_bonus = max(0, 1.0 - y) * 0.5 if y < 1.0 else 0
+            shaped = env_reward + leg_bonus + low_bonus - center_penalty - tilt_penalty - vel_penalty
             return shaped
         return env_reward
 

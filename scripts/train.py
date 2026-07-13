@@ -116,11 +116,22 @@ def train(env_name: str, cfg: Config, n_generations: int,
           max_steps: int = 1000, n_eval_episodes: int = 1,
           log_every: int = 1, verbose: bool = True,
           checkpoint_dir: Optional[str] = None,
-          checkpoint_every: int = 10) -> dict:
-    """Train and return final stats + best genome."""
+          checkpoint_every: int = 10,
+          reward_shaping: Optional[str] = None,
+          train_seeds_per_genome: int = 1) -> dict:
+    """Train and return final stats + best genome.
+
+    Args:
+        train_seeds_per_genome: how many different seeds to evaluate each
+            genome on per generation (more = more stable fitness signal,
+            slower).  Mean reward across seeds is used as the fitness.
+        reward_shaping: optional shaping key (e.g. 'mountaincar_position').
+            Only applied during training; final evaluation uses raw rewards.
+    """
     env_wrapper = make_env(env_name, max_steps=max_steps,
                            n_eval_episodes=n_eval_episodes,
-                           seed=cfg.seed)
+                           seed=cfg.seed,
+                           reward_shaping=reward_shaping)
     assert cfg.n_inputs == env_wrapper.n_inputs, \
         f"Config n_inputs={cfg.n_inputs} != env n_inputs={env_wrapper.n_inputs}"
     assert cfg.n_outputs == env_wrapper.n_outputs
@@ -132,10 +143,18 @@ def train(env_name: str, cfg: Config, n_generations: int,
     t0 = time.time()
 
     for gen in range(n_generations):
-        ep_seed = cfg.seed * 10000 + gen
-        def eval_fn(g, _ep_seed=ep_seed):
-            r, _, _ = env_wrapper.evaluate(g, episode_seed=_ep_seed)
-            return r
+        # Use a different seed each generation, and evaluate each genome on
+        # `train_seeds_per_genome` seeds (mean reward).
+        base_seed = cfg.seed * 10000 + gen * 137
+        def eval_fn(g, _base=base_seed, _n=train_seeds_per_genome):
+            if _n <= 1:
+                r, _, _ = env_wrapper.evaluate(g, episode_seed=_base)
+                return r
+            rewards = []
+            for k in range(_n):
+                r, _, _ = env_wrapper.evaluate(g, episode_seed=_base + k * 7919)
+                rewards.append(r)
+            return float(np.mean(rewards))
         pop.evaluate(eval_fn)
         gen_best = pop.best()
         if gen_best and gen_best.fitness > best_ever_fitness:
