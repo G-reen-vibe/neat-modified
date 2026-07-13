@@ -1,2 +1,15 @@
-skills/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.venv/
 node_modules/
+.next/
+.env
+.DS_Store
+*.log
+skills/
+upload/
+download/
+worklog.md
