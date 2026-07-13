@@ -480,6 +480,7 @@ footer {{
     html_parts.append("""
 <li><a href="#mutation-types">Mutation-Type Ablation</a></li>
 <li><a href="#optimizer-ablation">Optimizer Ablation (Blackjack)</a></li>
+<li><a href="#activation-ablation">Activation Function Ablation</a></li>
 <li><a href="#key-findings">Key Findings &amp; Insights</a></li>
 <li><a href="#visualizations">Genome Visualizations</a></li>
 <li><a href="#behavior">Agent Behavior Captures</a></li>
@@ -687,6 +688,42 @@ hurt across all methods. <b>For stochastic envs, simpler optimizers are better.<
 </div>
 """)
 
+    # --- Activation function ablation ---
+    act_summary_path = "results/ablations/activation_ablation.json"
+    if os.path.exists(act_summary_path):
+        with open(act_summary_path) as f:
+            act_results = json.load(f)
+        html_parts.append("""
+<h2 id="activation-ablation">5d. Activation Function Ablation (CartPole-v1)</h2>
+<p>We tested all 5 activation functions (ReLU, Tanh, Sigmoid, UAF, P-Swish) on CartPole-v1.
+UAF is the spec's Universal Activation Function (learnable softmax over {tanh, sigmoid, relu, id});
+P-Swish is parametric swish (x * sigmoid(beta * x), beta starts at 0 = identity).</p>
+<table>
+<tr><th>Activation</th><th>Eval Mean</th><th>Std</th><th>Solved</th></tr>
+""")
+        for r in sorted(act_results, key=lambda x: -x["eval_mean"]):
+            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
+            html_parts.append(f"""
+<tr>
+<td>{r['activation']}</td>
+<td>{r['eval_mean']:.2f}</td>
+<td>± {r['eval_std']:.2f}</td>
+<td>{marker}</td>
+</tr>
+""")
+        html_parts.append("""
+</table>
+<div class="callout callout-info">
+<h4>Insight: Tanh and P-Swish win, Sigmoid loses</h4>
+<p><b>Tanh</b> and <b>P-Swish</b> both solve CartPole perfectly (500.00). <b>UAF</b> comes close
+(498.40) — its learnable mix of activations is competitive but adds parameter overhead.
+<b>ReLU</b> (426.40) and <b>Sigmoid</b> (369.40) both fail. Sigmoid suffers from vanishing
+gradients in deep networks; ReLU's non-zero-mean output makes weight updates oscillate.
+<b>P-Swish starting at identity (beta=0) is especially elegant</b> — the network begins as a
+linear model and learns non-linearity as needed.</p>
+</div>
+""")
+
     # --- Key findings ---
     html_parts.append("""
 <h2 id="key-findings">6. Key Findings &amp; Insights</h2>
@@ -728,11 +765,14 @@ optimal topology is small, NEAT's "augmenting" tendency can be a liability.</p>
 </div>
 
 <div class="callout callout-warning">
-<h4>Finding #5: Optimizer (GRPO) is env-dependent</h4>
-<p>The OpenAI-ES-style optimizer (Adam, lr=0.1) doesn't universally help. On CartPole it doesn't
+<h4>Finding #5: Optimizer (GRPO) is env-dependent — and SGD beats Adam on stochastic envs!</h4>
+<p>The OpenAI-ES-style optimizer doesn't universally help. On CartPole it doesn't
 hurt (500.00 with/without). On MountainCar it actively hurts (-166.90 vs -111.40 baseline) —
-the gradient signal from relative reward is too noisy when fitness is sparse. On Blackjack it
-slightly helps. <b>The optimizer is most useful on envs with dense, low-variance rewards.</b></p>
+the gradient signal from relative reward is too noisy when fitness is sparse. On Blackjack,
+we ran a deeper ablation testing 4 methods × 3 learning rates and found <b>plain SGD with
+lr=0.05 achieves +0.080</b>, beating Adam (-0.100) by a huge margin! The adaptive moment
+estimation in Adam/RMSProp overfits to noisy gradient estimates. <b>For stochastic envs,
+simpler optimizers are better.</b></p>
 </div>
 
 <div class="callout callout-info">
@@ -778,6 +818,16 @@ helped training but caused eval overfitting, so we ended up dropping it for the 
 their members' fitness multiplied by 0.5) was a key algorithmic fix. Without it, the population
 collapses into one or two dominant species after ~20 generations, killing the diversity that
 NEAT relies on for exploration.</p>
+</div>
+
+<div class="callout callout-info">
+<h4>Finding #11: Activation function choice matters — Tanh/P-Swish win</h4>
+<p>Testing all 5 activations on CartPole-v1: <b>Tanh</b> and <b>P-Swish</b> both solve perfectly
+(500.00), <b>UAF</b> comes close (498.40), but <b>ReLU</b> (426.40) and <b>Sigmoid</b> (369.40)
+both fail. Sigmoid suffers from vanishing gradients; ReLU's non-zero-mean output causes weight
+oscillations. <b>P-Swish (parametric swish, beta starting at 0)</b> is especially elegant — the
+network starts as a linear model and learns non-linearity only as needed, which mirrors
+curriculum learning.</p>
 </div>
 """)
 
