@@ -431,16 +431,26 @@ def make_gif(frame_paths: List[str], output_path: str, fps: int = 20,
 def capture_training_trajectory(g, env_name: str, output_path: str,
                                  max_steps: int = 500, seed: int = 0) -> str:
     """Capture a single rollout as a GIF."""
-    res = capture_agent_behavior(g, env_name, max_steps=max_steps, seed=seed,
-                                  output_dir=os.path.dirname(output_path) or ".",
-                                  tag=f"traj_{seed}")
-    make_gif(res["frames"], output_path, duration=0.05)
-    # Clean up individual frames
-    for p in res["frames"]:
-        try:
-            os.remove(p)
-        except Exception:
-            pass
+    import sys, os
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+    from .envs import make_env
+    os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
+    env = make_env(env_name, max_steps=max_steps, n_eval_episodes=1,
+                   seed=seed, render_mode="rgb_array")
+    result = env.rollout(g, episode_seed=seed, render=True)
+
+    from PIL import Image
+    if not result["frames"]:
+        return output_path
+    images = [Image.fromarray(f) for f in result["frames"]]
+    # Resize if large
+    max_dim = 480
+    if images[0].size[0] > max_dim or images[0].size[1] > max_dim:
+        scale = max_dim / max(images[0].size)
+        new_size = (int(images[0].size[0] * scale), int(images[0].size[1] * scale))
+        images = [im.resize(new_size, Image.LANCZOS) for im in images]
+    images[0].save(output_path, save_all=True, append_images=images[1:],
+                   duration=0.05, loop=0, optimize=True)
     return output_path
 
 
