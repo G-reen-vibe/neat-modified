@@ -100,10 +100,13 @@ class Population:
         # 5. Reproduce
         new_genomes, elite_ids = self._reproduce(survivors_per_species)
         # 6. Mutations applied at the very end (per spec); elites are exempt
+        from .mutations import repair_genome
         for g in new_genomes:
             if g.id in elite_ids:
                 continue  # elitism: don't mutate
             apply_mutation_policy(g, self.cfg, self.rng)
+            # Repair: ensure every output has at least one incoming connection
+            repair_genome(g, self.rng)
         # Replace population
         self.genomes = new_genomes
         self.generation += 1

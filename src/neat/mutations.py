@@ -423,6 +423,34 @@ def mutate_prune(g: Genome, cfg: MutationCfg, rng: np.random.Generator) -> bool:
 
 
 # ---------------------------------------------------------------------------
+# Genome repair: ensure every output has at least one incoming connection
+# ---------------------------------------------------------------------------
+def repair_genome(g: Genome, rng: np.random.Generator) -> bool:
+    """Ensure every output node has at least one incoming connection.
+
+    Returns True if any repair was made.
+    """
+    cfg = g.cfg
+    any_change = False
+    for oid in g.output_ids:
+        if any(c.dst == oid for c in g.conns.values()):
+            continue
+        # Output has no incoming; add a connection from a random non-output node
+        candidates = [nid for nid, n in g.nodes.items() if n.kind != "output"]
+        if not candidates:
+            continue
+        # Prefer inputs and bias (so the output gets a meaningful signal)
+        priority = [nid for nid in candidates if g.nodes[nid].kind in ("input", "bias")]
+        src = priority[int(rng.integers(0, len(priority)))] if priority else \
+              candidates[int(rng.integers(0, len(candidates)))]
+        w = float(rng.normal(0, cfg.mutation.conn_std))
+        c = g.add_conn(src, oid, w)
+        if c is not None:
+            any_change = True
+    return any_change
+
+
+# ---------------------------------------------------------------------------
 # Activation-parameter mutation (for UAF / P-Swish)
 # ---------------------------------------------------------------------------
 def mutate_activations(g: Genome, std: float, rng: np.random.Generator) -> bool:

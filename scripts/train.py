@@ -37,9 +37,13 @@ def build_default_config(env_name: str, seed: int = 0, pop_size: int = 100,
         cfg.init.n_neurons_range = (0, 1)
         cfg.mutation.weight_std = 0.3
         cfg.mutation.conn_std = 0.5
-        cfg.policy.conn_prob = 0.3
+        cfg.policy.kind = "per_type"
+        cfg.policy.weight_prob = 0.8       # was 1.0 (100%)
+        cfg.policy.conn_prob = 0.25
         cfg.policy.neuron_prob = 0.05
         cfg.policy.prune_prob = 0.03
+        cfg.generation.elitism = 2          # was 1
+        cfg.generation.cull_pct = 0.5
         cfg.speciation.target_species = 8
         cfg.speciation.initial_kind = "purge"
         cfg.speciation.subsequent_kind = "standard"
