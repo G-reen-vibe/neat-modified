@@ -52,3 +52,30 @@ Stage Summary:
 - Playback mode used because Z.ai sandbox kills background Python
   processes (WebSocket backend dies after ~30s of training)
 - Final state: gen 59, best=500, mean=243.4, 12 species
+
+---
+Task ID: ablation-study
+Agent: main
+Task: Run 50+ ablation rounds, build visualizations, write casual HTML report, deploy to GitHub Pages
+
+Work Log:
+- Built instrumentation layer (instrument.py): TrainingStatsCollector,
+  video recording, genome JSON export
+- Built visualization tools (viz.py): genome graph, training curves,
+  species composition, weight distribution, topology growth, activation
+  usage, ablation bars, dashboard
+- Built ablation runner (ablations.py + ablations2.py): 6 ablation suites
+  (GRPO, speciation, similarity, mutation, popsize, crossover)
+- Ran 47 ablation runs across 3 envs (MountainCar, LunarLander, Pendulum)
+- Ran 5 showcase runs (one per env) with full instrumentation
+- Generated 76 plots, 30 MP4 videos, 10 GIFs, 5 genome JSONs
+- Built self-contained HTML report (10.6 MB, 67 embedded base64 images)
+- Deployed to GitHub Pages: https://g-reen-vibe.github.io/neat-modified/
+- Verified report renders correctly in browser (all images load)
+
+Stage Summary:
+- 102 total rounds: 50 sweep + 47 ablation + 5 showcase
+- 3/5 envs solved: MountainCar (-90), Acrobot (-64), LunarLander (+265)
+- 2/5 unsolved: Pendulum (-616, target -200), BipedalWalker (-18, target +300)
+- 10 lessons learned documented in report
+- Report live at https://g-reen-vibe.github.io/neat-modified/
