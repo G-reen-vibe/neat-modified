@@ -120,19 +120,20 @@ ENVS: Dict[str, EnvConfig] = {
 }
 
 
-def shape_fitness(raw_reward: float, cfg: EnvConfig, steps_alive: int = 0) -> float:
-    """Transform raw episode reward into a NEAT-friendly fitness.
+def shape_fitness(shaped_reward: float, cfg: EnvConfig, steps_alive: int = 0,
+                   raw_reward: float = 0.0) -> float:
+    """Transform episode reward into a NEAT-friendly fitness.
 
     For envs where agents fail early (BipedalWalker, LunarLander), we add
     a small per-step survival bonus so that "staying alive longer" gives
     a measurable fitness gradient even when the raw reward is identical.
     """
-    base = raw_reward
+    base = shaped_reward
     if cfg.fitness_mode == "shape_pos":
-        base = raw_reward + cfg.abs_shift
+        base = shaped_reward + cfg.abs_shift
     elif cfg.fitness_mode == "normalize":
-        base = raw_reward / cfg.max_steps
-    # survival bonus: +1 per step alive (only for envs where early failure
+        base = shaped_reward / cfg.max_steps
+    # survival bonus: +0.5 per step alive (only for envs where early failure
     # is common and we need a gradient)
     if cfg.name in ("BipedalWalker-v3", "LunarLander-v3"):
         base += float(steps_alive) * 0.5
@@ -152,15 +153,19 @@ def evaluate_episode(
     obs = np.asarray(obs, dtype=np.float64)
     obs_norm.update(obs)
     norm_obs = obs_norm.normalize(obs)
-    total_reward = 0.0
+    total_reward = 0.0  # TRUE raw reward (for solved check)
+    shaped_reward = 0.0  # shaped reward (for fitness)
     steps = 0
     trace = {"obs": [], "actions": [], "rewards": []} if record_trace else None
+    # for potential-based shaping (Pendulum)
+    prev_potential = 0.0
+    if cfg.name == "Pendulum-v1":
+        prev_potential = float(obs[0])  # cos(theta)
     for _ in range(cfg.max_steps):
         if cfg.discrete:
             a = act_discrete(genome, norm_obs)
         else:
             raw = forward(genome, norm_obs)
-            # tanh-squash to [-1, 1], then scale to action range
             squashed = np.tanh(raw)
             low = np.array(cfg.action_low)
             high = np.array(cfg.action_high)
@@ -175,13 +180,22 @@ def evaluate_episode(
         obs_norm.update(obs)
         norm_obs = obs_norm.normalize(obs)
         total_reward += float(r)
+        # potential-based shaping for Pendulum
+        if cfg.name == "Pendulum-v1":
+            cur_potential = float(obs[0])
+            shaped_r = r + 0.9 * cur_potential - prev_potential
+            shaped_reward += shaped_r
+            prev_potential = cur_potential
+        else:
+            shaped_reward = total_reward  # no extra shaping
         if record_trace:
             trace["rewards"][-1] = float(r)
         steps += 1
         if terminated or truncated:
             break
     return {
-        "reward": total_reward,
+        "reward": total_reward,        # true raw reward
+        "shaped_reward": shaped_reward, # shaped (for fitness)
         "steps": steps,
         "trace": trace,
     }
@@ -240,6 +254,9 @@ def build_population(cfg: EnvConfig, hp: Dict) -> Population:
         threshold=hp.get("threshold", 0.25),
         min_threshold=0.05, max_threshold=0.5, threshold_adjust=0.025,
         similarity_method="percentage",
+        # For continuous control: use identity output (we tanh-squash in eval).
+        # For discrete: use tanh (default) so argmax is well-defined.
+        output_activation="identity" if not cfg.discrete else "tanh",
         seed=hp.get("seed", 0),
     )
     return pop
@@ -285,17 +302,20 @@ def run_round(
     raw_best_tracker = {"best": -float("inf")}  # mutable closure
     def fit(genome: Genome) -> float:
         rs = []
+        ss = []
         steps_total = 0
         for k in range(n_avg):
             res = evaluate_episode(genome, env, cfg, obs_norm,
                                     seed=env_seed + k * 1000)
             rs.append(res["reward"])
+            ss.append(res["shaped_reward"])
             steps_total += res["steps"]
         raw = float(np.mean(rs))
+        shaped = float(np.mean(ss))
         if raw > raw_best_tracker["best"]:
             raw_best_tracker["best"] = raw
         avg_steps = steps_total / max(1, n_avg)
-        return shape_fitness(raw, cfg, steps_alive=int(avg_steps))
+        return shape_fitness(shaped, cfg, steps_alive=int(avg_steps), raw_reward=raw)
 
     result = RoundResult(env=env_name, round_id=round_id, hyperparams=dict(hp), notes=notes)
     t0 = time.time()

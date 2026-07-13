@@ -191,6 +191,8 @@ class Population:
         optimizer: Optional[GRPOOptimizer] = None,
         # mutation policy
         mutation_policy: Optional[MutationPolicy] = None,
+        # output activation override (default "tanh"; use "identity" for continuous control)
+        output_activation: str = "tanh",
         # seed
         seed: int = 0,
     ) -> None:
@@ -211,6 +213,7 @@ class Population:
         self.cull_pct = cull_pct
         self.topology_method = topology_method
         self.weight_method = weight_method
+        self.output_activation = output_activation
         self.optimizer = optimizer or GRPOOptimizer(enabled=False, similarity_method=similarity_method)
         self.mutation_policy = mutation_policy or MutationPolicy()
         self.speciator = Speciator(
@@ -240,7 +243,7 @@ class Population:
         for i in range(self.n_inputs):
             g.add_node(NodeGene(i, "input", "identity"))
         for j in range(self.n_outputs):
-            g.add_node(NodeGene(self.n_inputs + j, "output", "tanh"))
+            g.add_node(NodeGene(self.n_inputs + j, "output", self.output_activation))
         # number of weights: total possible = n_inputs * n_outputs (no extra nodes yet)
         n_conns = int(self.n_inputs * self.n_outputs * self.init_conns_multiplier)
         # add base connections (all input-output pairs, possibly with multiplier repeats -> but
