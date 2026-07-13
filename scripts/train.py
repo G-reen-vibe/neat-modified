@@ -78,10 +78,32 @@ def build_default_config(env_name: str, seed: int = 0, pop_size: int = 100,
         cfg.hidden_activation = "tanh"
         cfg.init.n_conn_multiplier = 2.0
         cfg.policy.conn_prob = 0.5
+    elif env_name == "Blackjack-v1":
+        cfg.n_inputs = 3   # (player_sum, dealer_card, usable_ace)
+        cfg.n_outputs = 2
+        cfg.output_activation = "sigmoid"
+        cfg.hidden_activation = "tanh"
+        cfg.init.n_conn_multiplier = 1.5
+        cfg.mutation.weight_std = 0.3
+        cfg.mutation.conn_std = 0.5
+        cfg.policy.conn_prob = 0.3
+        cfg.policy.neuron_prob = 0.08
+        cfg.policy.prune_prob = 0.03
+        cfg.speciation.target_species = 8
+        cfg.speciation.initial_kind = "purge"
+        cfg.speciation.subsequent_kind = "standard"
     else:
         import gymnasium as gym
         env = gym.make(env_name)
-        cfg.n_inputs = int(np.prod(env.observation_space.shape))
+        # Handle Tuple observation space
+        if hasattr(env.observation_space, 'shape') and env.observation_space.shape is not None:
+            cfg.n_inputs = int(np.prod(env.observation_space.shape))
+        elif hasattr(env.observation_space, 'spaces'):
+            # Tuple space
+            cfg.n_inputs = sum(int(s.n) if hasattr(s, 'n') else int(np.prod(s.shape))
+                                for s in env.observation_space.spaces)
+        else:
+            cfg.n_inputs = 1
         cfg.n_outputs = env.action_space.n
         env.close()
 

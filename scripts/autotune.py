@@ -382,6 +382,20 @@ class AutoTuner:
             "env_bests": {},
         }
         for name, eb in self.env_bests.items():
+            # Convert numpy strings to plain strings for JSON serialization
+            def _clean(d):
+                if isinstance(d, dict):
+                    return {str(k) if not isinstance(k, str) else k: _clean(v)
+                            for k, v in d.items()}
+                if isinstance(d, (list, tuple)):
+                    return [_clean(x) for x in d]
+                if isinstance(d, (np.integer,)):
+                    return int(d)
+                if isinstance(d, (np.floating,)):
+                    return float(d)
+                if isinstance(d, (np.bool_,)):
+                    return bool(d)
+                return d
             state["env_bests"][name] = {
                 "best_eval_mean": eb.best_eval_mean,
                 "best_eval_std": eb.best_eval_std,
@@ -389,14 +403,14 @@ class AutoTuner:
                 "best_round": eb.best_round,
                 "best_config": eb.best_config.to_dict() if eb.best_config else None,
                 "history": [
-                    {
+                    _clean({
                         "round": r.round_idx, "env": r.env_name,
                         "changes": r.hp_changes, "train_best": r.train_best,
                         "eval_mean": r.eval_mean, "eval_std": r.eval_std,
                         "eval_min": r.eval_min, "eval_max": r.eval_max,
                         "solved": r.solved, "elapsed_s": r.elapsed_s,
                         "is_best": r.is_best, "notes": r.notes,
-                    }
+                    })
                     for r in eb.history
                 ],
             }

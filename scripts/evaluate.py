@@ -29,6 +29,7 @@ SOLVED_THRESHOLDS = {
     "LunarLander-v3": (200.0, 100),
     "Acrobot-v1": (-100.0, 100),
     "MountainCar-v0": (-110.0, 100),
+    "Blackjack-v1": (-0.2, 1000),   # No formal "solved" threshold; dealer-edge is ~-0.05 to -0.10
 }
 
 
