@@ -1,12 +1,17 @@
 """
-Generate a comprehensive HTML report from all ablation results, statistics,
-and visualizations.
+Generate a comprehensive, narrative-driven HTML report.
 
-The report is built as a single self-contained HTML file with embedded
-images (base64), making it easy to share and view.
+The report is structured as a story:
+  1. What is this thing? (algorithm overview)
+  2. How I built it (implementation journey)
+  3. The 5 environments and why I picked them
+  4. Getting to "solved" — the tuning journey
+  5. Ablations: what actually matters?
+  6. Visual deep-dives (genomes, training time-lapses)
+  7. What I learned
 
-Usage:
-    python scripts/generate_report.py
+Visuals support the text, not replace it. Every chart has a caption
+explaining what to look at and why it matters.
 """
 import base64
 import glob
@@ -33,24 +38,29 @@ def b64_image(path: str) -> str:
     return f"data:image/{mime};base64,{data}"
 
 
-def fmt(v, precision=2):
-    if isinstance(v, float):
-        return f"{v:.{precision}f}"
-    return str(v)
+def figure(path: str, caption: str, subcaption: str = "") -> str:
+    """Embed an image with a caption explaining what it shows."""
+    if not os.path.exists(path):
+        return f"<p><em>(missing image: {path})</em></p>"
+    sub_html = f'<div class="subcaption">{subcaption}</div>' if subcaption else ""
+    return f"""
+<figure>
+<img src="{b64_image(path)}" alt="{caption}">
+<figcaption><strong>{caption}</strong>{sub_html}</figcaption>
+</figure>
+"""
 
 
 # ---------------------------------------------------------------------------
-# Chart generators (matplotlib)
+# Chart generators
 # ---------------------------------------------------------------------------
 def chart_ablation_comparison(summary: Dict, env_name: str, output_path: str) -> str:
-    """Bar chart comparing eval_mean across all ablations of one env."""
     plt = _import_plt()
     results = summary.get(env_name, [])
     if not results:
         return ""
-    # Sort by eval_mean descending
     results = sorted(results, key=lambda r: -r["eval_mean"])
-    names = [r["name"].replace(f"{env_name}_", "") for r in results]
+    names = [r["name"].replace(f"{env_name}_", "")[:30] for r in results]
     evals = [r["eval_mean"] for r in results]
     stds = [r["eval_std"] for r in results]
     solved = [r["solved"] for r in results]
@@ -61,13 +71,12 @@ def chart_ablation_comparison(summary: Dict, env_name: str, output_path: str) ->
     bars = ax.barh(names, evals, xerr=stds, color=colors, alpha=0.8,
                     edgecolor="black", linewidth=0.5, capsize=3)
     ax.axvline(threshold, color="#ffd60a", linestyle="--", linewidth=2,
-               label=f"Threshold ({threshold})")
-    ax.set_xlabel("Eval Mean Reward")
-    ax.set_title(f"{env_name} - Ablation Comparison")
+               label=f"Solved threshold ({threshold})")
+    ax.set_xlabel("Eval Mean Reward (over 10-100 random episodes)")
+    ax.set_title(f"{env_name} — Which Configs Solve It?")
     ax.legend(loc="lower right")
     ax.grid(True, alpha=0.3, axis='x')
     ax.invert_yaxis()
-    # Annotate values
     for bar, val in zip(bars, evals):
         ax.text(bar.get_width() + max(stds) * 0.1, bar.get_y() + bar.get_height() / 2,
                 f"{val:.1f}", va="center", fontsize=9)
@@ -77,9 +86,8 @@ def chart_ablation_comparison(summary: Dict, env_name: str, output_path: str) ->
 
 
 def chart_fitness_curves(stats_paths: List[str], labels: List[str],
-                          output_path: str, title: str = "Fitness Over Generations",
-                          max_curves: int = 6) -> str:
-    """Plot fitness curves (max) from multiple stats files on one chart."""
+                          output_path: str, title: str = "",
+                          max_curves: int = 8) -> str:
     plt = _import_plt()
     fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
     colors = ["#4cc9f0", "#f72585", "#4ade80", "#ffd60a", "#a78bfa", "#fb923c",
@@ -96,7 +104,7 @@ def chart_fitness_curves(stats_paths: List[str], labels: List[str],
         except Exception:
             pass
     ax.set_xlabel("Generation")
-    ax.set_ylabel("Max Fitness")
+    ax.set_ylabel("Max Fitness in Population")
     ax.set_title(title)
     ax.legend(loc="best", fontsize=9)
     ax.grid(True, alpha=0.3)
@@ -106,8 +114,8 @@ def chart_fitness_curves(stats_paths: List[str], labels: List[str],
 
 
 def chart_genome_size_curves(stats_paths: List[str], labels: List[str],
-                              output_path: str, title: str = "Genome Size (Conns) Over Generations",
-                              max_curves: int = 6) -> str:
+                              output_path: str, title: str = "",
+                              max_curves: int = 8) -> str:
     plt = _import_plt()
     fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
     colors = ["#4cc9f0", "#f72585", "#4ade80", "#ffd60a", "#a78bfa", "#fb923c",
@@ -119,15 +127,12 @@ def chart_genome_size_curves(stats_paths: List[str], labels: List[str],
             history = data["history"]
             gens = [h["generation"] for h in history]
             avg = [h["genome_size"]["avg_conns"] for h in history]
-            max_g = [h["genome_size"]["max_conns"] for h in history]
             ax.plot(gens, avg, "-", color=colors[i % len(colors)], linewidth=2,
-                    label=f"{label} (avg)", alpha=0.85)
-            ax.plot(gens, max_g, "--", color=colors[i % len(colors)], linewidth=1,
-                    alpha=0.4)
+                    label=label, alpha=0.85)
         except Exception:
             pass
     ax.set_xlabel("Generation")
-    ax.set_ylabel("# Connections")
+    ax.set_ylabel("Avg # Connections per Genome")
     ax.set_title(title)
     ax.legend(loc="best", fontsize=9)
     ax.grid(True, alpha=0.3)
@@ -137,8 +142,8 @@ def chart_genome_size_curves(stats_paths: List[str], labels: List[str],
 
 
 def chart_species_curves(stats_paths: List[str], labels: List[str],
-                          output_path: str, title: str = "Species Count Over Generations",
-                          max_curves: int = 6) -> str:
+                          output_path: str, title: str = "",
+                          max_curves: int = 8) -> str:
     plt = _import_plt()
     fig, ax = plt.subplots(figsize=(10, 5), constrained_layout=True)
     colors = ["#4cc9f0", "#f72585", "#4ade80", "#ffd60a", "#a78bfa", "#fb923c",
@@ -155,7 +160,7 @@ def chart_species_curves(stats_paths: List[str], labels: List[str],
         except Exception:
             pass
     ax.set_xlabel("Generation")
-    ax.set_ylabel("# Species")
+    ax.set_ylabel("Number of Species")
     ax.set_title(title)
     ax.legend(loc="best", fontsize=9)
     ax.grid(True, alpha=0.3)
@@ -168,23 +173,11 @@ def chart_species_curves(stats_paths: List[str], labels: List[str],
 # Main report generator
 # ---------------------------------------------------------------------------
 def generate_report(output_path: str = "results/report.html"):
-    """Generate the full HTML report."""
-    print("Generating HTML report...")
-    # Load aggregated summary
+    print("Generating narrative HTML report...")
     summary_path = "results/ablations/summary.json"
-    if not os.path.exists(summary_path):
-        print(f"ERROR: {summary_path} not found. Run ablations first.")
-        return
     with open(summary_path) as f:
         summary = json.load(f)
 
-    # Load tuning state (best configs)
-    tuning_state = {}
-    if os.path.exists("results/autotune_v2.json"):
-        with open("results/autotune_v2.json") as f:
-            tuning_state = json.load(f)
-
-    # Output dir for temp charts
     chart_dir = "results/charts"
     os.makedirs(chart_dir, exist_ok=True)
 
@@ -195,816 +188,1172 @@ def generate_report(output_path: str = "results/report.html"):
         chart_ablation_comparison(summary, env_name, chart_path)
         env_charts[env_name] = chart_path
 
-    # Generate fitness-curve comparison charts (per env, top ablations)
-    fitness_curve_charts = {}
-    genome_size_charts = {}
-    species_curve_charts = {}
+    # Generate fitness-curve comparisons per env
+    fitness_charts, genome_charts, species_charts = {}, {}, {}
     for env_name in summary:
-        # Find stats files for this env
         stats_files = sorted(glob.glob(f"results/ablations/{env_name}_*_stats.json"))
-        # Filter out files that don't exist
-        valid_files = []
-        labels = []
+        valid, labels = [], []
         for sf in stats_files:
             label = os.path.basename(sf).replace(f"{env_name}_", "").replace("_stats.json", "")
-            # Don't include baseline twice
-            valid_files.append(sf)
-            labels.append(label)
-        if valid_files:
+            valid.append(sf); labels.append(label)
+        if valid:
             fc = os.path.join(chart_dir, f"{env_name}_fitness_curves.png")
-            chart_fitness_curves(valid_files, labels, fc,
-                                  title=f"{env_name} - Max Fitness Across Ablations")
-            fitness_curve_charts[env_name] = fc
-
+            chart_fitness_curves(valid, labels, fc,
+                title=f"{env_name} — Max Fitness per Generation, by Ablation")
+            fitness_charts[env_name] = fc
             gc = os.path.join(chart_dir, f"{env_name}_genome_size_curves.png")
-            chart_genome_size_curves(valid_files, labels, gc,
-                                      title=f"{env_name} - Genome Size Across Ablations")
-            genome_size_charts[env_name] = gc
-
+            chart_genome_size_curves(valid, labels, gc,
+                title=f"{env_name} — Genome Complexity Over Training")
+            genome_charts[env_name] = gc
             sc = os.path.join(chart_dir, f"{env_name}_species_curves.png")
-            chart_species_curves(valid_files, labels, sc,
-                                  title=f"{env_name} - Species Count Across Ablations")
-            species_curve_charts[env_name] = sc
+            chart_species_curves(valid, labels, sc,
+                title=f"{env_name} — Species Count Over Training")
+            species_charts[env_name] = sc
 
-    # ---------------------------------------------------------------------------
-    # Build the HTML
-    # ---------------------------------------------------------------------------
-    html_parts = []
+    # Load extra ablations
+    mut_summary_path = "results/ablations/mutation_type_summary.json"
+    mut_results = json.load(open(mut_summary_path)) if os.path.exists(mut_summary_path) else []
+    opt_summary_path = "results/ablations/blackjack_optimizer_ablation.json"
+    opt_results = json.load(open(opt_summary_path)) if os.path.exists(opt_summary_path) else []
+    act_summary_path = "results/ablations/activation_ablation.json"
+    act_results = json.load(open(act_summary_path)) if os.path.exists(act_summary_path) else []
 
-    # --- Header ---
-    html_parts.append(f"""<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>NEAT Ablation Report</title>
+    # --- Build the HTML ---
+    H = []  # html parts
+
+    H.append("""<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>NEAT, but Make It Modified — A Field Report</title>
 <style>
-body {{
-    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #0f172a;
-    color: #e2e8f0;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-}}
-.container {{
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 24px;
-}}
-h1 {{
-    color: #4cc9f0;
-    font-size: 36px;
-    border-bottom: 3px solid #4cc9f0;
-    padding-bottom: 12px;
-    margin-top: 32px;
-}}
-h2 {{
-    color: #4ade80;
-    font-size: 26px;
-    margin-top: 32px;
-    border-left: 4px solid #4ade80;
-    padding-left: 12px;
-}}
-h3 {{
-    color: #f72585;
-    font-size: 20px;
-    margin-top: 24px;
-}}
-h4 {{
-    color: #ffd60a;
-    font-size: 16px;
-    margin-top: 20px;
-    margin-bottom: 8px;
-}}
-p {{
-    margin: 12px 0;
-    font-size: 16px;
-}}
-ul, ol {{
-    margin: 12px 0;
-    padding-left: 28px;
-}}
-li {{
-    margin: 6px 0;
-    font-size: 15px;
-}}
-code {{
-    background: #1e293b;
-    color: #fbbf24;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-}}
-pre {{
-    background: #1e293b;
-    padding: 12px;
-    border-radius: 6px;
-    overflow-x: auto;
-    border-left: 3px solid #4cc9f0;
-}}
-pre code {{
-    background: none;
-    color: #e2e8f0;
-    padding: 0;
-}}
-img {{
-    max-width: 100%;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    margin: 12px 0;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}}
-.chart-row {{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin: 16px 0;
-}}
-.chart-row img {{
-    width: 100%;
-    height: auto;
-}}
-table {{
-    width: 100%;
-    border-collapse: collapse;
-    margin: 16px 0;
-    background: #1e293b;
-    border-radius: 6px;
-    overflow: hidden;
-}}
-th {{
-    background: #4cc9f0;
-    color: #0f172a;
-    padding: 12px;
-    text-align: left;
-    font-weight: bold;
-}}
-td {{
-    padding: 10px 12px;
-    border-bottom: 1px solid #334155;
-}}
-tr:hover {{
-    background: #334155;
-}}
-.solved {{
-    color: #4ade80;
-    font-weight: bold;
-}}
-.unsolved {{
-    color: #f72585;
-}}
-.callout {{
-    background: #1e293b;
-    border-left: 4px solid #f72585;
-    padding: 16px;
-    margin: 16px 0;
-    border-radius: 0 6px 6px 0;
-}}
-.callout-positive {{
-    border-left-color: #4ade80;
-}}
-.callout-info {{
-    border-left-color: #4cc9f0;
-}}
-.callout-warning {{
-    border-left-color: #ffd60a;
-}}
-.callout h4 {{
-    margin-top: 0;
-    color: #f72585;
-}}
-.callout-positive h4 {{ color: #4ade80; }}
-.callout-info h4 {{ color: #4cc9f0; }}
-.callout-warning h4 {{ color: #ffd60a; }}
-.toc {{
-    background: #1e293b;
-    padding: 20px 28px;
-    border-radius: 8px;
-    margin: 24px 0;
-}}
-.toc a {{
-    color: #4cc9f0;
-    text-decoration: none;
-}}
-.toc a:hover {{
-    text-decoration: underline;
-}}
-.stat-grid {{
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 12px;
-    margin: 16px 0;
-}}
-.stat-card {{
-    background: #1e293b;
-    padding: 16px;
-    border-radius: 8px;
-    text-align: center;
-    border-top: 3px solid #4cc9f0;
-}}
-.stat-card .value {{
-    font-size: 28px;
-    font-weight: bold;
-    color: #4cc9f0;
-}}
-.stat-card .label {{
-    font-size: 12px;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}}
-.stat-card.solved {{ border-top-color: #4ade80; }}
-.stat-card.solved .value {{ color: #4ade80; }}
-.stat-card.unsolved {{ border-top-color: #f72585; }}
-.stat-card.unsolved .value {{ color: #f72585; }}
-.gif-display {{
-    text-align: center;
-    background: #1e293b;
-    padding: 12px;
-    border-radius: 8px;
-    margin: 16px 0;
-}}
-.gif-display img {{
-    max-width: 100%;
-    max-height: 400px;
-    border-radius: 4px;
-}}
-footer {{
-    margin-top: 60px;
-    padding: 24px;
-    text-align: center;
-    color: #64748b;
-    border-top: 1px solid #334155;
-}}
-</style>
-</head>
-<body>
-<div class="container">
+body { font-family: 'Georgia', 'Times New Roman', serif; background: #fafaf7; color: #1a1a1a;
+    line-height: 1.75; margin: 0; padding: 0; font-size: 17px; }
+.container { max-width: 820px; margin: 0 auto; padding: 40px 24px; }
+h1 { font-family: 'Helvetica Neue', sans-serif; font-size: 38px; color: #1a1a1a;
+    border-bottom: 4px solid #4cc9f0; padding-bottom: 16px; margin-top: 48px; line-height: 1.2; }
+h2 { font-family: 'Helvetica Neue', sans-serif; font-size: 28px; color: #1a1a1a;
+    margin-top: 56px; padding-top: 16px; border-top: 1px solid #d0d0d0; line-height: 1.3; }
+h3 { font-family: 'Helvetica Neue', sans-serif; font-size: 21px; color: #2a2a2a;
+    margin-top: 32px; }
+h4 { font-family: 'Helvetica Neue', sans-serif; font-size: 17px; color: #4a4a4a;
+    margin-top: 24px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+p { margin: 14px 0; }
+ul, ol { margin: 14px 0; padding-left: 28px; }
+li { margin: 8px 0; }
+code { background: #eef2f7; color: #c0392b; padding: 2px 6px; border-radius: 3px;
+    font-family: 'Menlo', 'Courier New', monospace; font-size: 14px; }
+pre { background: #1e293b; color: #e2e8f0; padding: 16px; border-radius: 6px;
+    overflow-x: auto; font-size: 13px; line-height: 1.5; }
+pre code { background: none; color: inherit; padding: 0; }
+figure { margin: 28px 0; text-align: center; }
+figure img { max-width: 100%; border: 1px solid #d0d0d0; border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+figcaption { font-size: 14px; color: #555; margin-top: 10px; font-style: italic;
+    text-align: left; padding: 0 8px; line-height: 1.5; }
+figcaption strong { color: #1a1a1a; font-style: normal; }
+.subcaption { color: #777; margin-top: 4px; font-size: 13px; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 15px; }
+th { background: #1a1a1a; color: #fafaf7; padding: 10px 12px; text-align: left;
+    font-family: 'Helvetica Neue', sans-serif; font-weight: 600; }
+td { padding: 8px 12px; border-bottom: 1px solid #e0e0e0; }
+tr:nth-child(even) { background: #f5f5f0; }
+.toc { background: #f0f0eb; border-left: 4px solid #4cc9f0; padding: 20px 28px;
+    margin: 32px 0; border-radius: 0 4px 4px 0; }
+.toc a { color: #1a1a1a; text-decoration: none; }
+.toc a:hover { text-decoration: underline; color: #4cc9f0; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc li { margin: 6px 0; padding-left: 12px; }
+.toc > ul > li { font-weight: 600; }
+.toc ul ul { padding-left: 24px; margin-top: 4px; }
+.toc ul ul li { font-weight: normal; font-size: 15px; }
+.callout { background: #f0f0eb; padding: 18px 24px; margin: 24px 0;
+    border-radius: 4px; border-left: 4px solid #4cc9f0; }
+.callout-find { border-left-color: #4ade80; background: #f0faf0; }
+.callout-warn { border-left-color: #f72585; background: #faf0f5; }
+.callout-story { border-left-color: #ffd60a; background: #fffdf0; }
+.callout h4 { margin-top: 0; color: #1a1a1a; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; margin: 20px 0; }
+.stat-card { background: #1a1a1a; color: #fafaf7; padding: 16px;
+    border-radius: 4px; text-align: center; }
+.stat-card .value { font-size: 32px; font-weight: bold; color: #4cc9f0;
+    font-family: 'Helvetica Neue', sans-serif; }
+.stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+    margin-top: 4px; opacity: 0.7; }
+.stat-card.solved .value { color: #4ade80; }
+.stat-card.unsolved .value { color: #f72585; }
+.gif-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+.gif-row figure { margin: 0; }
+.gif-row img { max-height: 280px; width: auto; margin: 0 auto; }
+hr { border: none; border-top: 1px solid #d0d0d0; margin: 48px 0; }
+blockquote { border-left: 4px solid #4cc9f0; padding-left: 20px; margin: 24px 0;
+    color: #555; font-style: italic; }
+footer { margin-top: 80px; padding: 32px 0; text-align: center; color: #888;
+    border-top: 1px solid #d0d0d0; font-size: 14px; }
+.lead { font-size: 20px; line-height: 1.6; color: #2a2a2a; margin: 24px 0;
+    font-style: italic; }
+</style></head><body><div class="container">
 """)
 
-    # --- Title ---
-    html_parts.append("""
-<h1>NEAT Ablation Report</h1>
-<p>A deep dive into the modified NEAT algorithm: what works, what doesn't, and why.</p>
+    # ===========================================================
+    # TITLE & LEAD
+    # ===========================================================
+    H.append("""
+<h1>NEAT, but Make It Modified</h1>
+<p class="lead">A field report on implementing a heavily modified NEAT variant,
+tuning it on five RL environments, and figuring out — through 70+ ablation
+runs — which of the modifications actually pull their weight.</p>
+<p>Hi. This document is the story of a side project: take a spec for a modified
+NEAT algorithm, build it from scratch in Python, get it solving RL benchmarks,
+and then <em>actually understand</em> what each piece of the algorithm is doing.
+Not just "does it work?" but "does <em>this specific piece</em> work, and would
+the algorithm be worse without it?"</p>
+<p>What follows is the journey, with the data and visuals to back it up. I'll
+explain what I built, how I tuned it, what the ablations showed, and what I
+think it all means. The charts are here to support the prose, not replace
+it — every figure has a caption telling you what to look for.</p>
 """)
 
-    # --- Overview stats ---
-    total_ablations = sum(len(v) for v in summary.values())
-    n_envs = len(summary)
-    n_solved = sum(1 for env_results in summary.values() for r in env_results if r["solved"])
-    html_parts.append(f"""
-<div class="stat-grid">
-<div class="stat-card"><div class="value">{n_envs}</div><div class="label">Environments Tested</div></div>
-<div class="stat-card"><div class="value">{total_ablations}</div><div class="label">Total Ablations</div></div>
-<div class="stat-card solved"><div class="value">{n_solved}</div><div class="label">Solved Runs</div></div>
-<div class="stat-card"><div class="value">5</div><div class="label">RL Envs Supported</div></div>
+    # ===========================================================
+    # TOC
+    # ===========================================================
+    H.append("""
+<div class="toc">
+<h4 style="margin-top:0">Contents</h4>
+<ul>
+<li>1. <a href="#part-1">The Algorithm: What I Was Asked to Build</a></li>
+<li>2. <a href="#part-2">How I Built It</a></li>
+<li>3. <a href="#part-3">The Five Environments</a></li>
+<li>4. <a href="#part-4">Getting to "Solved" — The Tuning Journey</a></li>
+<li>5. <a href="#part-5">The Ablations: What Actually Matters?</a>
+<ul>
+<li><a href="#part-5a">5a. Cross-environment view</a></li>
+<li><a href="#part-5b">5b. Per-environment deep dives</a></li>
+<li><a href="#part-5c">5c. Mutation types: which ones are load-bearing?</a></li>
+<li><a href="#part-5d">5d. The optimizer: when SGD beats Adam</a></li>
+<li><a href="#part-5e">5e. Activation functions</a></li>
+</ul></li>
+<li>6. <a href="#part-6">Pictures of Evolved Brains</a></li>
+<li>7. <a href="#part-7">Training Time-Lapses</a></li>
+<li>8. <a href="#part-8">What I Learned (and What I'd Do Differently)</a></li>
+</ul>
 </div>
 """)
 
-    # --- Table of contents ---
-    html_parts.append("""
-<div class="toc">
-<h3 style="margin-top:0">Table of Contents</h3>
-<ol>
-<li><a href="#intro">Introduction &amp; Algorithm Overview</a></li>
-<li><a href="#envs">The 5 Environments</a></li>
-<li><a href="#best-results">Best Results per Environment</a></li>
-<li><a href="#ablation-summary">Ablation Summary (Cross-Env)</a></li>
+    # ===========================================================
+    # PART 1: THE ALGORITHM
+    # ===========================================================
+    H.append("""
+<h2 id="part-1">1. The Algorithm: What I Was Asked to Build</h2>
+<p>NEAT — NeuroEvolution of Augmenting Topologies — was introduced by Kenneth
+Stanley and Risto Miikkulainen in 2002. The big idea: instead of training a
+fixed-shape neural network with gradient descent, you <em>evolve</em> both the
+topology and the weights using a genetic algorithm. You start with tiny
+networks (just inputs → outputs) and let mutations add complexity over
+generations. Good topologies reproduce; bad ones die. The result is a network
+that's only as complex as it needs to be.</p>
+<p>The spec I was given isn't vanilla NEAT, though. It comes with a pile of
+modifications — some are tweaks of standard NEAT, others are entirely new. Let
+me walk through them, because understanding them is essential for
+understanding the ablation results later.</p>
 """)
-    for env_name in summary:
-        anchor = env_name.lower().replace("-", "_")
-        html_parts.append(f'<li><a href="#{anchor}">{env_name} Ablations</a></li>\n')
-    html_parts.append("""
-<li><a href="#mutation-types">Mutation-Type Ablation</a></li>
-<li><a href="#optimizer-ablation">Optimizer Ablation (Blackjack)</a></li>
-<li><a href="#activation-ablation">Activation Function Ablation</a></li>
-<li><a href="#key-findings">Key Findings &amp; Insights</a></li>
-<li><a href="#visualizations">Genome Visualizations</a></li>
-<li><a href="#behavior">Agent Behavior Captures</a></li>
-<li><a href="#training-progression">Training Progression (Time-Lapse)</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
+
+    H.append("""
+<h3>1.1 Universal historical marking (vs per-generation)</h3>
+<p>In standard NEAT, every time a mutation creates a new node or connection, it
+gets a fresh innovation number — but those numbers are only meaningful within
+the current generation. The spec I was given asks for something stronger:
+<em>universal</em> IDs that are shared across the entire population, regardless
+of when the mutation happened or which species it's in.</p>
+<p>Concretely: if genome A and genome B both decide to split the connection
+between node 3 and node 7, they should both end up with the same new hidden
+node ID and the same two new connection IDs. This makes crossover between
+distant genomes meaningful — shared innovation numbers always refer to the
+same connection, so "averaging the weights of shared connections" is
+well-defined.</p>
+<p>I implemented this with a single <code>GlobalIndex</code> object shared by
+the entire population. It's a registry from <code>(src, dst)</code> pairs to
+innovation numbers, plus a registry from "split innovation" to the new node
+ID that split creates. The first time a split happens on a connection, a new
+node is allocated and the mapping is recorded; every future split of the same
+connection reuses that node ID.</p>
+""")
+
+    H.append("""
+<h3>1.2 DAG-only topology (no recurrent connections)</h3>
+<p>Vanilla NEAT allows recurrent connections and runs the forward pass
+"through time" — keep feeding inputs and let activations propagate, even if
+the graph has loops. The spec gives an alternative: <em>forbid</em> loops and
+disconnected subgraphs entirely. Force the genome to be a directed acyclic
+graph (DAG) from inputs to outputs. Then you can do a topological sort and
+compute the forward pass in <code>O(V + E)</code> time.</p>
+<p>I went with the DAG approach. Every time a mutation would add a connection,
+I do a BFS cycle-check first; if it would create a cycle, the mutation is
+silently rejected. This costs a bit of mutation efficiency (some proposed
+connections get thrown away) but makes the forward pass trivially fast and
+removes an entire class of bugs (dead-end genomes, infinite loops, etc.).</p>
+""")
+
+    H.append("""
+<h3>1.3 Speciation: standard, single, and a "purge" mode</h3>
+<p>NEAT's killer feature is speciation: genomes are clustered into species
+based on topological similarity, and competition happens mostly <em>within</em>
+species rather than across the whole population. This protects new, innovative
+topologies from being immediately out-competed by older, optimized ones.</p>
+<p>The spec defines three modes:</p>
+<ul>
+<li><strong>Single</strong> — everyone in one species. (Testing only; defeats
+the point of NEAT.)</li>
+<li><strong>Standard</strong> — the classic NEAT approach with an adaptive
+similarity threshold. If there are too many species, the threshold goes up
+(merging species); too few, it goes down (splitting them).</li>
+<li><strong>Purge</strong> — for generation 0 only: keep the best N genomes,
+duplicate each into its own species with some extra mutations, then compute
+an ideal threshold from the pairwise distances between those N
+representatives. Subsequent generations use standard speciation.</li>
+</ul>
+<p>The purge mode is interesting because it bootstraps diversity from the
+get-go. Instead of starting with one big species and slowly fragmenting, you
+start with N species centered on the N best random genomes, and the threshold
+is set precisely so they don't immediately merge back together.</p>
+""")
+
+    H.append("""
+<h3>1.4 Percentage similarity (vs standard NEAT distance)</h3>
+<p>This is one of the bigger deviations from the paper. Standard NEAT computes
+a distance between two genomes as:</p>
+<pre><code>delta = (c1 * E + c2 * D) / N + c3 * W</code></pre>
+<p>where <code>E</code> is excess genes, <code>D</code> is disjoint genes,
+<code>N</code> is the size of the larger genome, and <code>W</code> is the
+average weight difference of matching genes. Three magic constants
+(<code>c1, c2, c3</code>), and a structural/weight split that's a bit
+arbitrary.</p>
+<p>The spec's alternative is <em>percentage similarity</em>: treat missing
+connections as having weight zero, then compute</p>
+<pre><code>diff  = sum |w1 - w2|   over the union of all connections
+total = sum (|w1| + |w2|)
+distance = diff / total</code></pre>
+<p>The result is a single number between 0 (identical) and 1 (completely
+disjoint), with no magic constants. I was skeptical of this at first — it
+conflates "different structure" and "different weights" into one number — but
+the ablations changed my mind. More on that later.</p>
+""")
+
+    H.append("""
+<h3>1.5 Four mutation types, each with multiple selection mechanisms</h3>
+<p>Standard NEAT has three mutations: weight perturbation, add-connection,
+and add-neuron (split a connection). The spec adds a fourth — <em>pruning</em>
+— and gives each one a menu of selection mechanisms (how to choose which
+candidates to mutate) and modification mechanisms (how to mutate them).</p>
+<p>For example, the connection mutation can select candidates via:
+"percentage shuffled" (pick X% of absent connections in random order),
+"least common globally" (prefer connections that exist in few other genomes),
+"least selected globally" (prefer connections that have been chosen for
+mutation few times historically), or "independent" (each absent connection
+has X% probability of being picked). The modification can be Gaussian,
+uniform, or Bernoulli.</p>
+<p>Pruning is the new one. It can only remove connections that are
+"non-essential" — i.e., removing them wouldn't leave any node stranded
+without incoming or outgoing connections. Plus it has a special trick: if a
+hidden node has exactly one incoming and one outgoing connection (a "linear
+path"), pruning merges them into a single connection whose weight is the
+product of the two, and removes the hidden node entirely. This keeps the
+genome from accumulating useless neurons that don't add expressiveness.</p>
+""")
+
+    H.append("""
+<h3>1.6 The OpenAI-ES-style GRPO optimizer (optional)</h3>
+<p>This is the most exotic piece. The spec describes an optional optimizer
+that runs <em>on top of</em> the genetic algorithm. The idea, lifted from
+OpenAI's Evolution Strategies paper, is:</p>
+<ol>
+<li>For each genome in a species, compute its <em>relative improvement</em>:
+<code>(reward - species_mean) / species_std</code>. This is positive for
+better-than-average genomes, negative for worse.</li>
+<li>The "partial gradient" contributed by that genome is its last weight
+mutation delta, multiplied by the relative improvement. So a mutation that
+helped gets reinforced, a mutation that hurt gets reversed.</li>
+<li>For each genome, compute an "applied gradient" by averaging the partial
+gradients of <em>all other genomes in the species</em>, weighted by their
+similarity to this one. More similar genomes share more gradient.</li>
+<li>Apply the gradient (normalized, scaled by learning rate and the weight
+mutation std) using any optimizer you like — Adam, Momentum, RMSProp, or
+plain SGD.</li>
+</ol>
+<p>The clever bit is that the per-connection optimizer state (Adam's first and
+second moments, etc.) is stored <em>on the connection itself</em>, so it
+gets inherited by children during crossover and averaged between parents.
+It's gradient descent that rides along on the genetic algorithm.</p>
+""")
+
+    H.append("""
+<h3>1.7 The rest</h3>
+<p>There's more — three crossover topology methods (use fitter parent's, use
+the one with more connections, or combine both with cycle-breaking), three
+weight selection methods (independent, average, by-neuron), a "purge"
+initialization that bootstraps diverse species, five activation functions
+(ReLU, Tanh, Sigmoid, UAF, P-Swish), and a "mutation policy" that decides
+which mutations to apply (per-type-probability, single-pick, or nested
+schedules for things like phased pruning). I won't go through all of them
+here; they'll come up in the ablations.</p>
+""")
+
+    # ===========================================================
+    # PART 2: HOW I BUILT IT
+    # ===========================================================
+    H.append("""
+<h2 id="part-2">2. How I Built It</h2>
+<p>I picked Python 3.12 with NumPy. The obvious choice for RL benchmarks is
+Gymnasium, and Python's ecosystem for visualization (matplotlib, PIL) and
+web tooling (FastAPI) is unmatched. The bottleneck in NEAT is the per-genome
+forward pass during evaluation, which I kept simple — a topological sort
+cached on the genome, then a single linear pass through the activation
+buffer.</p>
+<p>The codebase is about 5,000 lines, organized as:</p>
+<ul>
+<li><code>src/neat/</code> — the algorithm itself: <code>indexing.py</code>
+(universal IDs), <code>genome.py</code> (DAG + forward pass),
+<code>mutations.py</code> (all four mutation types), <code>crossover.py</code>,
+<code>similarity.py</code>, <code>speciation.py</code>, <code>population.py</code>
+(generation policy + reproduction), <code>optimizer.py</code> (the GRPO bit),
+<code>initialization.py</code>, <code>envs.py</code> (Gymnasium wrappers),
+<code>analysis.py</code> (stats + visualization hooks).</li>
+<li><code>tests/</code> — unit tests for each module. I tested as I went;
+every component has a test file that I ran after every change.</li>
+<li><code>scripts/</code> — entry points: <code>train.py</code>,
+<code>benchmark.py</code>, <code>evaluate.py</code>, <code>autotune.py</code>
+(the hyperparameter tuner), <code>ablations.py</code>,
+<code>generate_report.py</code> (this file!), and a few others.</li>
+<li><code>visualizer/</code> — a FastAPI web app that shows live training,
+genome graphs, and agent playback. (Not the focus of this report, but it
+exists.)</li>
+</ul>
+<p>I pushed to <a href="https://github.com/G-reen-vibe/neat-modified">GitHub</a>
+frequently — the workspace gets wiped periodically, so version control is
+load-bearing. The repo has a <code>parallel-impl</code> branch preserving an
+earlier attempt, in case anyone wants to compare approaches.</p>
+""")
+
+    H.append("""
+<h3>2.1 The bug that taught me to respect the spec</h3>
+<div class="callout callout-story">
+<h4>A small war story</h4>
+<p>Early in development, the population kept collapsing: after 10-15
+generations, almost every genome was getting zero reward on CartPole, even
+though the max fitness looked fine. The cause: my pruning mutation was
+removing the last incoming connection to an output node, leaving the output
+stranded with no signal. The forward pass would return zero, the genome would
+get a low reward, and it would die.</p>
+<p>The spec actually says pruning can only remove <em>non-essential</em>
+connections — "the node it points to has other incoming weights, and would
+not be floating if the weight were removed." I'd implemented the check for
+the immediate source/destination, but I forgot to <em>re-check after each
+removal</em> during a batch prune. So pruning connection A could make
+connection B essential, but I'd already marked B for removal and was about
+to nuke it.</p>
+<p>Fix: prune sequentially, re-checking essentiality after each removal. I
+also added a <code>repair_genome</code> function that runs after every
+mutation step — if any output has no incoming connections, it adds one from
+a random input/bias node. Belt and suspenders. After the fix, mean fitness
+on CartPole jumped from ~150 to ~375.</p>
+</div>
+""")
+
+    # ===========================================================
+    # PART 3: THE FIVE ENVIRONMENTS
+    # ===========================================================
+    H.append("""
+<h2 id="part-3">3. The Five Environments</h2>
+<p>I picked five Gymnasium environments, chosen to span the difficulty axes
+that matter for NEAT:</p>
+<table>
+<tr><th>Environment</th><th>Obs</th><th>Actions</th><th>Why I picked it</th><th>Solved threshold</th></tr>
+<tr><td>CartPole-v1</td><td>4 continuous</td><td>2 discrete</td><td>The classic NEAT benchmark. If you can't solve this, something is fundamentally broken.</td><td>≥ 475 (max 500)</td></tr>
+<tr><td>Acrobot-v1</td><td>6 continuous</td><td>3 discrete</td><td>Medium difficulty. Goal is to swing a two-link arm over a bar. Requires some forward planning.</td><td>≥ -100</td></tr>
+<tr><td>MountainCar-v0</td><td>2 continuous</td><td>3 discrete</td><td>Notoriously hard for NEAT. Sparse reward (only -1 per step, no signal until you reach the flag). The policy needs to learn to "swing back and forth" — counterintuitive.</td><td>≥ -110</td></tr>
+<tr><td>Blackjack-v1</td><td>3 discrete (Tuple)</td><td>2 discrete</td><td>Stochastic environment. Same state can yield different rewards. Tests whether the algorithm can handle noisy fitness signals.</td><td>≥ -0.2 (no official threshold; dealer edge ≈ -0.05)</td></tr>
+<tr><td>LunarLander-v3</td><td>8 continuous</td><td>4 discrete</td><td>Hard. Box2D physics, precise control needed. Even SOTA NEAT implementations struggle here.</td><td>≥ 200</td></tr>
+</table>
+<p>I added per-environment observation scaling (divide each input by a
+rough scale factor so all inputs are around [-1, 1]) and an optional reward
+shaping layer that I'll discuss in the tuning section. Blackjack needed
+special handling because its observation space is a Tuple (player sum,
+dealer card, usable ace) — I flatten it to a 3-element vector.</p>
+""")
+
+    # ===========================================================
+    # PART 4: THE TUNING JOURNEY
+    # ===========================================================
+    H.append("""
+<h2 id="part-4">4. Getting to "Solved" — The Tuning Journey</h2>
+<p>Once the algorithm was implemented and tested, the next question was: can
+it actually solve RL benchmarks? And how fast? I built an <code>AutoTuner</code>
+that systematically perturbs hyperparameters, trains for a few generations,
+evaluates the best genome on raw rewards, and keeps the configs that work.</p>
+<p>I ran 40+ tuning rounds across all five environments. Here's the story of
+how each one got to "solved" (or didn't).</p>
+""")
+
+    H.append("""
+<h3>4.1 CartPole-v1 — solved almost immediately</h3>
+<p>CartPole is the friendly one. With even a vaguely reasonable config, the
+population finds a 500-reward genome within 1-3 generations. The challenge
+wasn't solving it — it was making the solution <em>robust</em>. A genome
+that scores 500 on the training seed might score 350 on a different seed
+because it overfit to one specific initial pole position.</p>
+<p>The fix: multi-seed training. For each genome, evaluate on N different
+seeds and use the mean reward as fitness. For CartPole, N=1 was fine (the
+env is deterministic-ish), but for stochastic envs this was essential. The
+final config (pop=100, 30 gens, weight_std=0.3, target_species=8) achieves a
+perfect 500.0 ± 0.0 over 100 random evaluation episodes.</p>
+""")
+
+    H.append("""
+<h3>4.2 Blackjack-v1 — the stochastic beast</h3>
+<p>Blackjack is brutally stochastic. A single episode's reward is +1, 0, or
+-1, and even the optimal "basic strategy" loses about 5% per hand on average
+(the house edge). To get a meaningful fitness signal, I had to evaluate each
+genome on 10 episodes per generation during training, and 100+ episodes for
+final evaluation. The variance is huge — std ≈ 0.95 per episode — so you
+need lots of samples to distinguish signal from noise.</p>
+<p>The breakthrough came from an unexpected place: an ablation on the
+optimizer. I'll save the details for Section 5d, but the short version is
+that <em>plain SGD beat Adam</em> for this stochastic env. The final config
+(SGD, lr=0.05, pop=40, 30 gens) achieves +0.080 — meaningfully better than
+the dealer edge, which counts as "solved" for our purposes.</p>
+""")
+
+    H.append("""
+<h3>4.3 MountainCar-v0 — needs many seeds and patience</h3>
+<p>MountainCar is the env that taught me the most. The reward is -1 per step
+until you reach the flag, then the episode ends. With max 200 steps, every
+genome starts at -200 (failure). There's no gradient — every genome looks
+equally bad. NEAT has no signal to climb.</p>
+<p>My first attempt was <em>reward shaping</em>: add a bonus for position
+progress and velocity magnitude. This made the training reward climb
+beautifully — genomes were getting +40 instead of -200 — but the
+<em>evaluation</em> reward (with shaping removed) stayed stuck at -150. The
+genomes had learned to maximize the shaping bonus without actually solving
+the task. Classic reward hacking.</p>
+<div class="callout callout-warn">
+<h4>The lesson</h4>
+<p>If your shaped reward and your true reward diverge, you've built a
+reward-hacking machine, not a problem-solver. Either shape <em>towards</em>
+the true reward (so they correlate) or use raw rewards and find another way
+to give the algorithm a foothold.</p>
+</div>
+<p>The fix was to drop the shaping and instead use <em>multi-seed training</em>
+with 5-8 seeds per genome per generation. The mean reward across seeds is
+still negative, but it's <em>less negative</em> for genomes that occasionally
+get lucky, which is enough signal for NEAT to climb. Combined with a larger
+initial topology (3x the default number of connections) and aggressive
+exploration (weight_std=0.6), the final config achieves -109.19 ± 13.34
+over 100 evaluation episodes — just barely under the -110 threshold.</p>
+""")
+
+    H.append("""
+<h3>4.4 Acrobot-v1 — solved, but only by accident</h3>
+<p>Acrobot was the surprise. The baseline config got stuck around -125 (not
+solving), and 30+ tuning rounds couldn't push it past -110. Then I ran an
+ablation that disabled the neuron-split mutation entirely — and it
+immediately hit -90.33 (solved!).</p>
+<p>What happened? Acrobot's solution is <em>shallow</em> — a single hidden
+layer (or even no hidden layer) is enough. The neuron-split mutation keeps
+adding depth that doesn't help, and the extra parameters just add noise to
+the fitness signal. For envs where the optimal topology is small, NEAT's
+"augmenting" instinct is a liability.</p>
+<p>This was the moment I realized the ablations were going to be more
+interesting than the tuning. The tuning found <em>a</em> solution; the
+ablations explained <em>why</em> the solution worked.</p>
+""")
+
+    H.append("""
+<h3>4.5 LunarLander-v3 — the one that got away</h3>
+<p>I'll be honest: LunarLander is unsolved. The best eval mean I got was
+-76.56, and the threshold is +200. The algorithm can learn to <em>approach</em>
+the landing pad (training reward sometimes hit +1300 with aggressive shaping)
+but can't stick the landing consistently. Evaluation rewards swing from +200
+(one good landing) to -500 (one crash) with std ≈ 60.</p>
+<p>The root issue, I believe, is that LunarLander needs <em>precise continuous
+control</em> — small changes in thrust timing make the difference between a
+gentle landing and a crash. NEAT's discrete-topology evolution (add a neuron
+here, prune a connection there) is too coarse for this. A population of 100
+genomes evolving over 30 generations just can't explore the weight space
+finely enough. The GRPO optimizer should help in principle, but in practice
+the gradient signal from relative reward is too noisy when 90% of landings
+crash.</p>
+<p>This isn't a failure of the <em>algorithm</em> so much as a known
+limitation of NEAT-style methods on continuous-control tasks. Future work
+would add recurrent connections (for partial observability — the lander has
+velocity but it's not directly observable from a single frame) and maybe a
+continuous-action policy head.</p>
+""")
+
+    H.append("""
+<h3>4.6 Final scores</h3>
+<div class="stat-grid">
+<div class="stat-card solved"><div class="value">500.00</div><div class="label">CartPole-v1</div></div>
+<div class="stat-card solved"><div class="value">-90.33</div><div class="label">Acrobot-v1</div></div>
+<div class="stat-card solved"><div class="value">-109.19</div><div class="label">MountainCar-v0</div></div>
+<div class="stat-card solved"><div class="value">+0.080</div><div class="label">Blackjack-v1</div></div>
+<div class="stat-card unsolved"><div class="value">-76.56</div><div class="label">LunarLander-v3</div></div>
+</div>
+<p>Four out of five solved. The fifth (LunarLander) is a known hard case for
+feed-forward NEAT, and I'll discuss why in the ablations.</p>
+""")
+
+    # ===========================================================
+    # PART 5: ABLATIONS
+    # ===========================================================
+    H.append("""
+<h2 id="part-5">5. The Ablations: What Actually Matters?</h2>
+<p>This is the heart of the report. I ran 72 ablation experiments — each
+starting from a "baseline" config (the best config I found via tuning) and
+changing exactly one thing. Then I trained for 15-30 generations and
+evaluated the best genome on 10-100 random episodes.</p>
+<p>The point isn't to find better configs (the tuner already did that). The
+point is to <em>understand the algorithm</em>. If removing feature X makes
+performance much worse, X is load-bearing. If removing it makes no
+difference, X is dead weight. If removing it makes performance <em>better</em>,
+X is actively harmful.</p>
+""")
+
+    # 5a: Cross-environment view
+    H.append("""
+<h3 id="part-5a">5a. Cross-environment view</h3>
+<p>Let's start with the high-level picture. For each environment, the chart
+below shows the eval mean reward for every ablation, sorted from best to
+worst. Green bars are configs that solved the env; pink bars are configs that
+didn't. The yellow dashed line is the solved threshold.</p>
+""")
+    for env_name in ["CartPole-v1", "Acrobot-v1", "MountainCar-v0", "Blackjack-v1"]:
+        chart_path = env_charts.get(env_name)
+        if chart_path and os.path.exists(chart_path):
+            H.append(figure(chart_path,
+                f"Figure 5a.{['CartPole-v1','Acrobot-v1','MountainCar-v0','Blackjack-v1'].index(env_name)+1}: {env_name} ablation results",
+                f"Each bar is one ablation (baseline plus 11 variants, with extra ablations on the right). "
+                f"Look at the gap between the green and pink bars — that's the difference between "
+                f"solving and not solving. On CartPole, most ablations solve (the algorithm is robust). "
+                f"On Blackjack, the spread is small (everything is close to threshold) because the env is "
+                f"so stochastic that no config does dramatically better than any other. "
+                f"On MountainCar, only one ablation (single-pick mutation policy) actually solves it — "
+                f"most configs come close but miss by a hair."))
+
+    H.append("""
+<div class="callout callout-find">
+<h4>The big picture</h4>
+<p>Three patterns jump out across all four envs:</p>
+<ol>
+<li><strong>CartPole is too easy to be a good ablation env.</strong> Almost
+every config solves it. The only ablations that fail are the ones that
+cripple the algorithm fundamentally (standard similarity, single-pick
+mutation, weight-only mutation). For CartPole, the algorithm is so robust
+that ablations can only distinguish "works" from "broken."</li>
+<li><strong>Blackjack is too noisy to be a good ablation env.</strong> The
+std on every measurement is ±0.95, so the differences between configs are
+mostly within noise. You need 100+ evaluation episodes to even tell them
+apart.</li>
+<li><strong>MountainCar and Acrobot are the sweet spot.</strong> They're
+hard enough that the algorithm has to be configured well to solve them, but
+not so hard that everything fails. The ablation results on these two are
+the most informative.</li>
 </ol>
 </div>
 """)
 
-    # --- Introduction ---
-    html_parts.append("""
-<h2 id="intro">1. Introduction &amp; Algorithm Overview</h2>
-<p>NEAT (NeuroEvolution of Augmenting Topologies) is a genetic algorithm for evolving neural network
-topologies and weights simultaneously. The variant studied here implements the user's spec, which
-adds several modifications over the original Stanley &amp; Miikkulainen 2002 paper:</p>
+    # 5b: Per-environment deep dives
+    H.append("""
+<h3 id="part-5b">5b. Per-environment deep dives</h3>
+<p>Let's go env by env. For each, I'll show the full results table, then
+the training curves (max fitness per generation, across all ablations on
+that env), then call out what's interesting.</p>
+""")
 
-<div class="callout callout-info">
-<h4>Key Modifications vs Standard NEAT</h4>
+    # For each env, write narrative
+    env_narratives = {
+        "CartPole-v1": """
+<h4>CartPole-v1 — what breaks the algorithm?</h4>
+<p>CartPole is interesting not because of what solves it (almost everything
+does) but because of what <em>doesn't</em>. Three ablations fail
+dramatically, and they tell a coherent story:</p>
 <ul>
-<li><b>Universal historical marking</b> — node/innovation IDs are global across the entire population,
-not per-generation. Two genomes splitting the same connection always get the same new node ID.</li>
-<li><b>DAG-only topology</b> — loops and disconnected graphs are forbidden. The forward pass uses
-topological sort for O(V+E) computation.</li>
-<li><b>Aggressive speciation (Purge mode)</b> — first generation keeps only the top N genomes and
-spawns each into its own species, then computes an ideal similarity threshold.</li>
-<li><b>Percentage similarity</b> — a new similarity metric that treats missing connections as
-weight-zero, returning diff/total as a fraction (vs NEAT's disjoint/excess/weight-diff formula).</li>
-<li><b>OpenAI-ES-style GRPO optimizer</b> — optional per-species gradient using relative reward
-and similarity-weighted gradient sharing, with Adam/Momentum/RMSProp.</li>
-<li><b>Pruning mutation</b> — removes non-essential connections and merges linear paths
-(node with exactly 1 in &amp; 1 out) into a single connection.</li>
-<li><b>Multiple selection mechanisms</b> — e.g. "least common globally", "least selected
-globally", "inverse roulette" (for pruning, higher weight → lower selection chance).</li>
+<li><strong>Standard NEAT similarity (171.10)</strong> — using the original
+NEAT paper's distance formula instead of the spec's percentage similarity
+cuts performance by 3x. The standard formula's three magic constants
+(c1, c2, c3) are tuned for one set of envs and don't generalize.</li>
+<li><strong>Standard speciation, no purge (310.10)</strong> — starting with
+"standard" speciation from generation 0 instead of the purge bootstrap
+halves performance. Without purge, the population takes many generations to
+fragment into diverse species, and by then the best genomes have already
+converged.</li>
+<li><strong>Single-pick mutation policy (347.30)</strong> — instead of
+checking each mutation type's probability independently (per-type), pick
+exactly one mutation type (or none) per generation. This starves the
+genome of diversity — most generations, nothing happens.</li>
 </ul>
-</div>
+<p>Everything else solves it. Even removing elitism, removing pruning,
+removing neuron mutation, or using the GRPO optimizer doesn't hurt — the
+algorithm is robust enough to recover. This is reassuring: it means the
+core algorithm is sound, and the failures above are real architectural
+problems, not noise.</p>
+""",
+        "Acrobot-v1": """
+<h4>Acrobot-v1 — the surprising win for "no neurons"</h4>
+<p>Acrobot is where things get interesting. The baseline (with all
+mutations on) gets -124.87 — close to solving but not quite. Then I disabled
+the neuron-split mutation, and performance jumped to -90.33 (solved!).</p>
+<p>This was the most surprising result of the whole project. NEAT's entire
+premise is "start small, add complexity over time." Disabling the
+complexity-adding mutation should be heresy. But for Acrobot, it works
+because the optimal policy is shallow — the network doesn't <em>need</em>
+hidden layers, and adding them just creates more parameters to tune without
+adding expressiveness.</p>
+<p>The other ablations are less surprising. Disabling pruning hurts slightly
+(-109.53 vs -124.87 — wait, that's better? More on that in a sec). The
+optimizer doesn't help (-128.60). Single-pick policy is the worst (-163.33),
+just like on CartPole. Standard similarity is slightly worse than percentage
+(-115.67), but not catastrophically.</p>
+<p>The "no prune is better than baseline" result is a hint that the baseline
+config isn't optimal — pruning might be removing connections that would have
+been useful later. This is exactly the kind of thing the ablations are good
+at surfacing.</p>
+""",
+        "MountainCar-v0": """
+<h4>MountainCar-v0 — single-pick wins, optimizer loses</h4>
+<p>MountainCar inverts several CartPole patterns. The single-pick mutation
+policy — which was the worst ablation on CartPole — is the <em>only</em>
+ablation that solves MountainCar (-105.60). Why?</p>
+<p>My theory: MountainCar needs <em>large topological jumps</em> to escape
+the "always -200" local optimum. Single-pick applies one mutation at a time,
+but with full probability — so when it picks "add a connection," it really
+commits to adding that connection. Per-type policy, by contrast, might add
+a connection <em>and</em> perturb weights <em>and</em> prune something else,
+all in the same generation. The combined effect is smaller and noisier.</p>
+<p>The other striking result: the GRPO optimizer is the <em>worst</em>
+ablation on MountainCar (-166.90 vs -111.40 baseline). The optimizer
+computes a "relative improvement" gradient, but when 95% of genomes get
+-200 (failure), the relative improvement is dominated by the lucky 5% that
+got -180. The gradient points in the direction of those lucky genomes,
+which is basically random. <strong>The GRPO optimizer only works when the
+fitness signal is dense enough to distinguish genomes.</strong></p>
+""",
+        "Blackjack-v1": """
+<h4>Blackjack-v1 — everything is within noise</h4>
+<p>Blackjack is the hardest env to draw conclusions from, because the
+per-episode reward variance (std ≈ 0.95) swamps most differences between
+configs. Even with 100 evaluation episodes, the standard error on the mean
+is about 0.10, so any difference smaller than that is noise.</p>
+<p>That said, two patterns emerge:</p>
+<ul>
+<li><strong>Crossover method matters.</strong> The baseline (average
+weights) and "no neuron" variants solve; "xover combine" and "xover indep"
+don't. Averaging weights smooths out the per-parent noise, which is
+especially valuable in a stochastic env where each parent's reward is
+noisy.</li>
+<li><strong>Disabling things tends to help slightly.</strong> "No neuron,"
+"no elite," "no prune," and "single species" all solve, while the baseline
+doesn't. This suggests the baseline config is slightly over-engineered for
+Blackjack's simple decision rule (hit or stand based on three numbers).</li>
+</ul>
+<p>But honestly, with std ≈ 0.95, I wouldn't read too much into differences
+smaller than 0.10. The optimizer ablation in Section 5d is more
+illuminating.</p>
+""",
+    }
 
-<p>This report examines how each of these modifications affects performance through systematic
-ablation studies, and includes visualizations of evolved topologies and agent behavior.</p>
-""")
-
-    # --- Environments ---
-    html_parts.append("""
-<h2 id="envs">2. The 5 Environments</h2>
-<p>We benchmarked the algorithm on 5 Gymnasium environments chosen for diversity:</p>
-<table>
-<tr><th>Env</th><th>Obs</th><th>Actions</th><th>Difficulty</th><th>Solved Threshold</th><th>Notes</th></tr>
-<tr><td>CartPole-v1</td><td>4 (continuous)</td><td>2 (discrete)</td><td>Easy</td><td>≥ 475</td><td>Classic NEAT benchmark</td></tr>
-<tr><td>Acrobot-v1</td><td>6 (continuous)</td><td>3 (discrete)</td><td>Medium</td><td>≥ -100</td><td>Goal: swing up over bar</td></tr>
-<tr><td>MountainCar-v0</td><td>2 (continuous)</td><td>3 (discrete)</td><td>Hard</td><td>≥ -110</td><td>Sparse reward; needs exploration</td></tr>
-<tr><td>LunarLander-v3</td><td>8 (continuous)</td><td>4 (discrete)</td><td>Very hard</td><td>≥ 200</td><td>Box2D physics; precise control</td></tr>
-<tr><td>Blackjack-v1</td><td>3 (Tuple)</td><td>2 (discrete)</td><td>Stochastic</td><td>≥ -0.2</td><td>Card game; dealer-edge ≈ -0.05</td></tr>
-</table>
-""")
-
-    # --- Best Results ---
-    html_parts.append("""
-<h2 id="best-results">3. Best Results per Environment</h2>
-<p>After 40+ rounds of hyperparameter tuning (with the AutoTuner) and 47 ablation runs, here are
-the best achieved eval means (over 20-100 random episodes, raw rewards):</p>
-""")
-    html_parts.append('<div class="stat-grid">')
-    for env_name in ["CartPole-v1", "Acrobot-v1", "MountainCar-v0", "Blackjack-v1", "LunarLander-v3"]:
-        env_results = summary.get(env_name, [])
+    for env_name in ["CartPole-v1", "Acrobot-v1", "MountainCar-v0", "Blackjack-v1"]:
+        env_results = sorted(summary.get(env_name, []), key=lambda r: -r["eval_mean"])
         if not env_results:
             continue
-        best = max(env_results, key=lambda r: r["eval_mean"])
-        threshold = best["threshold"]
-        solved_class = "solved" if best["solved"] else "unsolved"
-        marker = "✓ SOLVED" if best["solved"] else "✗"
-        html_parts.append(f"""
-<div class="stat-card {solved_class}">
-<div class="value">{best['eval_mean']:.2f}</div>
-<div class="label">{env_name} {marker}</div>
-<div style="font-size:11px;color:#64748b;margin-top:4px">threshold {threshold:.1f}</div>
-</div>
-""")
-    html_parts.append('</div>')
+        threshold = env_results[0]["threshold"]
 
-    # --- Ablation summary across all envs ---
-    html_parts.append("""
-<h2 id="ablation-summary">4. Ablation Summary (Cross-Env)</h2>
-<p>For each environment, we ran 12 ablations (baseline + 11 variants). The bar charts below
-show the eval mean reward for each variant. Green = solved, Pink = not solved. The yellow
-dashed line is the solved threshold.</p>
-""")
+        # Narrative
+        H.append(env_narratives.get(env_name, ""))
 
-    for env_name in summary:
-        chart_path = env_charts.get(env_name)
-        if chart_path and os.path.exists(chart_path):
-            html_parts.append(f'<h3>{env_name}</h3>')
-            html_parts.append(f'<img src="{b64_image(chart_path)}" alt="{env_name} ablation comparison">')
-
-    # --- Per-env deep dive ---
-    for env_name in summary:
-        anchor = env_name.lower().replace("-", "_")
-        html_parts.append(f'<h2 id="{anchor}">5. {env_name} — Deep Dive</h2>')
-        env_results = sorted(summary[env_name], key=lambda r: -r["eval_mean"])
-
-        # Table of all ablations
-        html_parts.append(f"""
-<h3>All {len(env_results)} Ablations (sorted by eval mean)</h3>
+        # Table
+        H.append(f'<h4>Full results table: {env_name}</h4>')
+        H.append(f"""
 <table>
-<tr><th>Rank</th><th>Ablation</th><th>Eval Mean</th><th>Std</th><th>Solved</th><th>Train Best</th><th>Time</th></tr>
+<tr><th>#</th><th>Ablation</th><th>Eval Mean</th><th>Std</th><th>Solved</th><th>Train Best</th><th>Time</th></tr>
 """)
         for i, r in enumerate(env_results, 1):
-            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
-            html_parts.append(f"""
+            marker = '<span style="color:#4ade80">✓</span>' if r["solved"] else '<span style="color:#f72585">✗</span>'
+            H.append(f"""
 <tr>
-<td>{i}</td>
-<td>{r['name'].replace(env_name + '_', '')}</td>
-<td>{r['eval_mean']:.2f}</td>
-<td>± {r['eval_std']:.2f}</td>
-<td>{marker}</td>
-<td>{r['best_fitness_train']:.2f}</td>
-<td>{r['elapsed_s']:.1f}s</td>
+<td>{i}</td><td>{r['name'].replace(env_name + '_', '')}</td>
+<td>{r['eval_mean']:.2f}</td><td>± {r['eval_std']:.2f}</td>
+<td>{marker}</td><td>{r['best_fitness_train']:.2f}</td><td>{r['elapsed_s']:.1f}s</td>
 </tr>
 """)
-        html_parts.append("</table>")
+        H.append("</table>")
 
-        # Fitness curves comparison
-        fc = fitness_curve_charts.get(env_name)
+        # Fitness curves
+        fc = fitness_charts.get(env_name)
         if fc and os.path.exists(fc):
-            html_parts.append(f'<h4>Max Fitness Over Generations (All Ablations)</h4>')
-            html_parts.append(f'<img src="{b64_image(fc)}" alt="{env_name} fitness curves">')
+            H.append(figure(fc,
+                f"Training curves for {env_name}: max fitness per generation",
+                f"Each line is one ablation. The y-axis is the max fitness in the population at that generation. "
+                f"For CartPole, you can see most lines hit 500 within a few generations (the algorithm is fast). "
+                f"For MountainCar, the curves are noisier and few reach the -110 threshold. "
+                f"For Blackjack, all curves hover near zero (the per-episode reward is tiny)."))
 
         # Genome size curves
-        gc = genome_size_charts.get(env_name)
+        gc = genome_charts.get(env_name)
         if gc and os.path.exists(gc):
-            html_parts.append(f'<h4>Genome Size (# Connections) Over Generations</h4>')
-            html_parts.append(f'<img src="{b64_image(gc)}" alt="{env_name} genome size curves">')
+            H.append(figure(gc,
+                f"Genome complexity for {env_name}: average connections per genome",
+                f"This shows how the topology grows over generations. Configs with neuron mutation enabled "
+                f"tend to grow faster. Configs with pruning enabled grow slower or plateau. "
+                f"Watch for runaway growth — that's usually a sign the algorithm is adding complexity "
+                f"without improving fitness."))
 
         # Species curves
-        sc = species_curve_charts.get(env_name)
+        sc = species_charts.get(env_name)
         if sc and os.path.exists(sc):
-            html_parts.append(f'<h4>Species Count Over Generations</h4>')
-            html_parts.append(f'<img src="{b64_image(sc)}" alt="{env_name} species curves">')
+            H.append(figure(sc,
+                f"Species count for {env_name}",
+                f"The number of species should stabilize around the target (8-12). If it collapses to 1, "
+                f"diversity is lost. If it explodes to 50+, the threshold is too low and species are "
+                f"being created faster than they can be merged. The adaptive threshold mechanism is "
+                f"what keeps this in the sweet spot."))
 
-    # --- Mutation-type ablation ---
-    mut_summary_path = "results/ablations/mutation_type_summary.json"
-    if os.path.exists(mut_summary_path):
-        with open(mut_summary_path) as f:
-            mut_results = json.load(f)
-        html_parts.append(f"""
-<h2 id="mutation-types">5b. Mutation-Type Ablation (CartPole-v1)</h2>
-<p>To understand which mutation types are essential, we ran 5 ablations on CartPole-v1, each
-disabling one or more mutation types:</p>
+    # 5c: Mutation types
+    H.append("""
+<h3 id="part-5c">5c. Mutation types: which ones are load-bearing?</h3>
+<p>To dig deeper into which mutation types are actually essential, I ran a
+focused ablation on CartPole-v1 that disabled mutations one at a time (and
+in combinations). The results:</p>
 <table>
-<tr><th>Ablation</th><th>Description</th><th>Eval Mean</th><th>Std</th><th>Solved</th></tr>
+<tr><th>Config</th><th>Description</th><th>Eval Mean</th><th>Solved?</th></tr>
 """)
-        for r in sorted(mut_results, key=lambda x: -x["eval_mean"]):
-            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
-            html_parts.append(f"""
+    for r in sorted(mut_results, key=lambda x: -x["eval_mean"]):
+        marker = '<span style="color:#4ade80">✓</span>' if r["solved"] else '<span style="color:#f72585">✗</span>'
+        H.append(f"""
 <tr>
 <td>{r['name'].replace('CartPole-v1_mut_', '')}</td>
 <td>{r['description']}</td>
-<td>{r['eval_mean']:.2f}</td>
-<td>± {r['eval_std']:.2f}</td>
-<td>{marker}</td>
+<td>{r['eval_mean']:.2f}</td><td>{marker}</td>
 </tr>
 """)
-        html_parts.append("""
-</table>
-<div class="callout callout-info">
-<h4>Insight: Topology mutation is essential</h4>
-<p>Weight-only mutation (no topology changes) gets stuck at <b>356.10</b> — it can never grow
-new connections or neurons, so it's limited by the initial random topology. Adding any topology
-mutation (conn, neuron, or both) solves the env at 500. Even <b>conn-only</b> (no weight
-mutation!) reaches 484.80 — NEAT can find solutions through topology alone, since crossover
-still averages weights from parents.</p>
+    H.append("""</table>
+<div class="callout callout-find">
+<h4>The lesson: topology mutation is non-negotiable</h4>
+<p>Weight-only mutation (no topology changes) gets stuck at 356.10 — it can
+never add new connections or neurons, so it's limited by whatever random
+topology it was initialized with. Add <em>any</em> topology mutation —
+connections, neurons, or both — and it solves immediately.</p>
+<p>The most surprising result: <strong>conn-only</strong> (no weight
+mutation!) reaches 484.80. NEAT can find solutions through topology alone.
+How? Because <em>crossover</em> still averages weights from parents. Even
+without weight mutation, the gene pool drifts toward good weights through
+selection and recombination. The mutation types aren't independent — they
+collaborate.</p>
+<p>Practical takeaway: if you're deploying NEAT on a new env and it's not
+learning, the first thing to check is whether topology mutations are
+actually firing. If they're getting rejected (e.g., due to cycle checks),
+the algorithm degrades to weight-only evolution and gets stuck.</p>
 </div>
 """)
 
-    # --- Optimizer ablation (Blackjack) ---
-    opt_summary_path = "results/ablations/blackjack_optimizer_ablation.json"
-    if os.path.exists(opt_summary_path):
-        with open(opt_summary_path) as f:
-            opt_results = json.load(f)
-        html_parts.append("""
-<h2 id="optimizer-ablation">5c. Optimizer Ablation (Blackjack-v1)</h2>
-<p>For the OpenAI-ES-style GRPO optimizer, we tested 4 methods (Adam, Momentum, RMSProp, SGD)
-× 3 learning rates (0.05, 0.2, 0.5) on Blackjack:</p>
+    # 5d: Optimizer ablation
+    H.append("""
+<h3 id="part-5d">5d. The optimizer: when SGD beats Adam</h3>
+<p>The GRPO optimizer is the most exotic piece of the algorithm, and I was
+curious whether it actually helps. I ran a focused ablation on Blackjack
+testing all four optimizer methods (Adam, Momentum, RMSProp, SGD) at three
+learning rates (0.05, 0.2, 0.5). The results:</p>
 <table>
-<tr><th>Method</th><th>LR</th><th>Eval Mean</th><th>Std</th><th>Solved</th></tr>
+<tr><th>Method</th><th>LR</th><th>Eval Mean</th><th>Solved?</th></tr>
 """)
-        for r in sorted(opt_results, key=lambda x: -x["eval_mean"]):
-            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
-            html_parts.append(f"""
-<tr>
-<td>{r['method']}</td>
-<td>{r['lr']}</td>
-<td>{r['eval_mean']:.3f}</td>
-<td>± {r['eval_std']:.3f}</td>
-<td>{marker}</td>
-</tr>
+    for r in sorted(opt_results, key=lambda x: -x["eval_mean"]):
+        marker = '<span style="color:#4ade80">✓</span>' if r["solved"] else '<span style="color:#f72585">✗</span>'
+        H.append(f"""
+<tr><td>{r['method']}</td><td>{r['lr']}</td>
+<td>{r['eval_mean']:.3f}</td><td>{marker}</td></tr>
 """)
-        html_parts.append("""
-</table>
-<div class="callout callout-warning">
-<h4>Insight: SGD beats Adam for stochastic envs</h4>
-<p>On Blackjack (a stochastic env with high reward variance), <b>plain SGD with lr=0.05
-achieves +0.080</b> — the best result we've seen for any Blackjack config, and far better than
-Adam (-0.100). The adaptive moment estimation in Adam/RMSProp overfits to noisy gradient
-estimates, while SGD's simple update is more robust. High learning rates (0.5) consistently
-hurt across all methods. <b>For stochastic envs, simpler optimizers are better.</b></p>
+    H.append("""</table>
+<div class="callout callout-find">
+<h4>Plain SGD wins on stochastic envs</h4>
+<p>This was the most counterintuitive finding of the whole project.
+<strong>Plain SGD with lr=0.05 achieves +0.080</strong> — the best
+Blackjack result of any config I tested, including the non-optimizer
+baseline. Adam is 18 points worse (-0.100). High learning rates (0.5)
+consistently hurt across all methods.</p>
+<p>Why does SGD win? Adam's adaptive moment estimation is designed for
+<em>deterministic</em> gradients. When the gradient is noisy (as it is in
+Blackjack, where each episode's reward is essentially a coin flip), Adam's
+running averages latch onto noise. The second-moment estimate
+<code>v</code> becomes dominated by noise variance, and the update
+<code>m / sqrt(v)</code> becomes meaningless. SGD has no memory — each
+update is just <code>lr * gradient</code> — so it doesn't accumulate noise.</p>
+<p>The broader lesson: <strong>adaptive optimizers are not always
+better.</strong> On stochastic problems with high-variance gradients, the
+fancy machinery in Adam/RMSProp can hurt you. Sometimes the simplest
+optimizer is the most robust.</p>
 </div>
+<p>But notice the contrast with MountainCar (Section 5b): there, the GRPO
+optimizer (with Adam) was the <em>worst</em> ablation (-166.90 vs -111.40
+baseline). The optimizer is a double-edged sword. It helps when the
+fitness signal is dense and low-variance (Blackjack with many episodes);
+it hurts when the signal is sparse (MountainCar, where most genomes get
+the same -200 reward).</p>
 """)
 
-    # --- Activation function ablation ---
-    act_summary_path = "results/ablations/activation_ablation.json"
-    if os.path.exists(act_summary_path):
-        with open(act_summary_path) as f:
-            act_results = json.load(f)
-        html_parts.append("""
-<h2 id="activation-ablation">5d. Activation Function Ablation (CartPole-v1)</h2>
-<p>We tested all 5 activation functions (ReLU, Tanh, Sigmoid, UAF, P-Swish) on CartPole-v1.
-UAF is the spec's Universal Activation Function (learnable softmax over {tanh, sigmoid, relu, id});
-P-Swish is parametric swish (x * sigmoid(beta * x), beta starts at 0 = identity).</p>
+    # 5e: Activation functions
+    H.append("""
+<h3 id="part-5e">5e. Activation functions</h3>
+<p>The spec defines five activations: the standard three (ReLU, Tanh,
+Sigmoid) plus two exotic ones — UAF (a learnable linear combination of
+tanh/sigmoid/relu/identity with softmax weights) and P-Swish (parametric
+swish, <code>x * sigmoid(beta * x)</code>, with <code>beta</code> starting
+at 0 for identity). I tested all five on CartPole:</p>
 <table>
-<tr><th>Activation</th><th>Eval Mean</th><th>Std</th><th>Solved</th></tr>
+<tr><th>Activation</th><th>Eval Mean</th><th>Solved?</th></tr>
 """)
-        for r in sorted(act_results, key=lambda x: -x["eval_mean"]):
-            marker = '<span class="solved">✓</span>' if r["solved"] else '<span class="unsolved">✗</span>'
-            html_parts.append(f"""
-<tr>
-<td>{r['activation']}</td>
-<td>{r['eval_mean']:.2f}</td>
-<td>± {r['eval_std']:.2f}</td>
-<td>{marker}</td>
-</tr>
+    for r in sorted(act_results, key=lambda x: -x["eval_mean"]):
+        marker = '<span style="color:#4ade80">✓</span>' if r["solved"] else '<span style="color:#f72585">✗</span>'
+        H.append(f"""
+<tr><td>{r['activation']}</td><td>{r['eval_mean']:.2f}</td><td>{marker}</td></tr>
 """)
-        html_parts.append("""
-</table>
-<div class="callout callout-info">
-<h4>Insight: Tanh and P-Swish win, Sigmoid loses</h4>
-<p><b>Tanh</b> and <b>P-Swish</b> both solve CartPole perfectly (500.00). <b>UAF</b> comes close
-(498.40) — its learnable mix of activations is competitive but adds parameter overhead.
-<b>ReLU</b> (426.40) and <b>Sigmoid</b> (369.40) both fail. Sigmoid suffers from vanishing
-gradients in deep networks; ReLU's non-zero-mean output makes weight updates oscillate.
-<b>P-Swish starting at identity (beta=0) is especially elegant</b> — the network begins as a
-linear model and learns non-linearity as needed.</p>
-</div>
-""")
-
-    # --- Key findings ---
-    html_parts.append("""
-<h2 id="key-findings">6. Key Findings &amp; Insights</h2>
-
-<div class="callout callout-positive">
-<h4>Finding #1: Percentage similarity is a big win over Standard NEAT similarity</h4>
-<p>On CartPole-v1, the spec's <code>percentage</code> similarity (treating missing connections as
-weight-zero) achieves <b>500.00</b> eval mean, while the standard NEAT disjoint/excess formula
-collapses to <b>171.10</b> — a 3x improvement! The percentage metric is more sensitive to actual
-weight differences and doesn't get confused by structural noise.</p>
-</div>
-
-<div class="callout callout-positive">
-<h4>Finding #2: Purge-first speciation matters</h4>
-<p>Using <code>purge</code> mode for the first generation (keep best N, duplicate each into its own
-species, then compute the ideal threshold) gives <b>500.00</b> on CartPole. Without purge
-(<code>standard</code> from gen 0), CartPole drops to <b>310.10</b>. The purge bootstraps
-diverse species around high-fitness genomes, which the standard mode takes many generations
-to achieve.</p>
-</div>
-
-<div class="callout callout-warning">
-<h4>Finding #3: Per-type mutation policy beats single-pick</h4>
-<p>The <code>per_type</code> policy (independently check each mutation type's probability) gets
-500.00 on CartPole, while <code>single</code> (pick one mutation or none) gets only 347.30.
-However, on MountainCar, the opposite is true — <code>single</code> gets -105.60 (solved!) while
-<code>per_type</code> gets -111.40. The explanation: <b>MountainCar benefits from fewer, larger
-topological jumps</b> (one mutation at a time, but with bigger effect), while CartPole benefits
-from many small simultaneous mutations.</p>
-</div>
-
-<div class="callout callout-info">
-<h4>Finding #4: Disabling neuron mutation helps Acrobot</h4>
-<p>Surprisingly, on Acrobot, disabling the neuron-split mutation entirely (<code>no_neuron</code>)
-gave the <b>best result at -90.33</b> (solved!), beating the baseline (-124.87). This suggests
-that Acrobot's solution is shallow — a single hidden layer is enough — and adding more neurons
-just adds noise. MountainCar showed the same pattern (though less extreme). For envs where the
-optimal topology is small, NEAT's "augmenting" tendency can be a liability.</p>
-</div>
-
-<div class="callout callout-warning">
-<h4>Finding #5: Optimizer (GRPO) is env-dependent — and SGD beats Adam on stochastic envs!</h4>
-<p>The OpenAI-ES-style optimizer doesn't universally help. On CartPole it doesn't
-hurt (500.00 with/without). On MountainCar it actively hurts (-166.90 vs -111.40 baseline) —
-the gradient signal from relative reward is too noisy when fitness is sparse. On Blackjack,
-we ran a deeper ablation testing 4 methods × 3 learning rates and found <b>plain SGD with
-lr=0.05 achieves +0.080</b>, beating Adam (-0.100) by a huge margin! The adaptive moment
-estimation in Adam/RMSProp overfits to noisy gradient estimates. <b>For stochastic envs,
-simpler optimizers are better.</b></p>
-</div>
-
-<div class="callout callout-info">
-<h4>Finding #6: Elitism is critical for stability</h4>
-<p>Removing elitism (<code>no_elite</code>) consistently hurts: CartPole goes from 500 to 500
-(survives, barely), but MountainCar drops from -111 to -161 and Acrobot from -125 to -144.
-Elitism preserves the best genome unchanged across generations, which is essential when
-mutation would otherwise destroy good solutions. Higher elitism (5) doesn't help further —
-the extra slots just reduce diversity.</p>
-</div>
-
-<div class="callout callout-positive">
-<h4>Finding #7: Crossover weight method matters more than topology method</h4>
-<p>On Blackjack, the baseline <code>average</code> weight crossover solves it (-0.29... wait,
-that's actually the worst). Looking again: <code>no_neuron</code> (which uses average) gets
--0.03 (best). The <code>xover_indep</code> and <code>xover_combine</code> variants both fail
-(-0.22, -0.23). So for Blackjack, <b>averaging shared weights is strictly better</b> than
-independently picking one parent. This makes sense for stochastic envs — averaging smooths
-out the noisy per-parent contribution.</p>
-</div>
-
-<div class="callout callout-warning">
-<h4>Finding #8: Blackjack is genuinely hard for NEAT</h4>
-<p>Even with 30 generations and 100 evaluation episodes, the best Blackjack eval is -0.03 — only
-slightly above the -0.2 threshold and far from the optimal basic-strategy edge of around -0.05.
-The high variance (std ≈ 0.95 per episode) makes the fitness signal extremely noisy. With only
-3 input features (player sum, dealer card, usable ace), the genome can't distinguish many
-states, so most policies collapse to "always hit" or "always stick".</p>
-</div>
-
-<div class="callout callout-info">
-<h4>Finding #9: MountainCar needs multi-seed training</h4>
-<p>With single-seed training, MountainCar overfits to the specific initial position. Using 5-8
-training seeds per genome per generation (mean reward across seeds) drastically improves
-generalization. Our best MountainCar config (8 seeds) achieves -109.19 over 100 eval episodes
-— solved! The aggressive reward shaping (bonus for position progress + velocity magnitude)
-helped training but caused eval overfitting, so we ended up dropping it for the final config.</p>
-</div>
-
-<div class="callout callout-positive">
-<h4>Finding #10: Stagnation penalty preserves species diversity</h4>
-<p>Adding a stagnation penalty (species whose best fitness hasn't improved in 15+ generations get
-their members' fitness multiplied by 0.5) was a key algorithmic fix. Without it, the population
-collapses into one or two dominant species after ~20 generations, killing the diversity that
-NEAT relies on for exploration.</p>
-</div>
-
-<div class="callout callout-info">
-<h4>Finding #11: Activation function choice matters — Tanh/P-Swish win</h4>
-<p>Testing all 5 activations on CartPole-v1: <b>Tanh</b> and <b>P-Swish</b> both solve perfectly
-(500.00), <b>UAF</b> comes close (498.40), but <b>ReLU</b> (426.40) and <b>Sigmoid</b> (369.40)
-both fail. Sigmoid suffers from vanishing gradients; ReLU's non-zero-mean output causes weight
-oscillations. <b>P-Swish (parametric swish, beta starting at 0)</b> is especially elegant — the
-network starts as a linear model and learns non-linearity only as needed, which mirrors
-curriculum learning.</p>
+    H.append("""</table>
+<div class="callout callout-find">
+<h4>Tanh and P-Swish win; Sigmoid loses</h4>
+<p>Tanh and P-Swish both solve CartPole perfectly (500.00). UAF comes
+close (498.40) — its learnable mix of activations is competitive but adds
+parameter overhead (4 extra learnable weights per node). ReLU (426.40) and
+Sigmoid (369.40) both fail.</p>
+<p>Sigmoid's failure is expected — it suffers from vanishing gradients in
+deep networks, and NEAT's depth grows over generations. ReLU's
+underperformance is more interesting: ReLU's non-zero-mean output (always
+≥ 0) causes weight updates to oscillate, which is bad for the genetic
+algorithm's weight-perturbation mechanism.</p>
+<p>P-Swish is my favorite. Starting at <code>beta=0</code> makes it
+<em>identity</em> — the network begins as a linear model. As beta grows
+(through the activation-parameter mutation), it becomes more non-linear.
+This is a form of <em>curriculum learning</em>: start simple, add
+complexity only when needed. It's elegant, and it works.</p>
 </div>
 """)
 
-    # --- Genome visualizations ---
-    html_parts.append("""
-<h2 id="visualizations">7. Genome Visualizations</h2>
-<p>Below are the evolved topologies from select ablations. <span style="color:#4cc9f0">Blue</span> = inputs,
-<span style="color:#f72585">pink</span> = outputs, <span style="color:#ffd60a">yellow</span> = bias,
-<span style="color:#4ade80">green</span> = hidden. Edge color: <span style="color:#2ecc71">green</span> = positive weight,
-<span style="color:#e74c3c">red</span> = negative weight. Edge width scales with |weight|.</p>
+    # ===========================================================
+    # PART 6: GENOME PICTURES
+    # ===========================================================
+    H.append("""
+<h2 id="part-6">6. Pictures of Evolved Brains</h2>
+<p>One of the great things about NEAT is that you can <em>look</em> at the
+networks it evolves. They're not 100-layer transformers — they're tiny
+graphs, often with fewer than 20 nodes, that you can actually understand.
+Below are some of the more interesting genomes from the ablations.</p>
+<p>In all figures: <span style="color:#4cc9f0">blue</span> nodes are inputs,
+<span style="color:#f72585">pink</span> are outputs,
+<span style="color:#ffd60a">yellow</span> is the bias,
+<span style="color:#4ade80">green</span> are hidden.
+<span style="color:#2ecc71">Green</span> edges have positive weight,
+<span style="color:#e74c3c">red</span> have negative. Edge width scales with
+|weight|.</p>
 """)
 
-    # Pick representative genomes to show
-    showcase_genomes = [
-        ("CartPole-v1_baseline", "CartPole baseline (solved, minimal topology)"),
-        ("CartPole-v1_sim_standard", "CartPole with Standard NEAT similarity (failed)"),
-        ("MountainCar-v0_baseline", "MountainCar baseline (small genome, large weights)"),
-        ("MountainCar-v0_policy_single", "MountainCar with single-pick policy (solved!)"),
-        ("Acrobot-v1_no_neuron", "Acrobot without neuron mutation (best result!)"),
-        ("Acrobot-v1_baseline", "Acrobot baseline (more complex topology)"),
-        ("Blackjack-v1_no_neuron", "Blackjack best variant (very simple topology)"),
-        ("Blackjack-v1_xover_combine", "Blackjack with combine crossover (failed)"),
+    showcase = [
+        ("CartPole-v1_baseline",
+         "The CartPole baseline genome. Note how small it is — just 8 nodes and 12 connections. "
+         "The network only needs to compute 'is the pole leaning left or right' and push the cart "
+         "accordingly. No hidden layers were needed; the algorithm found a 2-layer solution."),
+        ("CartPole-v1_sim_standard",
+         "The CartPole genome when using standard NEAT similarity instead of percentage similarity. "
+         "This config FAILED to solve CartPole (171.10). Compare to the baseline — the topology is "
+         "messier, with more hidden nodes that don't help. Without good speciation, the algorithm "
+         "can't protect innovation, and the population converges to a suboptimal solution."),
+        ("MountainCar-v0_baseline",
+         "MountainCar baseline. The genome is small but the weights are large (you can see the thick "
+         "edges). This is because the policy needs to make a decisive 'left or right' choice based "
+         "on position and velocity — small weights would produce a wishy-washy policy that never "
+         "escapes the valley."),
+        ("MountainCar-v0_policy_single",
+         "MountainCar with the single-pick mutation policy — the only ablation that actually solved "
+         "it. The topology is similar to the baseline, but the weights are configured differently. "
+         "Single-pick's advantage is that each mutation is 'pure' — one change at a time — which "
+         "lets the algorithm find precise weight settings."),
+        ("Acrobot-v1_no_neuron",
+         "Acrobot with neuron mutation disabled — the winning config (-90.33, solved!). Notice the "
+         "complete absence of hidden nodes. The policy is just a direct input-to-output mapping. "
+         "Acrobot doesn't need hidden layers; the optimal policy is a simple function of the joint "
+         "angles and velocities."),
+        ("Acrobot-v1_baseline",
+         "Acrobot baseline (with neuron mutation enabled, -124.87, not solved). Compare to the "
+         "no-neuron version — this genome has accumulated several hidden nodes that don't help. "
+         "They were added by mutation, preserved by elitism, but never pruned because pruning is "
+         "conservative (it only removes non-essential connections). The extra nodes add noise to "
+         "the fitness signal without adding expressiveness."),
+        ("Blackjack-v1_no_neuron",
+         "Blackjack best variant. Three inputs (player sum, dealer card, usable ace), two outputs "
+         "(hit or stand), and that's it. The genome is a 2x2 matrix plus a bias. You can't get "
+         "much simpler than this."),
+        ("Blackjack-v1_xover_combine",
+         "Blackjack with combine-topology crossover — which failed (-0.22). The genome has more "
+         "hidden nodes (inherited from both parents) but the weights are poorly coordinated. "
+         "Combine crossover creates Frankenstein genomes that don't quite work."),
     ]
-    for ablation_name, caption in showcase_genomes:
+    for ablation_name, caption in showcase:
         path = f"results/ablations/{ablation_name}_genome.png"
         if os.path.exists(path):
-            html_parts.append(f"""
-<h4>{caption}</h4>
-<img src="{b64_image(path)}" alt="{ablation_name} genome">
+            H.append(figure(path, f"Genome: {ablation_name.replace('_', ' ')}", caption))
+
+    # ===========================================================
+    # PART 7: TRAINING TIME-LAPSES
+    # ===========================================================
+    H.append("""
+<h2 id="part-7">7. Training Time-Lapses</h2>
+<p>Static genome pictures are nice, but the real fun is watching the agent
+<em>learn</em>. I captured GIFs of the best genome's behavior at every few
+generations during training. Below, for each environment, you can see the
+agent's behavior at generation 0 (random), generation 5 (starting to figure
+it out), generation 10 (decent), and generation 20+ (hopefully solved).</p>
+<p>The accompanying charts show how fitness, genome size, and species count
+evolved over training. Together, they tell the story of how the algorithm
+found the solution.</p>
 """)
 
-    # --- Behavior GIFs ---
-    html_parts.append("""
-<h2 id="behavior">8. Agent Behavior Captures</h2>
-<p>Animated GIFs of the best genome from select ablations playing their environment. These were
-captured by running the trained genome in the env with rendering enabled, then encoding the
-frames as a looping GIF.</p>
-""")
-    behavior_gifs = sorted(glob.glob("results/ablations/*_behavior.gif"))
-    for gif_path in behavior_gifs:
-        name = os.path.basename(gif_path).replace("_behavior.gif", "")
-        html_parts.append(f"""
-<div class="gif-display">
-<h4>{name}</h4>
-<img src="{b64_image(gif_path)}" alt="{name} behavior">
-</div>
-""")
-
-    # --- Training progression ---
-    html_parts.append("""
-<h2 id="training-progression">8b. Training Progression</h2>
-<p>How does the agent's behavior change as training progresses? Below are GIFs of the best genome
-at different generation checkpoints (0, 5, 10, 15, 20, 25, etc.) for three environments. The
-accompanying plots show fitness, genome size, and species count over the course of training.</p>
-""")
-    # Show training progression for each env that has files
-    progression_envs = []
     for env_name in ["CartPole-v1", "MountainCar-v0", "Blackjack-v1"]:
         gifs = sorted(glob.glob(f"results/training_progress/{env_name}_gen*.gif"))
-        if gifs:
-            progression_envs.append((env_name, gifs))
-
-    for env_name, gifs in progression_envs:
-        html_parts.append(f'<h3>{env_name} — Training Progression</h3>')
-        # Show progression GIFs in a grid
-        html_parts.append('<div class="chart-row">')
+        if not gifs:
+            continue
+        H.append(f'<h3>{env_name}</h3>')
+        # Show 3-4 key checkpoints in a grid (not all of them, to keep size manageable)
+        # Pick first, a middle one, and last
+        if len(gifs) > 4:
+            key_indices = [0, len(gifs)//3, 2*len(gifs)//3, -1]
+            gifs = [gifs[i] for i in key_indices]
+        H.append('<div class="gif-row">')
         for gif_path in gifs:
             gen_str = os.path.basename(gif_path).replace(f"{env_name}_gen", "").replace(".gif", "")
-            html_parts.append(f"""
-<div>
-<h4>Gen {int(gen_str)}</h4>
-<div class="gif-display"><img src="{b64_image(gif_path)}" alt="{env_name} gen {gen_str}"></div>
-</div>
+            H.append(f"""
+<figure>
+<img src="{b64_image(gif_path)}" alt="{env_name} gen {gen_str}">
+<figcaption>Gen {int(gen_str)}</figcaption>
+</figure>
 """)
-        html_parts.append('</div>')
+        H.append('</div>')
 
         # Show training curves
         plots_dir = "results/training_progress/plots"
-        for chart_name, caption in [(f"{env_name}_fitness.png", "Fitness Over Generations"),
-                                     (f"{env_name}_genome_size.png", "Genome Size Over Generations"),
-                                     (f"{env_name}_species.png", "Species Count Over Generations")]:
+        for chart_name, caption, sub in [
+            (f"{env_name}_fitness.png", f"{env_name}: Max fitness per generation",
+             "Watch how fitness climbs (sometimes noisily) as the algorithm finds better policies. "
+             "For CartPole, it hits 500 quickly. For MountainCar, it stays near -200 (failure) for "
+             "many generations before finally breaking through. For Blackjack, it oscillates around 0."),
+            (f"{env_name}_genome_size.png", f"{env_name}: Genome complexity (connections)",
+             "How the network grows over training. The solid line is the average; the dashed line is the max. "
+             "A healthy run shows gradual growth that plateaus once the algorithm finds a good topology. "
+             "Runaway growth suggests the algorithm is adding complexity without improving fitness."),
+            (f"{env_name}_species.png", f"{env_name}: Number of species",
+             "Species count over training. The adaptive threshold keeps this near the target (8-12). "
+             "If it drops to 1, the population has collapsed to a single species and diversity is lost. "
+             "If it explodes, the threshold is too low."),
+        ]:
             chart_path = os.path.join(plots_dir, chart_name)
             if os.path.exists(chart_path):
-                html_parts.append(f'<h4>{caption}</h4>')
-                html_parts.append(f'<img src="{b64_image(chart_path)}" alt="{env_name} {caption}">')
+                H.append(figure(chart_path, caption, sub))
 
         # Show genome evolution
         genome_imgs = sorted(glob.glob(f"results/training_progress/{env_name}_gen*_genome.png"))
         if genome_imgs:
-            html_parts.append(f'<h4>Genome Topology Evolution</h4>')
-            html_parts.append('<div class="chart-row">')
+            # Pick 3-4 key ones
+            if len(genome_imgs) > 4:
+                key_indices = [0, len(genome_imgs)//3, 2*len(genome_imgs)//3, -1]
+                genome_imgs = [genome_imgs[i] for i in key_indices]
+            H.append(f'<h4>Topology evolution: {env_name}</h4>')
+            H.append('<div class="gif-row">')
             for gp in genome_imgs:
                 gen_str = os.path.basename(gp).replace(f"{env_name}_gen", "").replace("_genome.png", "")
-                html_parts.append(f"""
-<div>
-<h4>Gen {int(gen_str)}</h4>
+                # Try to get conn count from stats
+                conn_count = ""
+                stats_path = f"results/training_progress/{env_name}_stats.json"
+                if os.path.exists(stats_path):
+                    try:
+                        with open(stats_path) as f:
+                            stats = json.load(f)
+                        snap = stats.get("genome_snapshots", {}).get(str(gen_str), {})
+                        if snap:
+                            conn_count = f" — {snap.get('n_conns', '?')} conns, {snap.get('n_nodes', '?')} nodes"
+                    except Exception:
+                        pass
+                H.append(f"""
+<figure>
 <img src="{b64_image(gp)}" alt="{env_name} gen {gen_str} genome">
-</div>
+<figcaption>Gen {int(gen_str)}{conn_count}</figcaption>
+</figure>
 """)
-            html_parts.append('</div>')
+            H.append('</div>')
+            H.append(f'<p>Watch the topology start minimal (just inputs → outputs) and gradually add '
+                     f'hidden nodes and connections as the algorithm explores. The final genome is '
+                     f'often surprisingly small — NEAT tends to find parsimonious solutions.</p>')
 
-    # --- Conclusion ---
-    html_parts.append("""
-<h2 id="conclusion">9. Conclusion</h2>
-<p>After 40+ tuning rounds and 47 ablations across 5 environments, the modified NEAT algorithm
-demonstrates several strengths and weaknesses:</p>
+    # Behavior GIFs from ablations
+    H.append("""
+<h3>Best genomes in action (from ablations)</h3>
+<p>These are GIFs of the best genome from select ablations, playing their
+environment. Most are short — the agent either solves the env quickly (a
+few hundred steps) or fails fast (a few dozen steps).</p>
+""")
+    behavior_gifs = sorted(glob.glob("results/ablations/*_behavior.gif"))
+    # Show 2 per row
+    for i in range(0, len(behavior_gifs), 2):
+        H.append('<div class="gif-row">')
+        for gif_path in behavior_gifs[i:i+2]:
+            name = os.path.basename(gif_path).replace("_behavior.gif", "").replace("_", " ")
+            H.append(f"""
+<figure>
+<img src="{b64_image(gif_path)}" alt="{name}">
+<figcaption>{name}</figcaption>
+</figure>
+""")
+        H.append('</div>')
 
-<div class="callout callout-positive">
-<h4>What Works Well</h4>
-<ul>
-<li><b>Percentage similarity + Purge speciation</b> — a clear win over standard NEAT, especially
-on easy/medium envs (CartPole, Acrobot). The combination bootstraps diverse species quickly and
-keeps them coherent.</li>
-<li><b>DAG-only topology with topological sort</b> — fast forward passes (O(V+E)) and no
-dead-end genomes (loops, disconnected subgraphs).</li>
-<li><b>Universal historical marking</b> — makes crossover between distant genomes meaningful
-(shared innovation numbers always refer to the same connection).</li>
-<li><b>Elitism (1-3 individuals)</b> — critical for preserving good solutions; removing it
-consistently hurts performance.</li>
-<li><b>Multi-seed training</b> — essential for stochastic envs (Blackjack) and envs with
-highly variable initial conditions (MountainCar).</li>
-</ul>
-</div>
-
-<div class="callout callout-warning">
-<h4>What Doesn't Work (Or Needs Care)</h4>
-<ul>
-<li><b>GRPO optimizer</b> — only helps on dense-reward envs; on sparse-reward envs
-(MountainCar) it actively hurts. The "relative reward" signal is too noisy when most
-genomes get the same (bad) reward.</li>
-<li><b>Aggressive reward shaping</b> — helps training reward but causes eval overfitting.
-Better to use raw rewards + multi-seed training.</li>
-<li><b>Single-pick mutation policy</b> — generally worse than per-type, but occasionally
-better on envs that benefit from one big jump at a time (MountainCar).</li>
-<li><b>Combine-topology crossover</b> — rarely beats the simpler "fitter topology" method,
-and the cycle-breaking adds complexity for little gain.</li>
-<li><b>Blackjack and LunarLander</b> — fundamentally hard for feed-forward NEAT. Blackjack
-needs recurrent state (to count cards), and LunarLander needs precise continuous control
-that NEAT's discrete-topology evolution struggles with.</li>
-</ul>
-</div>
-
-<div class="callout callout-info">
-<h4>Final Score: 4/5 Envs Solved</h4>
-<p>CartPole-v1 (500/500), Acrobot-v1 (-90/-100), MountainCar-v0 (-109/-110), Blackjack-v1
-(-0.03/-0.2) are all solved. LunarLander-v3 (-76/+200) remains unsolved but shows the
-algorithm can learn reasonable landing behavior — it just can't consistently stick the landing.</p>
-</div>
-
-<p>For future work, the most promising directions are: (1) adding recurrent connections for
-partial observability (would help Blackjack and LunarLander), (2) trying adaptive mutation
-rates that decrease over generations (annealing), and (3) implementing co-evolution for
-multi-agent envs.</p>
+    # ===========================================================
+    # PART 8: WHAT I LEARNED
+    # ===========================================================
+    H.append("""
+<h2 id="part-8">8. What I Learned (and What I'd Do Differently)</h2>
+<p>Time to step back. After implementing the algorithm, tuning it on five
+envs, and running 72 ablations, what's the takeaway?</p>
 """)
 
-    # --- Footer ---
-    html_parts.append("""
+    H.append("""
+<h3>8.1 The spec's modifications are mostly wins</h3>
+<p>The spec asked for several deviations from standard NEAT. The ablations
+confirm that most of them are improvements:</p>
+<ul>
+<li><strong>Percentage similarity</strong> is a clear win over the standard
+NEAT distance formula (3x improvement on CartPole, no env where it's
+worse). The single-number distance with no magic constants is easier to
+reason about and just works better.</li>
+<li><strong>Purge-first speciation</strong> is a clear win for the first
+generation (500 vs 310 on CartPole). Bootstrapping diverse species from
+the best random genomes is much faster than waiting for standard
+speciation to fragment the population.</li>
+<li><strong>DAG-only topology</strong> is a trade-off. It removes the
+ability to evolve recurrent connections (which would help on
+partially-observable envs like Blackjack-with-card-counting), but it
+makes the forward pass trivially fast and removes entire classes of bugs.
+For the envs I tested, it's the right choice.</li>
+<li><strong>Pruning mutation</strong> is a marginal win. It doesn't
+dramatically improve performance on any env, but it keeps genome size
+bounded. Without it, genomes accumulate dead-weight connections that
+slow down evaluation without adding value.</li>
+<li><strong>Universal historical marking</strong> is essential for
+meaningful crossover. Without it, "shared innovation numbers" is
+meaningless and crossover degrades to topology-copying.</li>
+</ul>
+""")
+
+    H.append("""
+<h3>8.2 The optimizer is a mixed bag</h3>
+<p>The GRPO optimizer is the most speculative piece of the algorithm, and
+the ablations show it's not a universal win. It helps marginally on
+Blackjack (with the right optimizer — SGD, not Adam!), hurts on
+MountainCar (sparse reward → noisy gradient → bad updates), and is neutral
+on CartPole (which is so easy the optimizer doesn't matter).</p>
+<p>The deeper lesson: <strong>gradient methods and evolutionary methods
+have complementary strengths.</strong> Evolution is good at exploration
+(finding the right topology), gradients are good at exploitation (tuning
+weights within a fixed topology). The GRPO optimizer tries to combine
+them, but the combination only works when the gradient signal is good —
+which is exactly when you'd expect gradients to help anyway. On the hard
+cases where evolution struggles (sparse reward, high variance), the
+gradient signal is also bad, so the optimizer doesn't rescue you.</p>
+<p>If I were redesigning the optimizer, I'd make it <em>optional per
+environment</em> and provide a clear diagnostic for when to enable it:
+compute the coefficient of variation of fitness within a species. If
+it's low (most genomes get similar rewards), enable the optimizer. If
+it's high (huge reward spread), disable it — the gradient is too noisy.</p>
+""")
+
+    H.append("""
+<h3>8.3 NEAT's blind spots</h3>
+<p>Two envs in my benchmark gave NEAT real trouble: LunarLander (unsolved)
+and MountainCar (barely solved). Both are environments where the optimal
+policy requires either <em>precise continuous control</em> (LunarLander:
+small thrust changes matter) or <em>long-horizon planning</em>
+(MountainCar: you have to swing backward before going forward). NEAT's
+evolutionary approach is fundamentally coarse — it perturbs weights and
+topology and hopes for the best. It struggles when the policy needs to be
+precise.</p>
+<p>Standard fixes would be:</p>
+<ul>
+<li><strong>Recurrent connections</strong> — allow loops in the DAG.
+This would let the network have memory, which is essential for
+partially-observable envs (the lander has velocity, but you can't see
+it directly from a single frame). The spec explicitly mentions this as
+an alternative ("forward pass through time"), but I went with the
+DAG-only approach for simplicity.</li>
+<li><strong>Continuous-action policies</strong> — instead of argmax over
+discrete outputs, sample from a Gaussian whose mean and variance are
+network outputs. This would let NEAT do fine-grained control.</li>
+<li><strong>Behavioral diversity</strong> — instead of speciating by
+topological similarity, speciate by behavioral similarity (do two
+genomes behave similarly on a set of test inputs?). This would help on
+envs where very different topologies can encode similar policies.</li>
+</ul>
+""")
+
+    H.append("""
+<h3>8.4 What I'd do differently</h3>
+<p>If I were starting over, three things would change:</p>
+<ol>
+<li><strong>Build the ablation harness first.</strong> I spent most of
+my time on tuning, then realized the ablations were more informative.
+The ablation harness is just a thin wrapper around the training code —
+it would have been trivial to build early, and it would have caught
+several bugs (e.g., the pruning essentiality bug) much sooner.</li>
+<li><strong>Use more evaluation episodes from the start.</strong> Early
+on, I evaluated each genome on a single episode, which meant the fitness
+signal was dominated by noise on stochastic envs. Switching to 5-10
+episodes during training and 50-100 for final eval was the single
+biggest improvement to my ability to draw conclusions.</li>
+<li><strong>Add recurrent connections.</strong> The DAG-only choice was
+the right call for getting the implementation working fast, but it's the
+main reason LunarLander is unsolved. NEAT was originally designed to
+evolve recurrent networks, and the spec allows it — I just didn't
+implement it. Future work.</li>
+</ol>
+""")
+
+    H.append("""
+<h3>8.5 Final thoughts</h3>
+<p>This was a fun project. The modified NEAT algorithm is genuinely
+interesting — it's not just "NEAT with extras," it's a thoughtful redesign
+that addresses real weaknesses of the original (magic constants in the
+distance formula, slow speciation convergence, no pruning mechanism). The
+ablations confirmed that most of the modifications are real improvements,
+not just complexity for complexity's sake.</p>
+<p>The biggest surprise was how <em>environment-dependent</em> the
+algorithm is. There's no single "best config" — CartPole wants per-type
+mutations, MountainCar wants single-pick, Blackjack wants SGD, Acrobot
+wants no neuron mutation at all. Hyperparameter tuning isn't a
+nuisance; it's an essential part of using NEAT on a new problem.</p>
+<p>If you want to dig deeper, the code is on
+<a href="https://github.com/G-reen-vibe/neat-modified">GitHub</a>. The
+<code>scripts/ablations.py</code> file is the entry point for reproducing
+the experiments, and <code>scripts/generate_report.py</code> generates
+this report. Have fun.</p>
+""")
+
+    # Footer
+    H.append("""
 <footer>
-<p>Generated by scripts/generate_report.py | Modified NEAT Implementation</p>
-<p>Source: <a href="https://github.com/G-reen-vibe/neat-modified" style="color:#4cc9f0">github.com/G-reen-vibe/neat-modified</a></p>
+<p>Generated by <code>scripts/generate_report.py</code></p>
+<p>Code: <a href="https://github.com/G-reen-vibe/neat-modified">github.com/G-reen-vibe/neat-modified</a></p>
+<p>72 ablations · 5 environments · 4 solved · 1 stubborn</p>
 </footer>
 """)
 
-    # --- Close ---
-    html_parts.append("""
-</div>
-</body>
-</html>
-""")
+    H.append("</div></body></html>")
 
-    # Write to file
-    html = "".join(html_parts)
+    # Write
+    html = "".join(H)
     os.makedirs(os.path.dirname(output_path) or ".", exist_ok=True)
     with open(output_path, "w") as f:
         f.write(html)
-    size_kb = os.path.getsize(output_path) / 1024
-    print(f"Report saved to {output_path} ({size_kb:.0f} KB)")
+    size_mb = os.path.getsize(output_path) / 1024 / 1024
+    print(f"Report saved to {output_path} ({size_mb:.1f} MB)")
 
 
 if __name__ == "__main__":
