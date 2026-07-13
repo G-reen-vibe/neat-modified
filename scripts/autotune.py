@@ -435,6 +435,41 @@ class AutoTuner:
             json.dump(state, f, indent=2)
 
     # ------------------------------------------------------------------
+    def load_state(self, path: Optional[str] = None) -> bool:
+        """Load tuning state from JSON.  Returns True if loaded."""
+        path = path or self.output_path
+        if not os.path.exists(path):
+            return False
+        with open(path) as f:
+            state = json.load(f)
+        self.algorithm_version = state.get("algorithm_version", 1)
+        self.algo_changes = state.get("algo_changes", [])
+        for name, eb_data in state.get("env_bests", {}).items():
+            if name not in self.env_bests:
+                continue
+            eb = self.env_bests[name]
+            eb.best_eval_mean = eb_data.get("best_eval_mean", -float("inf"))
+            eb.best_eval_std = eb_data.get("best_eval_std", 0.0)
+            eb.best_train_best = eb_data.get("best_train_best", -float("inf"))
+            eb.best_round = eb_data.get("best_round", -1)
+            if eb_data.get("best_config"):
+                eb.best_config = Config.from_dict(eb_data["best_config"])
+            # Reconstruct history
+            eb.history = []
+            for h in eb_data.get("history", []):
+                tr = TuningResult(
+                    round_idx=h["round"], env_name=h["env"],
+                    hp_changes=h.get("changes", {}),
+                    train_best=h["train_best"], eval_mean=h["eval_mean"],
+                    eval_std=h["eval_std"], eval_min=h["eval_min"],
+                    eval_max=h["eval_max"], solved=h["solved"],
+                    elapsed_s=h["elapsed_s"], is_best=h["is_best"],
+                    notes=h.get("notes", ""),
+                )
+                eb.history.append(tr)
+        return True
+
+    # ------------------------------------------------------------------
     def print_summary(self) -> None:
         print("\n" + "="*70)
         print(f"AUTO-TUNER SUMMARY (algorithm v{self.algorithm_version})")
@@ -464,6 +499,10 @@ def main():
     p.add_argument("--output", default="results/autotune.json")
     p.add_argument("--fresh-start-prob", type=float, default=0.15)
     p.add_argument("--rounds-per-save", type=int, default=1)
+    p.add_argument("--resume", action="store_true",
+                   help="Resume from --output if it exists")
+    p.add_argument("--start-round", type=int, default=1,
+                   help="Round number to start at (for resume)")
     args = p.parse_args()
 
     if args.envs == "all":
@@ -475,22 +514,33 @@ def main():
                        gens_per_round=args.gens_per_round,
                        eval_episodes=args.eval_episodes,
                        seed=args.seed, output_path=args.output)
+    # Try to resume
+    if args.resume:
+        if tuner.load_state():
+            print(f"[Resumed from {args.output}: "
+                  f"v{tuner.algorithm_version}, "
+                  f"{sum(len(eb.history) for eb in tuner.env_bests.values())} "
+                  f"total rounds completed]")
+        else:
+            print(f"[No state found at {args.output}, starting fresh]")
     print(f"\nAutoTuner: {args.rounds} rounds on {env_names}")
     print(f"  Pop: {args.pop}, Gens/round: {args.gens_per_round}, "
           f"Eval eps: {args.eval_episodes}")
 
-    for r in range(args.rounds):
-        print(f"\n--- Round {r+1}/{args.rounds} ---")
+    start_round = args.start_round
+    end_round = start_round + args.rounds - 1
+    for r in range(start_round, end_round + 1):
+        print(f"\n--- Round {r} (of {end_round}) ---")
         for env_name in env_names:
-            print(f"\n[{env_name}] round {r+1}")
-            tr = tuner.run_round(env_name, r + 1,
+            print(f"\n[{env_name}] round {r}")
+            tr = tuner.run_round(env_name, r,
                                   fresh_start_prob=args.fresh_start_prob)
             marker = " ★ NEW BEST" if tr.is_best else ""
             print(f"  train_best={tr.train_best:.2f}  eval={tr.eval_mean:.2f}±{tr.eval_std:.2f}"
                   f"  solved={tr.solved}  t={tr.elapsed_s:.1f}s{marker}")
             print(f"  changes: {tr.hp_changes}  ({tr.notes})")
         # Save after each round
-        if (r + 1) % args.rounds_per_save == 0:
+        if (r - start_round + 1) % args.rounds_per_save == 0:
             tuner.save_state()
             print(f"\n[Saved state to {args.output}]")
         tuner.print_summary()
