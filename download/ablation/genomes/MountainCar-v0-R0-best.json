@@ -1,0 +1,120 @@
+{
+  "n_inputs": 2,
+  "n_outputs": 3,
+  "nodes": [
+    {
+      "id": 0,
+      "kind": "input",
+      "activation": "identity"
+    },
+    {
+      "id": 1,
+      "kind": "input",
+      "activation": "identity"
+    },
+    {
+      "id": 2,
+      "kind": "output",
+      "activation": "tanh"
+    },
+    {
+      "id": 3,
+      "kind": "output",
+      "activation": "tanh"
+    },
+    {
+      "id": 4,
+      "kind": "output",
+      "activation": "tanh"
+    },
+    {
+      "id": 6,
+      "kind": "hidden",
+      "activation": "sigmoid"
+    },
+    {
+      "id": 9,
+      "kind": "hidden",
+      "activation": "tanh"
+    }
+  ],
+  "connections": [
+    {
+      "innov": 0,
+      "in": 0,
+      "out": 2,
+      "weight": 1.4810803728328166,
+      "enabled": true
+    },
+    {
+      "innov": 1,
+      "in": 0,
+      "out": 3,
+      "weight": 0.5362411105743624,
+      "enabled": true
+    },
+    {
+      "innov": 3,
+      "in": 1,
+      "out": 2,
+      "weight": -4.186066477647711,
+      "enabled": true
+    },
+    {
+      "innov": 4,
+      "in": 1,
+      "out": 3,
+      "weight": -3.120400162980995,
+      "enabled": true
+    },
+    {
+      "innov": 8,
+      "in": 1,
+      "out": 6,
+      "weight": 4.405368080166397,
+      "enabled": true
+    },
+    {
+      "innov": 9,
+      "in": 6,
+      "out": 4,
+      "weight": 1.7390623845342863,
+      "enabled": true
+    },
+    {
+      "innov": 14,
+      "in": 0,
+      "out": 9,
+      "weight": 4.551780850956932,
+      "enabled": true
+    },
+    {
+      "innov": 15,
+      "in": 9,
+      "out": 4,
+      "weight": -2.8353753860088076,
+      "enabled": true
+    },
+    {
+      "innov": 21,
+      "in": 6,
+      "out": 2,
+      "weight": -1.5806928832512745,
+      "enabled": true
+    },
+    {
+      "innov": 29,
+      "in": 0,
+      "out": 6,
+      "weight": 0.2835975336380969,
+      "enabled": true
+    }
+  ],
+  "fitness": 71.0,
+  "species_id": 15,
+  "generation": 3,
+  "extra": {
+    "round_id": 0,
+    "env": "MountainCar-v0"
+  }
+}
