@@ -15,12 +15,12 @@ Modules:
 - policy:        Mutation policy (nested / per-type / single-pick)
 
 Public API:
-    from neat import Config, Genome, GlobalIndex
-    from neat.population import Population
+    from neat import Config, Genome, GlobalIndex, Population
 """
 from .config import Config
 from .genome import Genome
 from .indexing import GlobalIndex
+from .population import Population
 
-__all__ = ["Config", "Genome", "GlobalIndex"]
+__all__ = ["Config", "Genome", "GlobalIndex", "Population"]
 __version__ = "0.1.0"
