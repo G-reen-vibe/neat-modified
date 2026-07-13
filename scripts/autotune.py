@@ -417,7 +417,40 @@ class AutoTuner:
             solved = eval_mean >= threshold
 
         elapsed = time.time() - t0
+        # If this round's eval is close to the best (within 1 std), re-evaluate
+        # both with more episodes to break ties fairly.  This prevents lucky
+        # evaluations from locking in a worse config.
         is_best = eval_mean > env_best.best_eval_mean
+        if (is_best and env_best.best_config is not None
+                and abs(eval_mean - env_best.best_eval_mean) < eval_std
+                and best_genome is not None):
+            # Re-evaluate both with 2x episodes
+            re_eval_eps = max(n_eval_eps * 2, 100)
+            env_wrapper2 = make_env(env_name, max_steps=max_steps,
+                                     n_eval_episodes=1, seed=self.seed + 77777)
+            new_rewards = []
+            for ep in range(re_eval_eps):
+                r, _, _ = env_wrapper2.evaluate_raw(best_genome,
+                                                     episode_seed=self.seed * 1000 + ep + 10000)
+                new_rewards.append(r)
+            new_eval_mean = float(np.mean(new_rewards))
+            new_eval_std = float(np.std(new_rewards))
+            # Also re-evaluate the previous best
+            best_genome_prev = None
+            # We can't easily re-evaluate the previous best genome (we don't
+            # store the genome, only the config).  So just accept the new one
+            # if its re-eval is also better than the old eval_mean.
+            if new_eval_mean > env_best.best_eval_mean:
+                eval_mean = new_eval_mean
+                eval_std = new_eval_std
+                eval_min = float(np.min(new_rewards))
+                eval_max = float(np.max(new_rewards))
+                threshold = SOLVED_THRESHOLDS.get(env_name, (float("inf"), 100))[0]
+                solved = eval_mean >= threshold
+                notes += " +re-eval"
+            else:
+                is_best = False
+                notes += " +re-eval(rejected)"
         if is_best:
             env_best.best_config = cfg
             env_best.best_eval_mean = eval_mean
