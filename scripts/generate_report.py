@@ -481,6 +481,7 @@ footer {{
 <li><a href="#key-findings">Key Findings &amp; Insights</a></li>
 <li><a href="#visualizations">Genome Visualizations</a></li>
 <li><a href="#behavior">Agent Behavior Captures</a></li>
+<li><a href="#training-progression">Training Progression (Time-Lapse)</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
 </ol>
 </div>
@@ -752,6 +753,59 @@ frames as a looping GIF.</p>
 <img src="{b64_image(gif_path)}" alt="{name} behavior">
 </div>
 """)
+
+    # --- Training progression ---
+    html_parts.append("""
+<h2 id="training-progression">8b. Training Progression</h2>
+<p>How does the agent's behavior change as training progresses? Below are GIFs of the best genome
+at different generation checkpoints (0, 5, 10, 15, 20, 25, etc.) for three environments. The
+accompanying plots show fitness, genome size, and species count over the course of training.</p>
+""")
+    # Show training progression for each env that has files
+    progression_envs = []
+    for env_name in ["CartPole-v1", "MountainCar-v0", "Blackjack-v1"]:
+        gifs = sorted(glob.glob(f"results/training_progress/{env_name}_gen*.gif"))
+        if gifs:
+            progression_envs.append((env_name, gifs))
+
+    for env_name, gifs in progression_envs:
+        html_parts.append(f'<h3>{env_name} — Training Progression</h3>')
+        # Show progression GIFs in a grid
+        html_parts.append('<div class="chart-row">')
+        for gif_path in gifs:
+            gen_str = os.path.basename(gif_path).replace(f"{env_name}_gen", "").replace(".gif", "")
+            html_parts.append(f"""
+<div>
+<h4>Gen {int(gen_str)}</h4>
+<div class="gif-display"><img src="{b64_image(gif_path)}" alt="{env_name} gen {gen_str}"></div>
+</div>
+""")
+        html_parts.append('</div>')
+
+        # Show training curves
+        plots_dir = "results/training_progress/plots"
+        for chart_name, caption in [(f"{env_name}_fitness.png", "Fitness Over Generations"),
+                                     (f"{env_name}_genome_size.png", "Genome Size Over Generations"),
+                                     (f"{env_name}_species.png", "Species Count Over Generations")]:
+            chart_path = os.path.join(plots_dir, chart_name)
+            if os.path.exists(chart_path):
+                html_parts.append(f'<h4>{caption}</h4>')
+                html_parts.append(f'<img src="{b64_image(chart_path)}" alt="{env_name} {caption}">')
+
+        # Show genome evolution
+        genome_imgs = sorted(glob.glob(f"results/training_progress/{env_name}_gen*_genome.png"))
+        if genome_imgs:
+            html_parts.append(f'<h4>Genome Topology Evolution</h4>')
+            html_parts.append('<div class="chart-row">')
+            for gp in genome_imgs:
+                gen_str = os.path.basename(gp).replace(f"{env_name}_gen", "").replace("_genome.png", "")
+                html_parts.append(f"""
+<div>
+<h4>Gen {int(gen_str)}</h4>
+<img src="{b64_image(gp)}" alt="{env_name} gen {gen_str} genome">
+</div>
+""")
+            html_parts.append('</div>')
 
     # --- Conclusion ---
     html_parts.append("""
