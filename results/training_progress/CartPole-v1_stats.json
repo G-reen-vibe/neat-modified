@@ -1,0 +1,2836 @@
+{
+  "history": [
+    {
+      "generation": 0,
+      "elapsed_s": 0.016287803649902344,
+      "fitness": {
+        "max": 56.0,
+        "mean": 11.866666666666667,
+        "min": 8.0,
+        "std": 9.776616092607002
+      },
+      "genome_size": {
+        "avg_nodes": 7.433333333333334,
+        "avg_conns": 10.433333333333334,
+        "max_nodes": 8,
+        "max_conns": 11,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 0,
+        "details": [],
+        "threshold": 0.325
+      },
+      "index": {
+        "n_nodes": 17,
+        "n_conn_innovations": 53,
+        "n_split_nodes": 10
+      }
+    },
+    {
+      "generation": 1,
+      "elapsed_s": 2.4952821731567383,
+      "fitness": {
+        "max": 300.0,
+        "mean": 26.666666666666668,
+        "min": 9.0,
+        "std": 53.5974709187746
+      },
+      "genome_size": {
+        "avg_nodes": 7.666666666666667,
+        "avg_conns": 10.9,
+        "max_nodes": 8,
+        "max_conns": 12,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 10,
+        "details": [],
+        "threshold": 0.6
+      },
+      "index": {
+        "n_nodes": 18,
+        "n_conn_innovations": 58,
+        "n_split_nodes": 11
+      }
+    },
+    {
+      "generation": 2,
+      "elapsed_s": 2.5696754455566406,
+      "fitness": {
+        "max": 300.0,
+        "mean": 81.36666666666666,
+        "min": 9.0,
+        "std": 115.47163672906385
+      },
+      "genome_size": {
+        "avg_nodes": 7.833333333333333,
+        "avg_conns": 11.433333333333334,
+        "max_nodes": 9,
+        "max_conns": 14,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.6887040130314657
+      },
+      "index": {
+        "n_nodes": 20,
+        "n_conn_innovations": 65,
+        "n_split_nodes": 13
+      }
+    },
+    {
+      "generation": 3,
+      "elapsed_s": 8.180443286895752,
+      "fitness": {
+        "max": 300.0,
+        "mean": 114.83333333333333,
+        "min": 8.0,
+        "std": 133.9462786177935
+      },
+      "genome_size": {
+        "avg_nodes": 8.133333333333333,
+        "avg_conns": 11.633333333333333,
+        "max_nodes": 9,
+        "max_conns": 14,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7090062902647021
+      },
+      "index": {
+        "n_nodes": 21,
+        "n_conn_innovations": 70,
+        "n_split_nodes": 14
+      }
+    },
+    {
+      "generation": 4,
+      "elapsed_s": 8.305465459823608,
+      "fitness": {
+        "max": 300.0,
+        "mean": 149.46666666666667,
+        "min": 9.0,
+        "std": 133.64199273515126
+      },
+      "genome_size": {
+        "avg_nodes": 8.233333333333333,
+        "avg_conns": 11.866666666666667,
+        "max_nodes": 9,
+        "max_conns": 14,
+        "min_nodes": 7,
+        "min_conns": 11
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7154063609420986
+      },
+      "index": {
+        "n_nodes": 23,
+        "n_conn_innovations": 74,
+        "n_split_nodes": 16
+      }
+    },
+    {
+      "generation": 5,
+      "elapsed_s": 8.44028115272522,
+      "fitness": {
+        "max": 300.0,
+        "mean": 163.03333333333333,
+        "min": 9.0,
+        "std": 125.69844425802927
+      },
+      "genome_size": {
+        "avg_nodes": 8.233333333333333,
+        "avg_conns": 11.666666666666666,
+        "max_nodes": 9,
+        "max_conns": 14,
+        "min_nodes": 7,
+        "min_conns": 9
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7154063609420986
+      },
+      "index": {
+        "n_nodes": 23,
+        "n_conn_innovations": 74,
+        "n_split_nodes": 16
+      }
+    },
+    {
+      "generation": 6,
+      "elapsed_s": 13.861223459243774,
+      "fitness": {
+        "max": 300.0,
+        "mean": 182.73333333333332,
+        "min": 9.0,
+        "std": 123.66727762652314
+      },
+      "genome_size": {
+        "avg_nodes": 8.2,
+        "avg_conns": 11.6,
+        "max_nodes": 10,
+        "max_conns": 14,
+        "min_nodes": 7,
+        "min_conns": 9
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7421739105034375
+      },
+      "index": {
+        "n_nodes": 24,
+        "n_conn_innovations": 76,
+        "n_split_nodes": 17
+      }
+    },
+    {
+      "generation": 7,
+      "elapsed_s": 14.017820119857788,
+      "fitness": {
+        "max": 300.0,
+        "mean": 189.46666666666667,
+        "min": 9.0,
+        "std": 129.07329528432888
+      },
+      "genome_size": {
+        "avg_nodes": 8.333333333333334,
+        "avg_conns": 11.833333333333334,
+        "max_nodes": 10,
+        "max_conns": 15,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7421739105034375
+      },
+      "index": {
+        "n_nodes": 24,
+        "n_conn_innovations": 81,
+        "n_split_nodes": 17
+      }
+    },
+    {
+      "generation": 8,
+      "elapsed_s": 14.147469997406006,
+      "fitness": {
+        "max": 300.0,
+        "mean": 156.33333333333334,
+        "min": 9.0,
+        "std": 130.56679857026782
+      },
+      "genome_size": {
+        "avg_nodes": 8.3,
+        "avg_conns": 11.666666666666666,
+        "max_nodes": 10,
+        "max_conns": 13,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7739246538532508
+      },
+      "index": {
+        "n_nodes": 25,
+        "n_conn_innovations": 84,
+        "n_split_nodes": 18
+      }
+    },
+    {
+      "generation": 9,
+      "elapsed_s": 14.262930870056152,
+      "fitness": {
+        "max": 300.0,
+        "mean": 138.26666666666668,
+        "min": 8.0,
+        "std": 136.3045446376932
+      },
+      "genome_size": {
+        "avg_nodes": 8.366666666666667,
+        "avg_conns": 12.033333333333333,
+        "max_nodes": 12,
+        "max_conns": 14,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7739246538532508
+      },
+      "index": {
+        "n_nodes": 25,
+        "n_conn_innovations": 84,
+        "n_split_nodes": 18
+      }
+    },
+    {
+      "generation": 10,
+      "elapsed_s": 14.397433996200562,
+      "fitness": {
+        "max": 300.0,
+        "mean": 160.83333333333334,
+        "min": 9.0,
+        "std": 133.80310991237172
+      },
+      "genome_size": {
+        "avg_nodes": 8.366666666666667,
+        "avg_conns": 12.266666666666667,
+        "max_nodes": 10,
+        "max_conns": 15,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7739246538532508
+      },
+      "index": {
+        "n_nodes": 25,
+        "n_conn_innovations": 85,
+        "n_split_nodes": 18
+      }
+    },
+    {
+      "generation": 11,
+      "elapsed_s": 19.835052728652954,
+      "fitness": {
+        "max": 300.0,
+        "mean": 190.06666666666666,
+        "min": 9.0,
+        "std": 133.46308686507874
+      },
+      "genome_size": {
+        "avg_nodes": 8.633333333333333,
+        "avg_conns": 12.733333333333333,
+        "max_nodes": 10,
+        "max_conns": 16,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7739246538532508
+      },
+      "index": {
+        "n_nodes": 25,
+        "n_conn_innovations": 87,
+        "n_split_nodes": 18
+      }
+    },
+    {
+      "generation": 12,
+      "elapsed_s": 19.992082118988037,
+      "fitness": {
+        "max": 300.0,
+        "mean": 180.23333333333332,
+        "min": 8.0,
+        "std": 137.70104897526704
+      },
+      "genome_size": {
+        "avg_nodes": 8.666666666666666,
+        "avg_conns": 12.766666666666667,
+        "max_nodes": 10,
+        "max_conns": 16,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 25,
+        "n_conn_innovations": 88,
+        "n_split_nodes": 18
+      }
+    },
+    {
+      "generation": 13,
+      "elapsed_s": 20.128316402435303,
+      "fitness": {
+        "max": 300.0,
+        "mean": 155.13333333333333,
+        "min": 8.0,
+        "std": 136.94323235884602
+      },
+      "genome_size": {
+        "avg_nodes": 8.566666666666666,
+        "avg_conns": 12.5,
+        "max_nodes": 10,
+        "max_conns": 15,
+        "min_nodes": 7,
+        "min_conns": 11
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 26,
+        "n_conn_innovations": 91,
+        "n_split_nodes": 19
+      }
+    },
+    {
+      "generation": 14,
+      "elapsed_s": 20.259296894073486,
+      "fitness": {
+        "max": 300.0,
+        "mean": 149.03333333333333,
+        "min": 9.0,
+        "std": 138.06845725540967
+      },
+      "genome_size": {
+        "avg_nodes": 8.766666666666667,
+        "avg_conns": 13.066666666666666,
+        "max_nodes": 12,
+        "max_conns": 15,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 26,
+        "n_conn_innovations": 93,
+        "n_split_nodes": 19
+      }
+    },
+    {
+      "generation": 15,
+      "elapsed_s": 20.402257204055786,
+      "fitness": {
+        "max": 300.0,
+        "mean": 164.13333333333333,
+        "min": 8.0,
+        "std": 132.91594670651406
+      },
+      "genome_size": {
+        "avg_nodes": 8.7,
+        "avg_conns": 12.9,
+        "max_nodes": 11,
+        "max_conns": 16,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 26,
+        "n_conn_innovations": 93,
+        "n_split_nodes": 19
+      }
+    },
+    {
+      "generation": 16,
+      "elapsed_s": 25.798511266708374,
+      "fitness": {
+        "max": 300.0,
+        "mean": 147.46666666666667,
+        "min": 9.0,
+        "std": 131.10650462717535
+      },
+      "genome_size": {
+        "avg_nodes": 8.633333333333333,
+        "avg_conns": 12.833333333333334,
+        "max_nodes": 12,
+        "max_conns": 16,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 27,
+        "n_conn_innovations": 95,
+        "n_split_nodes": 20
+      }
+    },
+    {
+      "generation": 17,
+      "elapsed_s": 25.927780866622925,
+      "fitness": {
+        "max": 300.0,
+        "mean": 157.06666666666666,
+        "min": 9.0,
+        "std": 137.7088555209464
+      },
+      "genome_size": {
+        "avg_nodes": 8.333333333333334,
+        "avg_conns": 12.766666666666667,
+        "max_nodes": 10,
+        "max_conns": 17,
+        "min_nodes": 7,
+        "min_conns": 7
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 27,
+        "n_conn_innovations": 97,
+        "n_split_nodes": 20
+      }
+    },
+    {
+      "generation": 18,
+      "elapsed_s": 26.075594663619995,
+      "fitness": {
+        "max": 300.0,
+        "mean": 175.6,
+        "min": 9.0,
+        "std": 122.18581477951247
+      },
+      "genome_size": {
+        "avg_nodes": 8.233333333333333,
+        "avg_conns": 13.266666666666667,
+        "max_nodes": 10,
+        "max_conns": 17,
+        "min_nodes": 7,
+        "min_conns": 8
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 27,
+        "n_conn_innovations": 98,
+        "n_split_nodes": 20
+      }
+    },
+    {
+      "generation": 19,
+      "elapsed_s": 26.24040126800537,
+      "fitness": {
+        "max": 300.0,
+        "mean": 198.5,
+        "min": 8.0,
+        "std": 126.36712388908754
+      },
+      "genome_size": {
+        "avg_nodes": 8.533333333333333,
+        "avg_conns": 13.4,
+        "max_nodes": 12,
+        "max_conns": 17,
+        "min_nodes": 7,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.778798314448885
+      },
+      "index": {
+        "n_nodes": 27,
+        "n_conn_innovations": 99,
+        "n_split_nodes": 20
+      }
+    }
+  ],
+  "genome_snapshots": {
+    "0": {
+      "id": 7,
+      "fitness": 56.0,
+      "n_nodes": 7,
+      "n_conns": 10,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": -0.009269406654751256
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.1387701806167286
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.13067542280501945
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.23782646943721988
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.8489699152303021
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 0.6200090576545326
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.0757115408615934
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 0.15741048480878245
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.1477120977665833
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": -0.0536345603341387
+        }
+      ]
+    },
+    "1": {
+      "id": 34,
+      "fitness": 300.0,
+      "n_nodes": 8,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 10,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 7,
+          "src": 1,
+          "dst": 6,
+          "weight": -0.9226941195022522
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 0.5670089619824166
+        },
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.40664869591086067
+        },
+        {
+          "innov": 13,
+          "src": 3,
+          "dst": 5,
+          "weight": 1.0272049366759892
+        },
+        {
+          "innov": 22,
+          "src": 3,
+          "dst": 10,
+          "weight": 1.013403750060613
+        },
+        {
+          "innov": 23,
+          "src": 10,
+          "dst": 6,
+          "weight": -0.22308440341647864
+        },
+        {
+          "innov": 24,
+          "src": 10,
+          "dst": 4,
+          "weight": -0.36262764357676597
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 0.8836486702702548
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -0.22647486990611554
+        },
+        {
+          "innov": 25,
+          "src": 1,
+          "dst": 10,
+          "weight": 0.2570849428655613
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.5146429375810122
+        }
+      ]
+    },
+    "2": {
+      "id": 60,
+      "fitness": 300.0,
+      "n_nodes": 8,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 10,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 7,
+          "src": 1,
+          "dst": 6,
+          "weight": -0.9226941195022522
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 0.5670089619824166
+        },
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.40664869591086067
+        },
+        {
+          "innov": 13,
+          "src": 3,
+          "dst": 5,
+          "weight": 1.0272049366759892
+        },
+        {
+          "innov": 22,
+          "src": 3,
+          "dst": 10,
+          "weight": 1.013403750060613
+        },
+        {
+          "innov": 23,
+          "src": 10,
+          "dst": 6,
+          "weight": -0.22308440341647864
+        },
+        {
+          "innov": 24,
+          "src": 10,
+          "dst": 4,
+          "weight": -0.36262764357676597
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 0.8836486702702548
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -0.22647486990611554
+        },
+        {
+          "innov": 25,
+          "src": 1,
+          "dst": 10,
+          "weight": 0.2570849428655613
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.5146429375810122
+        }
+      ]
+    },
+    "3": {
+      "id": 90,
+      "fitness": 300.0,
+      "n_nodes": 8,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 10,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 7,
+          "src": 1,
+          "dst": 6,
+          "weight": -0.9226941195022522
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 0.5670089619824166
+        },
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.40664869591086067
+        },
+        {
+          "innov": 13,
+          "src": 3,
+          "dst": 5,
+          "weight": 1.0272049366759892
+        },
+        {
+          "innov": 22,
+          "src": 3,
+          "dst": 10,
+          "weight": 1.013403750060613
+        },
+        {
+          "innov": 23,
+          "src": 10,
+          "dst": 6,
+          "weight": -0.22308440341647864
+        },
+        {
+          "innov": 24,
+          "src": 10,
+          "dst": 4,
+          "weight": -0.36262764357676597
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 0.8836486702702548
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -0.22647486990611554
+        },
+        {
+          "innov": 25,
+          "src": 1,
+          "dst": 10,
+          "weight": 0.2570849428655613
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.5146429375810122
+        }
+      ]
+    },
+    "4": {
+      "id": 120,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": 0.1340474461868127
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.4895277026813685
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.26456576296635276
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": -0.3579213416843068
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": -0.056214379580015766
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": -0.32092780131203574
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 1.177428158548564
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 0.8579201847836184
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.8196207814318344
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.10234089107701565
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.0289897911905963
+        }
+      ]
+    },
+    "5": {
+      "id": 150,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": 0.1340474461868127
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.4895277026813685
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.26456576296635276
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": -0.3579213416843068
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": -0.056214379580015766
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": -0.32092780131203574
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 1.177428158548564
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 0.8579201847836184
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.8196207814318344
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.10234089107701565
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.0289897911905963
+        }
+      ]
+    },
+    "6": {
+      "id": 181,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "7": {
+      "id": 210,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "8": {
+      "id": 240,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "9": {
+      "id": 270,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "10": {
+      "id": 300,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "11": {
+      "id": 330,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "12": {
+      "id": 360,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "13": {
+      "id": 390,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "14": {
+      "id": 420,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "15": {
+      "id": 450,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "16": {
+      "id": 480,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "17": {
+      "id": 510,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "18": {
+      "id": 540,
+      "fitness": 300.0,
+      "n_nodes": 7,
+      "n_conns": 11,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.032675341518583506
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": -0.9156874925890195
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.00671098576007545
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.10035198650866825
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.3158045460411612
+        },
+        {
+          "innov": 9,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.2520309130609265
+        },
+        {
+          "innov": 12,
+          "src": 2,
+          "dst": 6,
+          "weight": 0.568167176784018
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.119294707867553
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -1.4149138994358197
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.12381608826814752
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 1.183246022209282
+        }
+      ]
+    },
+    "19": {
+      "id": 570,
+      "fitness": 300.0,
+      "n_nodes": 8,
+      "n_conns": 17,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 5,
+          "kind": "output",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 10,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 1,
+          "dst": 4,
+          "weight": -0.9312128276579857
+        },
+        {
+          "innov": 65,
+          "src": 0,
+          "dst": 10,
+          "weight": -0.1763411867070347
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 6,
+          "weight": 0.39440939135357866
+        },
+        {
+          "innov": 4,
+          "src": 3,
+          "dst": 4,
+          "weight": 0.325321608186881
+        },
+        {
+          "innov": 7,
+          "src": 1,
+          "dst": 6,
+          "weight": 0.6380635517813392
+        },
+        {
+          "innov": 13,
+          "src": 3,
+          "dst": 5,
+          "weight": 1.2069061589633543
+        },
+        {
+          "innov": 14,
+          "src": 0,
+          "dst": 5,
+          "weight": 1.2893372129028635
+        },
+        {
+          "innov": 15,
+          "src": 1,
+          "dst": 5,
+          "weight": -0.7220012146408047
+        },
+        {
+          "innov": 19,
+          "src": 2,
+          "dst": 5,
+          "weight": 0.9853862869071792
+        },
+        {
+          "innov": 23,
+          "src": 10,
+          "dst": 6,
+          "weight": 0.7428890253996908
+        },
+        {
+          "innov": 22,
+          "src": 3,
+          "dst": 10,
+          "weight": 2.606297599836396
+        },
+        {
+          "innov": 55,
+          "src": 10,
+          "dst": 5,
+          "weight": 0.14420117083824985
+        },
+        {
+          "innov": 24,
+          "src": 10,
+          "dst": 4,
+          "weight": -1.4520331737821244
+        },
+        {
+          "innov": 25,
+          "src": 1,
+          "dst": 10,
+          "weight": 1.2356978223754593
+        },
+        {
+          "innov": 2,
+          "src": 6,
+          "dst": 5,
+          "weight": 0.1908658437332324
+        },
+        {
+          "innov": 18,
+          "src": 6,
+          "dst": 4,
+          "weight": 0.4821269276700129
+        },
+        {
+          "innov": 11,
+          "src": 3,
+          "dst": 6,
+          "weight": 0.12921554441198183
+        }
+      ]
+    }
+  }
+}

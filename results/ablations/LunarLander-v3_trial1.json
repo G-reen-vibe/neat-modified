@@ -1,0 +1,455 @@
+{
+  "name": "LunarLander-v3_trial1",
+  "env": "LunarLander-v3",
+  "best_fitness_train": -30.27408955462421,
+  "eval_mean": -126.75268264320121,
+  "eval_std": 63.786329651739095,
+  "solved": false,
+  "threshold": 200.0,
+  "elapsed_s": 21.082887172698975,
+  "best_genome": {
+    "id": 727,
+    "fitness": -30.27408955462421,
+    "n_nodes": 17,
+    "n_conns": 43,
+    "nodes": [
+      {
+        "id": 0,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 1,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 2,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 3,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 4,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 5,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 6,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 7,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 8,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 9,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 10,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 11,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 12,
+        "kind": "bias",
+        "activation": "relu"
+      },
+      {
+        "id": 13,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 38,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 29,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 76,
+        "kind": "hidden",
+        "activation": "tanh"
+      }
+    ],
+    "conns": [
+      {
+        "innov": 33,
+        "src": 6,
+        "dst": 11,
+        "weight": 1.0103643287409738
+      },
+      {
+        "innov": 1,
+        "src": 0,
+        "dst": 12,
+        "weight": -0.30806954269799985
+      },
+      {
+        "innov": 35,
+        "src": 3,
+        "dst": 10,
+        "weight": -0.428142002662514
+      },
+      {
+        "innov": 56,
+        "src": 1,
+        "dst": 9,
+        "weight": -1.3236293383287743
+      },
+      {
+        "innov": 70,
+        "src": 1,
+        "dst": 8,
+        "weight": 0.33910373781528996
+      },
+      {
+        "innov": 10,
+        "src": 3,
+        "dst": 12,
+        "weight": -0.913059606264523
+      },
+      {
+        "innov": 2,
+        "src": 5,
+        "dst": 8,
+        "weight": -0.46809597101352685
+      },
+      {
+        "innov": 4,
+        "src": 6,
+        "dst": 8,
+        "weight": 0.5838074303516094
+      },
+      {
+        "innov": 12,
+        "src": 4,
+        "dst": 9,
+        "weight": -0.20420710637051737
+      },
+      {
+        "innov": 39,
+        "src": 7,
+        "dst": 13,
+        "weight": 1.439904383807266
+      },
+      {
+        "innov": 40,
+        "src": 13,
+        "dst": 9,
+        "weight": -0.038951316788700924
+      },
+      {
+        "innov": 53,
+        "src": 5,
+        "dst": 13,
+        "weight": 0.5522866599593348
+      },
+      {
+        "innov": 26,
+        "src": 1,
+        "dst": 10,
+        "weight": -1.1431433217339664
+      },
+      {
+        "innov": 7,
+        "src": 12,
+        "dst": 8,
+        "weight": -0.075050795424983
+      },
+      {
+        "innov": 37,
+        "src": 2,
+        "dst": 12,
+        "weight": -0.4576927607624076
+      },
+      {
+        "innov": 6,
+        "src": 5,
+        "dst": 11,
+        "weight": -0.183206371625102
+      },
+      {
+        "innov": 31,
+        "src": 6,
+        "dst": 12,
+        "weight": 0.08131532758650534
+      },
+      {
+        "innov": 8,
+        "src": 5,
+        "dst": 9,
+        "weight": 0.579901277043148
+      },
+      {
+        "innov": 17,
+        "src": 3,
+        "dst": 9,
+        "weight": 1.1580706565779244
+      },
+      {
+        "innov": 9,
+        "src": 2,
+        "dst": 10,
+        "weight": -0.41191916870480844
+      },
+      {
+        "innov": 20,
+        "src": 6,
+        "dst": 9,
+        "weight": 0.7831466312742201
+      },
+      {
+        "innov": 246,
+        "src": 13,
+        "dst": 12,
+        "weight": 0.3026726726900089
+      },
+      {
+        "innov": 228,
+        "src": 4,
+        "dst": 38,
+        "weight": 1.7876716345349224
+      },
+      {
+        "innov": 229,
+        "src": 38,
+        "dst": 11,
+        "weight": 1.2087388819684315
+      },
+      {
+        "innov": 38,
+        "src": 7,
+        "dst": 8,
+        "weight": -1.0931483264061834
+      },
+      {
+        "innov": 19,
+        "src": 0,
+        "dst": 9,
+        "weight": -0.8180526067525801
+      },
+      {
+        "innov": 34,
+        "src": 7,
+        "dst": 11,
+        "weight": 1.3340952181006016
+      },
+      {
+        "innov": 42,
+        "src": 3,
+        "dst": 13,
+        "weight": -0.46869710602577247
+      },
+      {
+        "innov": 18,
+        "src": 3,
+        "dst": 8,
+        "weight": 1.104335791750289
+      },
+      {
+        "innov": 45,
+        "src": 13,
+        "dst": 11,
+        "weight": -1.779718931300854
+      },
+      {
+        "innov": 23,
+        "src": 0,
+        "dst": 11,
+        "weight": 0.5818044276157511
+      },
+      {
+        "innov": 247,
+        "src": 0,
+        "dst": 38,
+        "weight": 1.0697965290652653
+      },
+      {
+        "innov": 41,
+        "src": 6,
+        "dst": 13,
+        "weight": -0.7317245986273739
+      },
+      {
+        "innov": 36,
+        "src": 4,
+        "dst": 12,
+        "weight": -1.2039274055646545
+      },
+      {
+        "innov": 0,
+        "src": 0,
+        "dst": 8,
+        "weight": -0.7325640216868722
+      },
+      {
+        "innov": 248,
+        "src": 1,
+        "dst": 13,
+        "weight": 0.7051815350067352
+      },
+      {
+        "innov": 15,
+        "src": 7,
+        "dst": 10,
+        "weight": 0.15574676385092104
+      },
+      {
+        "innov": 156,
+        "src": 0,
+        "dst": 29,
+        "weight": 1.033697649545749
+      },
+      {
+        "innov": 157,
+        "src": 29,
+        "dst": 10,
+        "weight": 0.43054908900892985
+      },
+      {
+        "innov": 161,
+        "src": 4,
+        "dst": 29,
+        "weight": -0.13273360166526563
+      },
+      {
+        "innov": 412,
+        "src": 6,
+        "dst": 76,
+        "weight": 0.5839080319842029
+      },
+      {
+        "innov": 413,
+        "src": 76,
+        "dst": 10,
+        "weight": 0.3546147802230768
+      },
+      {
+        "innov": 426,
+        "src": 29,
+        "dst": 38,
+        "weight": -0.483799363047098
+      }
+    ]
+  },
+  "genome_viz_path": "results/ablations/LunarLander-v3_trial1_genome.png",
+  "config": {
+    "n_inputs": 8,
+    "n_outputs": 4,
+    "input_activation": "relu",
+    "output_activation": "tanh",
+    "hidden_activation": "tanh",
+    "bias_enabled": true,
+    "forbid_loops": true,
+    "seed": 101,
+    "init": {
+      "n_conn_multiplier": 0.99,
+      "weight_init_multiplier": 1.08,
+      "n_neurons_range": [
+        0,
+        2
+      ]
+    },
+    "mutation": {
+      "weight_select": "pct_shuffled",
+      "weight_pct": 1.0,
+      "weight_mod": "gaussian",
+      "weight_std": 0.215,
+      "weight_prob": 1.0,
+      "conn_select": "pct_shuffled",
+      "conn_pct": 0.0,
+      "conn_mod": "gaussian",
+      "conn_std": 0.4,
+      "neuron_select": "pct_shuffled",
+      "neuron_pct": 0.0,
+      "neuron_mod": "incoming_one",
+      "prune_select": "pct_shuffled",
+      "prune_pct": 0.0,
+      "prune_prob": 0.0
+    },
+    "policy": {
+      "kind": "per_type",
+      "prune_prob": 0.03,
+      "neuron_prob": 0.13,
+      "conn_prob": 0.3,
+      "weight_prob": 1.0,
+      "single_prune": 0.05,
+      "single_neuron": 0.1,
+      "single_conn": 0.25,
+      "single_weight": 0.6,
+      "nested_schedule": []
+    },
+    "generation": {
+      "pop_size": 50,
+      "asexual_pct": 0.75,
+      "crossover_pct": 0.25,
+      "interspecies": 1,
+      "elitism": 1,
+      "cull_pct": 0.57
+    },
+    "crossover": {
+      "topology": "fitter",
+      "weights": "average"
+    },
+    "speciation": {
+      "kind": "purge",
+      "initial_kind": "purge",
+      "subsequent_kind": "standard",
+      "target_species": 10,
+      "min_threshold": 0.05,
+      "max_threshold": 0.5,
+      "threshold_step": 0.025,
+      "similarity": "percentage",
+      "c1": 1.0,
+      "c2": 1.0,
+      "c3": 0.4,
+      "purge_keep": 10,
+      "purge_extra_mutations": 3
+    },
+    "optimizer": {
+      "enabled": false,
+      "lr": 0.1,
+      "weight_decay_l2": 0.0,
+      "weight_decay_l1": 0.0,
+      "method": "adam",
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_eps": 1e-08,
+      "momentum": 0.9,
+      "rmsprop_decay": 0.99
+    }
+  },
+  "best_genome_summary": {
+    "n_nodes": 17,
+    "n_conns": 43,
+    "fitness": -30.27408955462421
+  }
+}

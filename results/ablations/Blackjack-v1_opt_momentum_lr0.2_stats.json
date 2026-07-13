@@ -1,0 +1,1292 @@
+{
+  "history": [
+    {
+      "generation": 0,
+      "elapsed_s": 0.09673762321472168,
+      "fitness": {
+        "max": 0.1,
+        "mean": -0.45999999999999996,
+        "min": -1.0,
+        "std": 0.40422765862815474
+      },
+      "genome_size": {
+        "avg_nodes": 7.275,
+        "avg_conns": 13.075,
+        "max_nodes": 8,
+        "max_conns": 14,
+        "min_nodes": 6,
+        "min_conns": 11
+      },
+      "species": {
+        "count": 0,
+        "details": [],
+        "threshold": 0.275
+      },
+      "index": {
+        "n_nodes": 27,
+        "n_conn_innovations": 110,
+        "n_split_nodes": 21
+      }
+    },
+    {
+      "generation": 1,
+      "elapsed_s": 0.19638395309448242,
+      "fitness": {
+        "max": 0.4,
+        "mean": -0.065,
+        "min": -1.0,
+        "std": 0.20682117879946438
+      },
+      "genome_size": {
+        "avg_nodes": 7.85,
+        "avg_conns": 13.85,
+        "max_nodes": 9,
+        "max_conns": 16,
+        "min_nodes": 6,
+        "min_conns": 11
+      },
+      "species": {
+        "count": 10,
+        "details": [],
+        "threshold": 0.5
+      },
+      "index": {
+        "n_nodes": 28,
+        "n_conn_innovations": 113,
+        "n_split_nodes": 22
+      }
+    },
+    {
+      "generation": 2,
+      "elapsed_s": 0.29618072509765625,
+      "fitness": {
+        "max": 0.0,
+        "mean": -0.1575,
+        "min": -0.9,
+        "std": 0.16566155257029314
+      },
+      "genome_size": {
+        "avg_nodes": 7.875,
+        "avg_conns": 13.9,
+        "max_nodes": 10,
+        "max_conns": 17,
+        "min_nodes": 6,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7439296741675917
+      },
+      "index": {
+        "n_nodes": 29,
+        "n_conn_innovations": 118,
+        "n_split_nodes": 23
+      }
+    },
+    {
+      "generation": 3,
+      "elapsed_s": 0.39936184883117676,
+      "fitness": {
+        "max": -0.5,
+        "mean": -0.585,
+        "min": -1.0,
+        "std": 0.149248115565993
+      },
+      "genome_size": {
+        "avg_nodes": 8.0,
+        "avg_conns": 14.125,
+        "max_nodes": 11,
+        "max_conns": 16,
+        "min_nodes": 6,
+        "min_conns": 10
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7543652965290153
+      },
+      "index": {
+        "n_nodes": 29,
+        "n_conn_innovations": 121,
+        "n_split_nodes": 23
+      }
+    },
+    {
+      "generation": 4,
+      "elapsed_s": 0.4996514320373535,
+      "fitness": {
+        "max": 0.2,
+        "mean": 0.085,
+        "min": -0.6,
+        "std": 0.1388344337691482
+      },
+      "genome_size": {
+        "avg_nodes": 8.125,
+        "avg_conns": 14.65,
+        "max_nodes": 11,
+        "max_conns": 16,
+        "min_nodes": 6,
+        "min_conns": 11
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7545601597066538
+      },
+      "index": {
+        "n_nodes": 29,
+        "n_conn_innovations": 122,
+        "n_split_nodes": 23
+      }
+    },
+    {
+      "generation": 5,
+      "elapsed_s": 0.614978551864624,
+      "fitness": {
+        "max": -0.6,
+        "mean": -0.6,
+        "min": -0.6,
+        "std": 0.0
+      },
+      "genome_size": {
+        "avg_nodes": 8.375,
+        "avg_conns": 15.175,
+        "max_nodes": 11,
+        "max_conns": 17,
+        "min_nodes": 7,
+        "min_conns": 11
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7751156443599644
+      },
+      "index": {
+        "n_nodes": 30,
+        "n_conn_innovations": 127,
+        "n_split_nodes": 24
+      }
+    },
+    {
+      "generation": 6,
+      "elapsed_s": 0.7195558547973633,
+      "fitness": {
+        "max": 0.0,
+        "mean": -0.030000000000000006,
+        "min": -0.4,
+        "std": 0.1053565375285274
+      },
+      "genome_size": {
+        "avg_nodes": 8.575,
+        "avg_conns": 15.525,
+        "max_nodes": 11,
+        "max_conns": 18,
+        "min_nodes": 7,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.758161451651446
+      },
+      "index": {
+        "n_nodes": 31,
+        "n_conn_innovations": 131,
+        "n_split_nodes": 25
+      }
+    },
+    {
+      "generation": 7,
+      "elapsed_s": 0.824481725692749,
+      "fitness": {
+        "max": 0.0,
+        "mean": -0.26,
+        "min": -1.0,
+        "std": 0.17146428199482247
+      },
+      "genome_size": {
+        "avg_nodes": 8.7,
+        "avg_conns": 15.975,
+        "max_nodes": 11,
+        "max_conns": 18,
+        "min_nodes": 8,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.758161451651446
+      },
+      "index": {
+        "n_nodes": 34,
+        "n_conn_innovations": 140,
+        "n_split_nodes": 28
+      }
+    },
+    {
+      "generation": 8,
+      "elapsed_s": 0.9226546287536621,
+      "fitness": {
+        "max": -0.4,
+        "mean": -0.44499999999999995,
+        "min": -1.0,
+        "std": 0.11821590417536887
+      },
+      "genome_size": {
+        "avg_nodes": 8.7,
+        "avg_conns": 16.0,
+        "max_nodes": 11,
+        "max_conns": 18,
+        "min_nodes": 8,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.758161451651446
+      },
+      "index": {
+        "n_nodes": 36,
+        "n_conn_innovations": 144,
+        "n_split_nodes": 30
+      }
+    },
+    {
+      "generation": 9,
+      "elapsed_s": 1.020977258682251,
+      "fitness": {
+        "max": -0.1,
+        "mean": -0.22249999999999998,
+        "min": -1.0,
+        "std": 0.21270578271405788
+      },
+      "genome_size": {
+        "avg_nodes": 8.875,
+        "avg_conns": 16.225,
+        "max_nodes": 12,
+        "max_conns": 19,
+        "min_nodes": 8,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.758161451651446
+      },
+      "index": {
+        "n_nodes": 36,
+        "n_conn_innovations": 146,
+        "n_split_nodes": 30
+      }
+    },
+    {
+      "generation": 10,
+      "elapsed_s": 1.1249489784240723,
+      "fitness": {
+        "max": 0.0,
+        "mean": -0.1375,
+        "min": -1.0,
+        "std": 0.22213453130929464
+      },
+      "genome_size": {
+        "avg_nodes": 9.1,
+        "avg_conns": 16.55,
+        "max_nodes": 12,
+        "max_conns": 20,
+        "min_nodes": 8,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7661539273639538
+      },
+      "index": {
+        "n_nodes": 37,
+        "n_conn_innovations": 153,
+        "n_split_nodes": 31
+      }
+    },
+    {
+      "generation": 11,
+      "elapsed_s": 1.2252209186553955,
+      "fitness": {
+        "max": -0.2,
+        "mean": -0.425,
+        "min": -1.0,
+        "std": 0.23743420141167532
+      },
+      "genome_size": {
+        "avg_nodes": 9.425,
+        "avg_conns": 17.025,
+        "max_nodes": 12,
+        "max_conns": 20,
+        "min_nodes": 8,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7661783412832744
+      },
+      "index": {
+        "n_nodes": 37,
+        "n_conn_innovations": 158,
+        "n_split_nodes": 31
+      }
+    },
+    {
+      "generation": 12,
+      "elapsed_s": 1.3290743827819824,
+      "fitness": {
+        "max": -0.2,
+        "mean": -0.42000000000000004,
+        "min": -1.0,
+        "std": 0.1777638883463118
+      },
+      "genome_size": {
+        "avg_nodes": 9.325,
+        "avg_conns": 17.225,
+        "max_nodes": 12,
+        "max_conns": 20,
+        "min_nodes": 8,
+        "min_conns": 14
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7686716965013067
+      },
+      "index": {
+        "n_nodes": 37,
+        "n_conn_innovations": 159,
+        "n_split_nodes": 31
+      }
+    },
+    {
+      "generation": 13,
+      "elapsed_s": 1.4346256256103516,
+      "fitness": {
+        "max": 0.1,
+        "mean": -0.0375,
+        "min": -0.8,
+        "std": 0.18396670894485234
+      },
+      "genome_size": {
+        "avg_nodes": 9.35,
+        "avg_conns": 17.65,
+        "max_nodes": 12,
+        "max_conns": 20,
+        "min_nodes": 8,
+        "min_conns": 15
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7686716965013067
+      },
+      "index": {
+        "n_nodes": 38,
+        "n_conn_innovations": 162,
+        "n_split_nodes": 32
+      }
+    },
+    {
+      "generation": 14,
+      "elapsed_s": 1.5383458137512207,
+      "fitness": {
+        "max": 0.2,
+        "mean": 0.09,
+        "min": -1.0,
+        "std": 0.2467792535850613
+      },
+      "genome_size": {
+        "avg_nodes": 9.575,
+        "avg_conns": 18.1,
+        "max_nodes": 14,
+        "max_conns": 21,
+        "min_nodes": 8,
+        "min_conns": 16
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7962611178994448
+      },
+      "index": {
+        "n_nodes": 39,
+        "n_conn_innovations": 168,
+        "n_split_nodes": 33
+      }
+    },
+    {
+      "generation": 15,
+      "elapsed_s": 1.6430346965789795,
+      "fitness": {
+        "max": -0.5,
+        "mean": -0.5425,
+        "min": -1.0,
+        "std": 0.13395428324618813
+      },
+      "genome_size": {
+        "avg_nodes": 10.325,
+        "avg_conns": 17.975,
+        "max_nodes": 15,
+        "max_conns": 21,
+        "min_nodes": 8,
+        "min_conns": 16
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7962611178994448
+      },
+      "index": {
+        "n_nodes": 40,
+        "n_conn_innovations": 173,
+        "n_split_nodes": 34
+      }
+    },
+    {
+      "generation": 16,
+      "elapsed_s": 1.7498056888580322,
+      "fitness": {
+        "max": 0.6,
+        "mean": 0.315,
+        "min": -1.0,
+        "std": 0.4896682550462098
+      },
+      "genome_size": {
+        "avg_nodes": 10.4,
+        "avg_conns": 18.275,
+        "max_nodes": 15,
+        "max_conns": 21,
+        "min_nodes": 8,
+        "min_conns": 15
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7997009514145194
+      },
+      "index": {
+        "n_nodes": 40,
+        "n_conn_innovations": 178,
+        "n_split_nodes": 34
+      }
+    },
+    {
+      "generation": 17,
+      "elapsed_s": 1.8540918827056885,
+      "fitness": {
+        "max": -0.1,
+        "mean": -0.255,
+        "min": -0.3,
+        "std": 0.05894913061275797
+      },
+      "genome_size": {
+        "avg_nodes": 10.875,
+        "avg_conns": 18.775,
+        "max_nodes": 15,
+        "max_conns": 22,
+        "min_nodes": 8,
+        "min_conns": 16
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7997009514145194
+      },
+      "index": {
+        "n_nodes": 41,
+        "n_conn_innovations": 183,
+        "n_split_nodes": 35
+      }
+    },
+    {
+      "generation": 18,
+      "elapsed_s": 1.9589555263519287,
+      "fitness": {
+        "max": -0.2,
+        "mean": -0.315,
+        "min": -1.0,
+        "std": 0.18914280319377738
+      },
+      "genome_size": {
+        "avg_nodes": 10.8,
+        "avg_conns": 18.725,
+        "max_nodes": 15,
+        "max_conns": 22,
+        "min_nodes": 8,
+        "min_conns": 16
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7997009514145194
+      },
+      "index": {
+        "n_nodes": 41,
+        "n_conn_innovations": 188,
+        "n_split_nodes": 35
+      }
+    },
+    {
+      "generation": 19,
+      "elapsed_s": 2.0606775283813477,
+      "fitness": {
+        "max": 0.2,
+        "mean": -0.225,
+        "min": -1.0,
+        "std": 0.17428425057933378
+      },
+      "genome_size": {
+        "avg_nodes": 10.95,
+        "avg_conns": 18.8,
+        "max_nodes": 15,
+        "max_conns": 22,
+        "min_nodes": 8,
+        "min_conns": 16
+      },
+      "species": {
+        "count": 8,
+        "details": [],
+        "threshold": 0.7997009514145194
+      },
+      "index": {
+        "n_nodes": 41,
+        "n_conn_innovations": 188,
+        "n_split_nodes": 35
+      }
+    }
+  ],
+  "genome_snapshots": {
+    "0": {
+      "id": 5,
+      "fitness": 0.1,
+      "n_nodes": 8,
+      "n_conns": 14,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 5,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 13,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 14,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 16,
+          "src": 1,
+          "dst": 5,
+          "weight": 0.3043036513557613
+        },
+        {
+          "innov": 13,
+          "src": 1,
+          "dst": 3,
+          "weight": 2.180802175415155
+        },
+        {
+          "innov": 36,
+          "src": 2,
+          "dst": 4,
+          "weight": 2.135709825034868
+        },
+        {
+          "innov": 37,
+          "src": 0,
+          "dst": 13,
+          "weight": 1.0
+        },
+        {
+          "innov": 2,
+          "src": 0,
+          "dst": 4,
+          "weight": -0.03947239597310112
+        },
+        {
+          "innov": 39,
+          "src": 13,
+          "dst": 3,
+          "weight": 1.533259274645914
+        },
+        {
+          "innov": 40,
+          "src": 13,
+          "dst": 5,
+          "weight": -0.01989575352140628
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 5,
+          "weight": 2.415386292735528
+        },
+        {
+          "innov": 41,
+          "src": 13,
+          "dst": 14,
+          "weight": 1.0
+        },
+        {
+          "innov": 42,
+          "src": 14,
+          "dst": 4,
+          "weight": 0.10468464916944369
+        },
+        {
+          "innov": 0,
+          "src": 0,
+          "dst": 3,
+          "weight": 1.336122881889519
+        },
+        {
+          "innov": 43,
+          "src": 2,
+          "dst": 14,
+          "weight": 1.5806361432539613
+        },
+        {
+          "innov": 8,
+          "src": 1,
+          "dst": 4,
+          "weight": 1.0272625300403504
+        },
+        {
+          "innov": 44,
+          "src": 5,
+          "dst": 14,
+          "weight": 2.5172958255240423
+        }
+      ]
+    },
+    "4": {
+      "id": 160,
+      "fitness": 0.2,
+      "n_nodes": 8,
+      "n_conns": 15,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 5,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 13,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 14,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 0,
+          "dst": 3,
+          "weight": 0.47238650002109533
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 5,
+          "weight": 2.8794048120887443
+        },
+        {
+          "innov": 2,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.4051897125834602
+        },
+        {
+          "innov": 36,
+          "src": 2,
+          "dst": 4,
+          "weight": 1.359511565361672
+        },
+        {
+          "innov": 37,
+          "src": 0,
+          "dst": 13,
+          "weight": 1.0964626473303736
+        },
+        {
+          "innov": 39,
+          "src": 13,
+          "dst": 3,
+          "weight": 1.7195868251301831
+        },
+        {
+          "innov": 40,
+          "src": 13,
+          "dst": 5,
+          "weight": -0.1532843426641781
+        },
+        {
+          "innov": 41,
+          "src": 13,
+          "dst": 14,
+          "weight": 0.8264089725934733
+        },
+        {
+          "innov": 42,
+          "src": 14,
+          "dst": 4,
+          "weight": 0.5900813172825304
+        },
+        {
+          "innov": 43,
+          "src": 2,
+          "dst": 14,
+          "weight": 1.6133433815937992
+        },
+        {
+          "innov": 8,
+          "src": 1,
+          "dst": 4,
+          "weight": 1.4355421803751096
+        },
+        {
+          "innov": 13,
+          "src": 1,
+          "dst": 3,
+          "weight": 2.187587985452106
+        },
+        {
+          "innov": 44,
+          "src": 5,
+          "dst": 14,
+          "weight": 1.824209599512574
+        },
+        {
+          "innov": 16,
+          "src": 1,
+          "dst": 5,
+          "weight": 0.24298100095687478
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 3,
+          "weight": 0.0562573891739806
+        }
+      ]
+    },
+    "8": {
+      "id": 320,
+      "fitness": -0.4,
+      "n_nodes": 8,
+      "n_conns": 15,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 5,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 13,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 14,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 0,
+          "dst": 3,
+          "weight": 0.4788501839746413
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 5,
+          "weight": 2.8838762786976373
+        },
+        {
+          "innov": 2,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.39558835533517744
+        },
+        {
+          "innov": 36,
+          "src": 2,
+          "dst": 4,
+          "weight": 1.35516896732899
+        },
+        {
+          "innov": 37,
+          "src": 0,
+          "dst": 13,
+          "weight": 1.10152934352554
+        },
+        {
+          "innov": 39,
+          "src": 13,
+          "dst": 3,
+          "weight": 1.7181511575539206
+        },
+        {
+          "innov": 40,
+          "src": 13,
+          "dst": 5,
+          "weight": -0.17288761577713307
+        },
+        {
+          "innov": 41,
+          "src": 13,
+          "dst": 14,
+          "weight": 0.8078170169116875
+        },
+        {
+          "innov": 42,
+          "src": 14,
+          "dst": 4,
+          "weight": 0.5826446052991168
+        },
+        {
+          "innov": 43,
+          "src": 2,
+          "dst": 14,
+          "weight": 1.620403335292315
+        },
+        {
+          "innov": 8,
+          "src": 1,
+          "dst": 4,
+          "weight": 1.4161973530542933
+        },
+        {
+          "innov": 13,
+          "src": 1,
+          "dst": 3,
+          "weight": 2.1866086399501032
+        },
+        {
+          "innov": 44,
+          "src": 5,
+          "dst": 14,
+          "weight": 1.8376896362117736
+        },
+        {
+          "innov": 16,
+          "src": 1,
+          "dst": 5,
+          "weight": 0.2547786262373364
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 3,
+          "weight": 0.05657864192530271
+        }
+      ]
+    },
+    "12": {
+      "id": 488,
+      "fitness": -0.2,
+      "n_nodes": 8,
+      "n_conns": 15,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 5,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 13,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 14,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 0,
+          "dst": 3,
+          "weight": 1.112528296750928
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 5,
+          "weight": 2.2386561256212056
+        },
+        {
+          "innov": 2,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.23634543978557196
+        },
+        {
+          "innov": 36,
+          "src": 2,
+          "dst": 4,
+          "weight": 1.3007145767797827
+        },
+        {
+          "innov": 37,
+          "src": 0,
+          "dst": 13,
+          "weight": 0.7369660811299616
+        },
+        {
+          "innov": 39,
+          "src": 13,
+          "dst": 3,
+          "weight": 1.2330434312385716
+        },
+        {
+          "innov": 40,
+          "src": 13,
+          "dst": 5,
+          "weight": 0.33649466914321347
+        },
+        {
+          "innov": 41,
+          "src": 13,
+          "dst": 14,
+          "weight": 0.7750241307940947
+        },
+        {
+          "innov": 42,
+          "src": 14,
+          "dst": 4,
+          "weight": 0.3784860202872615
+        },
+        {
+          "innov": 43,
+          "src": 2,
+          "dst": 14,
+          "weight": 2.1489146213559365
+        },
+        {
+          "innov": 8,
+          "src": 1,
+          "dst": 4,
+          "weight": 0.9269466914141331
+        },
+        {
+          "innov": 13,
+          "src": 1,
+          "dst": 3,
+          "weight": 1.5179778523648548
+        },
+        {
+          "innov": 44,
+          "src": 5,
+          "dst": 14,
+          "weight": 2.3648471424127004
+        },
+        {
+          "innov": 16,
+          "src": 1,
+          "dst": 5,
+          "weight": 0.43505997302156824
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 3,
+          "weight": -0.2049590179997164
+        }
+      ]
+    },
+    "16": {
+      "id": 640,
+      "fitness": 0.6,
+      "n_nodes": 12,
+      "n_conns": 17,
+      "nodes": [
+        {
+          "id": 0,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 1,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 2,
+          "kind": "input",
+          "activation": "relu"
+        },
+        {
+          "id": 3,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 4,
+          "kind": "output",
+          "activation": "sigmoid"
+        },
+        {
+          "id": 5,
+          "kind": "bias",
+          "activation": "relu"
+        },
+        {
+          "id": 13,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 14,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 32,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 6,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 7,
+          "kind": "hidden",
+          "activation": "tanh"
+        },
+        {
+          "id": 23,
+          "kind": "hidden",
+          "activation": "tanh"
+        }
+      ],
+      "conns": [
+        {
+          "innov": 0,
+          "src": 0,
+          "dst": 3,
+          "weight": 0.18630730768159304
+        },
+        {
+          "innov": 1,
+          "src": 0,
+          "dst": 5,
+          "weight": 2.312055651486232
+        },
+        {
+          "innov": 2,
+          "src": 0,
+          "dst": 4,
+          "weight": 0.5162184074427508
+        },
+        {
+          "innov": 3,
+          "src": 2,
+          "dst": 3,
+          "weight": 0.31858140946395425
+        },
+        {
+          "innov": 36,
+          "src": 2,
+          "dst": 4,
+          "weight": 0.9482064580410978
+        },
+        {
+          "innov": 37,
+          "src": 0,
+          "dst": 13,
+          "weight": 0.884285218695595
+        },
+        {
+          "innov": 39,
+          "src": 13,
+          "dst": 3,
+          "weight": 2.092060100880711
+        },
+        {
+          "innov": 40,
+          "src": 13,
+          "dst": 5,
+          "weight": 0.6017900025740334
+        },
+        {
+          "innov": 41,
+          "src": 13,
+          "dst": 14,
+          "weight": 0.22778601542347995
+        },
+        {
+          "innov": 42,
+          "src": 14,
+          "dst": 4,
+          "weight": 0.6867397283702853
+        },
+        {
+          "innov": 43,
+          "src": 2,
+          "dst": 14,
+          "weight": 1.8528313034704327
+        },
+        {
+          "innov": 8,
+          "src": 1,
+          "dst": 4,
+          "weight": 0.3779718110249416
+        },
+        {
+          "innov": 13,
+          "src": 1,
+          "dst": 3,
+          "weight": 1.4707756720927363
+        },
+        {
+          "innov": 44,
+          "src": 5,
+          "dst": 14,
+          "weight": 1.9780605234097817
+        },
+        {
+          "innov": 16,
+          "src": 1,
+          "dst": 5,
+          "weight": -0.12780009091794234
+        },
+        {
+          "innov": 152,
+          "src": 1,
+          "dst": 32,
+          "weight": -1.1121660608790112
+        },
+        {
+          "innov": 147,
+          "src": 32,
+          "dst": 6,
+          "weight": -0.10901549344170797
+        }
+      ]
+    }
+  }
+}

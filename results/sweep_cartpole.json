@@ -1,0 +1,122 @@
+[
+  {
+    "name": "baseline",
+    "overrides": {},
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 6.26324462890625
+  },
+  {
+    "name": "low_mut",
+    "overrides": {
+      "weight_prob": 0.5,
+      "conn_prob": 0.15,
+      "neuron_prob": 0.03
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 5.661771774291992
+  },
+  {
+    "name": "high_elite",
+    "overrides": {
+      "elitism": 4
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 6.8046650886535645
+  },
+  {
+    "name": "more_species",
+    "overrides": {
+      "target_species": 12
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 5.4027910232543945
+  },
+  {
+    "name": "optimizer",
+    "overrides": {
+      "optimizer_enabled": true
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 8.187963485717773
+  },
+  {
+    "name": "optimizer_low_mut",
+    "overrides": {
+      "optimizer_enabled": true,
+      "weight_prob": 0.5
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 6.8673505783081055
+  },
+  {
+    "name": "aggressive",
+    "overrides": {
+      "weight_prob": 1.0,
+      "conn_prob": 0.4,
+      "neuron_prob": 0.1
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 6.00175666809082
+  },
+  {
+    "name": "small_weight_std",
+    "overrides": {
+      "weight_std": 0.15
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 5.5116894245147705
+  },
+  {
+    "name": "big_weight_std",
+    "overrides": {
+      "weight_std": 0.5
+    },
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "eval_min": 500.0,
+    "eval_max": 500.0,
+    "solved": true,
+    "elapsed_s": 7.505125284194946
+  }
+]

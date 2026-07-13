@@ -1,0 +1,1092 @@
+{
+  "MountainCar-v0": [
+    {
+      "name": "MountainCar-v0_baseline",
+      "description": "",
+      "best_fitness_train": -95.8,
+      "eval_mean": -111.4,
+      "eval_std": 16.153637361288016,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 38.32006812095642,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 25,
+        "fitness": -95.8
+      }
+    },
+    {
+      "name": "MountainCar-v0_spec_single",
+      "description": "",
+      "best_fitness_train": -98.0,
+      "eval_mean": -111.3,
+      "eval_std": 7.798076685952761,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 34.46011209487915,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 12,
+        "fitness": -98.0
+      }
+    },
+    {
+      "name": "MountainCar-v0_no_prune",
+      "description": "",
+      "best_fitness_train": -98.4,
+      "eval_mean": -134.7,
+      "eval_std": 26.404734423962683,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 17.801268577575684,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 17,
+        "fitness": -98.4
+      }
+    },
+    {
+      "name": "MountainCar-v0_sim_standard",
+      "description": "",
+      "best_fitness_train": -90.4,
+      "eval_mean": -111.6,
+      "eval_std": 20.13554071784515,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 17.86318802833557,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 24,
+        "fitness": -90.4
+      }
+    },
+    {
+      "name": "MountainCar-v0_xover_combine",
+      "description": "",
+      "best_fitness_train": -108.8,
+      "eval_mean": -135.7,
+      "eval_std": 31.032402420695693,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 17.806417226791382,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 24,
+        "fitness": -108.8
+      }
+    },
+    {
+      "name": "MountainCar-v0_high_elite",
+      "description": "",
+      "best_fitness_train": -115.4,
+      "eval_mean": -157.8,
+      "eval_std": 30.129055743584132,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 17.430941820144653,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 23,
+        "fitness": -115.4
+      }
+    },
+    {
+      "name": "MountainCar-v0_no_neuron",
+      "description": "",
+      "best_fitness_train": -98.6,
+      "eval_mean": -125.6,
+      "eval_std": 30.332161149512576,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 17.607616186141968,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 24,
+        "fitness": -98.6
+      }
+    },
+    {
+      "name": "MountainCar-v0_policy_single",
+      "description": "",
+      "best_fitness_train": -100.2,
+      "eval_mean": -105.6,
+      "eval_std": 11.403508232118746,
+      "solved": true,
+      "threshold": -110.0,
+      "elapsed_s": 17.244738578796387,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 24,
+        "fitness": -100.2
+      }
+    },
+    {
+      "name": "MountainCar-v0_no_elite",
+      "description": "",
+      "best_fitness_train": -145.6,
+      "eval_mean": -161.5,
+      "eval_std": 31.560259821490696,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 18.877213954925537,
+      "best_genome_summary": {
+        "n_nodes": 11,
+        "n_conns": 31,
+        "fitness": -145.6
+      }
+    },
+    {
+      "name": "MountainCar-v0_optimizer_on",
+      "description": "",
+      "best_fitness_train": -119.2,
+      "eval_mean": -166.9,
+      "eval_std": 36.519720699917734,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 18.675710678100586,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 24,
+        "fitness": -119.2
+      }
+    },
+    {
+      "name": "MountainCar-v0_xover_indep",
+      "description": "",
+      "best_fitness_train": -91.0,
+      "eval_mean": -144.8,
+      "eval_std": 27.848877894809334,
+      "solved": false,
+      "threshold": -110.0,
+      "elapsed_s": 18.52922749519348,
+      "best_genome_summary": {
+        "n_nodes": 11,
+        "n_conns": 29,
+        "fitness": -91.0
+      }
+    }
+  ],
+  "Acrobot-v1": [
+    {
+      "name": "Acrobot-v1_no_neuron",
+      "description": "",
+      "best_fitness_train": -75.0,
+      "eval_mean": -90.33333333333333,
+      "eval_std": 31.389311698233982,
+      "solved": true,
+      "threshold": -100.0,
+      "elapsed_s": 58.657021045684814,
+      "best_genome_summary": {
+        "n_nodes": 10,
+        "n_conns": 26,
+        "fitness": -75.0
+      }
+    },
+    {
+      "name": "Acrobot-v1_spec_standard",
+      "description": "",
+      "best_fitness_train": -122.0,
+      "eval_mean": -145.8,
+      "eval_std": 19.715307081892824,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 62.6988639831543,
+      "best_genome_summary": {
+        "n_nodes": 14,
+        "n_conns": 28,
+        "fitness": -122.0
+      }
+    },
+    {
+      "name": "Acrobot-v1_policy_single",
+      "description": "",
+      "best_fitness_train": -144.33333333333334,
+      "eval_mean": -163.33333333333334,
+      "eval_std": 40.05607181051193,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 69.71216368675232,
+      "best_genome_summary": {
+        "n_nodes": 11,
+        "n_conns": 26,
+        "fitness": -144.33333333333334
+      }
+    },
+    {
+      "name": "Acrobot-v1_high_elite",
+      "description": "",
+      "best_fitness_train": -92.33333333333333,
+      "eval_mean": -121.93333333333334,
+      "eval_std": 28.89859665950734,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 57.1776180267334,
+      "best_genome_summary": {
+        "n_nodes": 10,
+        "n_conns": 27,
+        "fitness": -92.33333333333333
+      }
+    },
+    {
+      "name": "Acrobot-v1_xover_indep",
+      "description": "",
+      "best_fitness_train": -91.33333333333333,
+      "eval_mean": -109.46666666666667,
+      "eval_std": 30.66130387892132,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 65.72696208953857,
+      "best_genome_summary": {
+        "n_nodes": 14,
+        "n_conns": 30,
+        "fitness": -91.33333333333333
+      }
+    },
+    {
+      "name": "Acrobot-v1_xover_combine",
+      "description": "",
+      "best_fitness_train": -115.33333333333333,
+      "eval_mean": -147.46666666666667,
+      "eval_std": 34.57526411885944,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 69.75315499305725,
+      "best_genome_summary": {
+        "n_nodes": 12,
+        "n_conns": 30,
+        "fitness": -115.33333333333333
+      }
+    },
+    {
+      "name": "Acrobot-v1_spec_single",
+      "description": "",
+      "best_fitness_train": -98.66666666666667,
+      "eval_mean": -114.53333333333333,
+      "eval_std": 24.1436442061996,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 55.85724472999573,
+      "best_genome_summary": {
+        "n_nodes": 15,
+        "n_conns": 29,
+        "fitness": -98.66666666666667
+      }
+    },
+    {
+      "name": "Acrobot-v1_baseline",
+      "description": "",
+      "best_fitness_train": -88.0,
+      "eval_mean": -124.86666666666666,
+      "eval_std": 23.63011261552137,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 69.07017850875854,
+      "best_genome_summary": {
+        "n_nodes": 11,
+        "n_conns": 27,
+        "fitness": -88.0
+      }
+    },
+    {
+      "name": "Acrobot-v1_optimizer_on",
+      "description": "",
+      "best_fitness_train": -119.66666666666667,
+      "eval_mean": -128.6,
+      "eval_std": 19.5202459000905,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 60.61836075782776,
+      "best_genome_summary": {
+        "n_nodes": 13,
+        "n_conns": 28,
+        "fitness": -119.66666666666667
+      }
+    },
+    {
+      "name": "Acrobot-v1_sim_standard",
+      "description": "",
+      "best_fitness_train": -104.0,
+      "eval_mean": -115.66666666666667,
+      "eval_std": 21.49315136399396,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 64.63775205612183,
+      "best_genome_summary": {
+        "n_nodes": 15,
+        "n_conns": 30,
+        "fitness": -104.0
+      }
+    },
+    {
+      "name": "Acrobot-v1_no_prune",
+      "description": "",
+      "best_fitness_train": -80.66666666666667,
+      "eval_mean": -109.53333333333333,
+      "eval_std": 28.07577049501739,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 68.97324752807617,
+      "best_genome_summary": {
+        "n_nodes": 14,
+        "n_conns": 30,
+        "fitness": -80.66666666666667
+      }
+    },
+    {
+      "name": "Acrobot-v1_no_elite",
+      "description": "",
+      "best_fitness_train": -105.0,
+      "eval_mean": -144.2,
+      "eval_std": 109.02183267584525,
+      "solved": false,
+      "threshold": -100.0,
+      "elapsed_s": 66.69264006614685,
+      "best_genome_summary": {
+        "n_nodes": 12,
+        "n_conns": 31,
+        "fitness": -105.0
+      }
+    }
+  ],
+  "CartPole-v1": [
+    {
+      "name": "CartPole-v1_high_elite",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 499.5,
+      "eval_std": 1.2041594578792296,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.355443239212036,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_sim_standard",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 171.1,
+      "eval_std": 116.69914309882485,
+      "solved": false,
+      "threshold": 475.0,
+      "elapsed_s": 3.2986338138580322,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_xover_indep",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.3112432956695557,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_mut_weight_conn_neuron",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.2983853816986084,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_baseline",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 2.7002601623535156,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 12,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_optimizer_on",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.7645599842071533,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_no_elite",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.504031181335449,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_act_pswish",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 9.787762641906738,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_act_relu",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 426.4,
+      "eval_std": 110.23992017413656,
+      "solved": false,
+      "threshold": 475.0,
+      "elapsed_s": 4.1876630783081055,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_mut_conn_only",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 484.8,
+      "eval_std": 39.96198193283211,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 4.0460124015808105,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_mut_weight_conn",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 2.5190937519073486,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 12,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_spec_standard",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 310.1,
+      "eval_std": 47.917533325495796,
+      "solved": false,
+      "threshold": 475.0,
+      "elapsed_s": 4.474926233291626,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_no_prune",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.0100443363189697,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_no_neuron",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.9015097618103027,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_act_sigmoid",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 369.4,
+      "eval_std": 123.35088163446584,
+      "solved": false,
+      "threshold": 475.0,
+      "elapsed_s": 3.0678272247314453,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_xover_combine",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.91089129447937,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_policy_single",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 347.3,
+      "eval_std": 93.56607291107179,
+      "solved": false,
+      "threshold": 475.0,
+      "elapsed_s": 5.081597566604614,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_mut_weight_only",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 356.1,
+      "eval_std": 55.649707995640014,
+      "solved": false,
+      "threshold": 475.0,
+      "elapsed_s": 3.9390909671783447,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_act_tanh",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 4.458886623382568,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_act_uaf",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 498.4,
+      "eval_std": 4.8,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 7.531297445297241,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_spec_single",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 4.798454284667969,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 10,
+        "fitness": 500.0
+      }
+    },
+    {
+      "name": "CartPole-v1_mut_weight_neuron",
+      "description": "",
+      "best_fitness_train": 500.0,
+      "eval_mean": 500.0,
+      "eval_std": 0.0,
+      "solved": true,
+      "threshold": 475.0,
+      "elapsed_s": 3.2016687393188477,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 11,
+        "fitness": 500.0
+      }
+    }
+  ],
+  "Blackjack-v1": [
+    {
+      "name": "Blackjack-v1_opt_sgd_lr0.2",
+      "description": "",
+      "best_fitness_train": 0.3,
+      "eval_mean": -0.01,
+      "eval_std": 0.9538867857350787,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.2443833351135254,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 13,
+        "fitness": 0.3
+      }
+    },
+    {
+      "name": "Blackjack-v1_baseline",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.29,
+      "eval_std": 0.9197282207261013,
+      "solved": false,
+      "threshold": -0.2,
+      "elapsed_s": 1.973785638809204,
+      "best_genome_summary": {
+        "n_nodes": 6,
+        "n_conns": 11,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_adam_lr0.05",
+      "description": "",
+      "best_fitness_train": 0.3,
+      "eval_mean": -0.14,
+      "eval_std": 0.9697422337920525,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.0654892921447754,
+      "best_genome_summary": {
+        "n_nodes": 11,
+        "n_conns": 17,
+        "fitness": 0.3
+      }
+    },
+    {
+      "name": "Blackjack-v1_no_elite",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.07,
+      "eval_std": 0.9823950325607311,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.6431379318237305,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 9,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_sim_standard",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.11,
+      "eval_std": 0.9475758544834288,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.764137029647827,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 13,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_sgd_lr0.05",
+      "description": "",
+      "best_fitness_train": 0.5,
+      "eval_mean": 0.08,
+      "eval_std": 0.9558242516278815,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.186863660812378,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 16,
+        "fitness": 0.5
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_rmsprop_lr0.2",
+      "description": "",
+      "best_fitness_train": 0.2,
+      "eval_mean": -0.17,
+      "eval_std": 0.9597395480024776,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.0972695350646973,
+      "best_genome_summary": {
+        "n_nodes": 6,
+        "n_conns": 11,
+        "fitness": 0.2
+      }
+    },
+    {
+      "name": "Blackjack-v1_spec_single",
+      "description": "",
+      "best_fitness_train": 0.5,
+      "eval_mean": -0.07,
+      "eval_std": 0.961821189203066,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.907435417175293,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 17,
+        "fitness": 0.5
+      }
+    },
+    {
+      "name": "Blackjack-v1_no_neuron",
+      "description": "",
+      "best_fitness_train": 0.7,
+      "eval_mean": -0.03,
+      "eval_std": 0.9742176348229383,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.5931601524353027,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 14,
+        "fitness": 0.7
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_sgd_lr0.5",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.13,
+      "eval_std": 0.9450396817065407,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.2002458572387695,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 12,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_rmsprop_lr0.05",
+      "description": "",
+      "best_fitness_train": 0.5,
+      "eval_mean": -0.15,
+      "eval_std": 0.9526279441628825,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.104220151901245,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 16,
+        "fitness": 0.5
+      }
+    },
+    {
+      "name": "Blackjack-v1_policy_single",
+      "description": "",
+      "best_fitness_train": 0.7,
+      "eval_mean": -0.09,
+      "eval_std": 0.9705153270299239,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.8141121864318848,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 22,
+        "fitness": 0.7
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_momentum_lr0.05",
+      "description": "",
+      "best_fitness_train": 0.3,
+      "eval_mean": -0.11,
+      "eval_std": 0.9888882646689666,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 1.9974148273468018,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 12,
+        "fitness": 0.3
+      }
+    },
+    {
+      "name": "Blackjack-v1_xover_indep",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.23,
+      "eval_std": 0.9149316914393117,
+      "solved": false,
+      "threshold": -0.2,
+      "elapsed_s": 3.6359705924987793,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 16,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_rmsprop_lr0.5",
+      "description": "",
+      "best_fitness_train": 0.4,
+      "eval_mean": -0.16,
+      "eval_std": 0.9769339793455851,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.0691590309143066,
+      "best_genome_summary": {
+        "n_nodes": 6,
+        "n_conns": 11,
+        "fitness": 0.4
+      }
+    },
+    {
+      "name": "Blackjack-v1_high_elite",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.17,
+      "eval_std": 0.9492628719169417,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.813131093978882,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 17,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_no_prune",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.1,
+      "eval_std": 0.9433981132056605,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.7651124000549316,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 14,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_adam_lr0.2",
+      "description": "",
+      "best_fitness_train": 0.5,
+      "eval_mean": -0.1,
+      "eval_std": 0.9848857801796106,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.0892186164855957,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 14,
+        "fitness": 0.5
+      }
+    },
+    {
+      "name": "Blackjack-v1_xover_combine",
+      "description": "",
+      "best_fitness_train": 0.7,
+      "eval_mean": -0.22,
+      "eval_std": 0.9547774609824008,
+      "solved": false,
+      "threshold": -0.2,
+      "elapsed_s": 3.694979190826416,
+      "best_genome_summary": {
+        "n_nodes": 8,
+        "n_conns": 20,
+        "fitness": 0.7
+      }
+    },
+    {
+      "name": "Blackjack-v1_optimizer_on",
+      "description": "",
+      "best_fitness_train": 0.5,
+      "eval_mean": -0.12,
+      "eval_std": 0.9516301802696256,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 4.055025577545166,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 13,
+        "fitness": 0.5
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_momentum_lr0.2",
+      "description": "",
+      "best_fitness_train": 0.6,
+      "eval_mean": -0.03,
+      "eval_std": 0.9638983348880731,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 2.1049091815948486,
+      "best_genome_summary": {
+        "n_nodes": 12,
+        "n_conns": 17,
+        "fitness": 0.6
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_adam_lr0.5",
+      "description": "",
+      "best_fitness_train": 0.5,
+      "eval_mean": -0.32,
+      "eval_std": 0.9368030742904296,
+      "solved": false,
+      "threshold": -0.2,
+      "elapsed_s": 2.067206382751465,
+      "best_genome_summary": {
+        "n_nodes": 7,
+        "n_conns": 13,
+        "fitness": 0.5
+      }
+    },
+    {
+      "name": "Blackjack-v1_spec_standard",
+      "description": "",
+      "best_fitness_train": 0.8,
+      "eval_mean": -0.08,
+      "eval_std": 0.9765244492586962,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 3.9420440196990967,
+      "best_genome_summary": {
+        "n_nodes": 9,
+        "n_conns": 20,
+        "fitness": 0.8
+      }
+    },
+    {
+      "name": "Blackjack-v1_opt_momentum_lr0.5",
+      "description": "",
+      "best_fitness_train": 0.3,
+      "eval_mean": -0.16,
+      "eval_std": 0.9457272334029511,
+      "solved": true,
+      "threshold": -0.2,
+      "elapsed_s": 1.9892997741699219,
+      "best_genome_summary": {
+        "n_nodes": 6,
+        "n_conns": 11,
+        "fitness": 0.3
+      }
+    }
+  ],
+  "LunarLander-v3": [
+    {
+      "name": "LunarLander-v3_trial0",
+      "description": "",
+      "best_fitness_train": 35.39449561181933,
+      "eval_mean": -144.0874708380227,
+      "eval_std": 71.94320810777515,
+      "solved": false,
+      "threshold": 200.0,
+      "elapsed_s": 20.881770133972168,
+      "best_genome_summary": {
+        "n_nodes": 16,
+        "n_conns": 41,
+        "fitness": 35.39449561181933
+      }
+    },
+    {
+      "name": "LunarLander-v3_trial2",
+      "description": "",
+      "best_fitness_train": 71.63869706989304,
+      "eval_mean": -204.99913143264394,
+      "eval_std": 161.07268734254856,
+      "solved": false,
+      "threshold": 200.0,
+      "elapsed_s": 22.176270961761475,
+      "best_genome_summary": {
+        "n_nodes": 17,
+        "n_conns": 51,
+        "fitness": 71.63869706989304
+      }
+    },
+    {
+      "name": "LunarLander-v3_trial1",
+      "description": "",
+      "best_fitness_train": -30.27408955462421,
+      "eval_mean": -126.75268264320121,
+      "eval_std": 63.786329651739095,
+      "solved": false,
+      "threshold": 200.0,
+      "elapsed_s": 21.082887172698975,
+      "best_genome_summary": {
+        "n_nodes": 17,
+        "n_conns": 43,
+        "fitness": -30.27408955462421
+      }
+    }
+  ]
+}

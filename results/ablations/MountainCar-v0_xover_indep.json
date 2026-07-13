@@ -1,0 +1,341 @@
+{
+  "name": "MountainCar-v0_xover_indep",
+  "env": "MountainCar-v0",
+  "best_fitness_train": -91.0,
+  "eval_mean": -144.8,
+  "eval_std": 27.848877894809334,
+  "solved": false,
+  "threshold": -110.0,
+  "elapsed_s": 18.52922749519348,
+  "best_genome": {
+    "id": 588,
+    "fitness": -91.0,
+    "n_nodes": 11,
+    "n_conns": 29,
+    "nodes": [
+      {
+        "id": 0,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 1,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 2,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 3,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 4,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 5,
+        "kind": "bias",
+        "activation": "relu"
+      },
+      {
+        "id": 8,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 9,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 33,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 35,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 34,
+        "kind": "hidden",
+        "activation": "tanh"
+      }
+    ],
+    "conns": [
+      {
+        "innov": 0,
+        "src": 0,
+        "dst": 3,
+        "weight": -1.1967902810217663
+      },
+      {
+        "innov": 1,
+        "src": 0,
+        "dst": 4,
+        "weight": 3.49904787520278
+      },
+      {
+        "innov": 2,
+        "src": 1,
+        "dst": 3,
+        "weight": 0.099031781349455
+      },
+      {
+        "innov": 3,
+        "src": 5,
+        "dst": 4,
+        "weight": 1.6124956652266842
+      },
+      {
+        "innov": 4,
+        "src": 1,
+        "dst": 4,
+        "weight": 0.7799721047721159
+      },
+      {
+        "innov": 5,
+        "src": 1,
+        "dst": 5,
+        "weight": -3.335633945763875
+      },
+      {
+        "innov": 6,
+        "src": 0,
+        "dst": 2,
+        "weight": 1.7648352285083941
+      },
+      {
+        "innov": 7,
+        "src": 5,
+        "dst": 2,
+        "weight": 1.9469026342658404
+      },
+      {
+        "innov": 8,
+        "src": 1,
+        "dst": 2,
+        "weight": 2.8010957317631258
+      },
+      {
+        "innov": 9,
+        "src": 5,
+        "dst": 3,
+        "weight": -4.233807552068705
+      },
+      {
+        "innov": 10,
+        "src": 0,
+        "dst": 5,
+        "weight": 4.662727985876561
+      },
+      {
+        "innov": 23,
+        "src": 1,
+        "dst": 8,
+        "weight": -3.326901990897536
+      },
+      {
+        "innov": 24,
+        "src": 8,
+        "dst": 5,
+        "weight": 0.6424287913370433
+      },
+      {
+        "innov": 25,
+        "src": 8,
+        "dst": 2,
+        "weight": 4.88819900599372
+      },
+      {
+        "innov": 27,
+        "src": 0,
+        "dst": 8,
+        "weight": 0.12685708997340478
+      },
+      {
+        "innov": 28,
+        "src": 8,
+        "dst": 4,
+        "weight": -2.4290311235656845
+      },
+      {
+        "innov": 29,
+        "src": 0,
+        "dst": 9,
+        "weight": -0.3312274737542746
+      },
+      {
+        "innov": 30,
+        "src": 9,
+        "dst": 2,
+        "weight": 1.2290388872971247
+      },
+      {
+        "innov": 31,
+        "src": 9,
+        "dst": 4,
+        "weight": 1.2431902907218415
+      },
+      {
+        "innov": 32,
+        "src": 1,
+        "dst": 9,
+        "weight": 3.5205543352917967
+      },
+      {
+        "innov": 33,
+        "src": 5,
+        "dst": 9,
+        "weight": -0.7438221478378156
+      },
+      {
+        "innov": 34,
+        "src": 9,
+        "dst": 3,
+        "weight": 1.8487588050895092
+      },
+      {
+        "innov": 155,
+        "src": 8,
+        "dst": 33,
+        "weight": 1.6673673182485413
+      },
+      {
+        "innov": 156,
+        "src": 33,
+        "dst": 9,
+        "weight": -7.256139615470881
+      },
+      {
+        "innov": 160,
+        "src": 8,
+        "dst": 35,
+        "weight": 4.512419311802828
+      },
+      {
+        "innov": 161,
+        "src": 35,
+        "dst": 3,
+        "weight": 1.8942345545583938
+      },
+      {
+        "innov": 175,
+        "src": 1,
+        "dst": 35,
+        "weight": 0.1464310434605956
+      },
+      {
+        "innov": 189,
+        "src": 34,
+        "dst": 3,
+        "weight": -1.3533216965613633
+      },
+      {
+        "innov": 204,
+        "src": 33,
+        "dst": 35,
+        "weight": 1.8962410714442013
+      }
+    ]
+  },
+  "genome_viz_path": "results/ablations/MountainCar-v0_xover_indep_genome.png",
+  "config": {
+    "n_inputs": 2,
+    "n_outputs": 3,
+    "input_activation": "relu",
+    "output_activation": "tanh",
+    "hidden_activation": "tanh",
+    "bias_enabled": true,
+    "forbid_loops": true,
+    "seed": 1605,
+    "init": {
+      "n_conn_multiplier": 3.0,
+      "weight_init_multiplier": 2.0,
+      "n_neurons_range": [
+        0,
+        2
+      ]
+    },
+    "mutation": {
+      "weight_select": "pct_shuffled",
+      "weight_pct": 1.0,
+      "weight_mod": "gaussian",
+      "weight_std": 0.6,
+      "weight_prob": 1.0,
+      "conn_select": "pct_shuffled",
+      "conn_pct": 0.0,
+      "conn_mod": "gaussian",
+      "conn_std": 0.8,
+      "neuron_select": "pct_shuffled",
+      "neuron_pct": 0.0,
+      "neuron_mod": "incoming_one",
+      "prune_select": "pct_shuffled",
+      "prune_pct": 0.0,
+      "prune_prob": 0.0
+    },
+    "policy": {
+      "kind": "per_type",
+      "prune_prob": 0.02,
+      "neuron_prob": 0.12,
+      "conn_prob": 0.5,
+      "weight_prob": 1.0,
+      "single_prune": 0.05,
+      "single_neuron": 0.1,
+      "single_conn": 0.25,
+      "single_weight": 0.6,
+      "nested_schedule": []
+    },
+    "generation": {
+      "pop_size": 40,
+      "asexual_pct": 0.75,
+      "crossover_pct": 0.25,
+      "interspecies": 1,
+      "elitism": 3,
+      "cull_pct": 0.6
+    },
+    "crossover": {
+      "topology": "fitter",
+      "weights": "independent"
+    },
+    "speciation": {
+      "kind": "purge",
+      "initial_kind": "purge",
+      "subsequent_kind": "standard",
+      "target_species": 12,
+      "min_threshold": 0.05,
+      "max_threshold": 0.5,
+      "threshold_step": 0.025,
+      "similarity": "percentage",
+      "c1": 1.0,
+      "c2": 1.0,
+      "c3": 0.4,
+      "purge_keep": 10,
+      "purge_extra_mutations": 3
+    },
+    "optimizer": {
+      "enabled": false,
+      "lr": 0.1,
+      "weight_decay_l2": 0.0,
+      "weight_decay_l1": 0.0,
+      "method": "adam",
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_eps": 1e-08,
+      "momentum": 0.9,
+      "rmsprop_decay": 0.99
+    }
+  },
+  "best_genome_summary": {
+    "n_nodes": 11,
+    "n_conns": 29,
+    "fitness": -91.0
+  }
+}

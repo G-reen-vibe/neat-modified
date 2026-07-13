@@ -1,0 +1,218 @@
+{
+  "name": "CartPole-v1_act_relu",
+  "env": "CartPole-v1",
+  "best_fitness_train": 500.0,
+  "eval_mean": 426.4,
+  "eval_std": 110.23992017413656,
+  "solved": false,
+  "threshold": 475.0,
+  "elapsed_s": 4.1876630783081055,
+  "best_genome": {
+    "id": 44,
+    "fitness": 500.0,
+    "n_nodes": 8,
+    "n_conns": 11,
+    "nodes": [
+      {
+        "id": 0,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 1,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 2,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 3,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 4,
+        "kind": "output",
+        "activation": "relu"
+      },
+      {
+        "id": 5,
+        "kind": "output",
+        "activation": "relu"
+      },
+      {
+        "id": 6,
+        "kind": "bias",
+        "activation": "relu"
+      },
+      {
+        "id": 7,
+        "kind": "hidden",
+        "activation": "relu"
+      }
+    ],
+    "conns": [
+      {
+        "innov": 11,
+        "src": 3,
+        "dst": 5,
+        "weight": 0.2236082500055625
+      },
+      {
+        "innov": 7,
+        "src": 0,
+        "dst": 6,
+        "weight": 0.4602614408677892
+      },
+      {
+        "innov": 20,
+        "src": 1,
+        "dst": 6,
+        "weight": -0.543753621922205
+      },
+      {
+        "innov": 2,
+        "src": 0,
+        "dst": 4,
+        "weight": -0.9718567247760044
+      },
+      {
+        "innov": 5,
+        "src": 6,
+        "dst": 7,
+        "weight": 0.7246316397458589
+      },
+      {
+        "innov": 6,
+        "src": 7,
+        "dst": 4,
+        "weight": -0.06965681983622662
+      },
+      {
+        "innov": 12,
+        "src": 2,
+        "dst": 6,
+        "weight": -0.6511074759836745
+      },
+      {
+        "innov": 4,
+        "src": 6,
+        "dst": 4,
+        "weight": 0.09534126339427235
+      },
+      {
+        "innov": 15,
+        "src": 2,
+        "dst": 5,
+        "weight": 0.44954696163984165
+      },
+      {
+        "innov": 0,
+        "src": 1,
+        "dst": 5,
+        "weight": 0.08183623572398474
+      },
+      {
+        "innov": 9,
+        "src": 2,
+        "dst": 7,
+        "weight": 0.14193026963836958
+      }
+    ]
+  },
+  "genome_viz_path": "results/ablations/CartPole-v1_act_relu_genome.png",
+  "config": {
+    "n_inputs": 4,
+    "n_outputs": 2,
+    "input_activation": "relu",
+    "output_activation": "relu",
+    "hidden_activation": "relu",
+    "bias_enabled": true,
+    "forbid_loops": true,
+    "seed": 7156,
+    "init": {
+      "n_conn_multiplier": 1.0,
+      "weight_init_multiplier": 1.0,
+      "n_neurons_range": [
+        0,
+        1
+      ]
+    },
+    "mutation": {
+      "weight_select": "pct_shuffled",
+      "weight_pct": 1.0,
+      "weight_mod": "gaussian",
+      "weight_std": 0.3,
+      "weight_prob": 1.0,
+      "conn_select": "pct_shuffled",
+      "conn_pct": 0.0,
+      "conn_mod": "gaussian",
+      "conn_std": 0.5,
+      "neuron_select": "pct_shuffled",
+      "neuron_pct": 0.0,
+      "neuron_mod": "incoming_one",
+      "prune_select": "pct_shuffled",
+      "prune_pct": 0.0,
+      "prune_prob": 0.0
+    },
+    "policy": {
+      "kind": "per_type",
+      "prune_prob": 0.03,
+      "neuron_prob": 0.137,
+      "conn_prob": 0.471,
+      "weight_prob": 0.81,
+      "single_prune": 0.05,
+      "single_neuron": 0.1,
+      "single_conn": 0.25,
+      "single_weight": 0.6,
+      "nested_schedule": []
+    },
+    "generation": {
+      "pop_size": 40,
+      "asexual_pct": 0.75,
+      "crossover_pct": 0.25,
+      "interspecies": 1,
+      "elitism": 2,
+      "cull_pct": 0.5
+    },
+    "crossover": {
+      "topology": "fitter",
+      "weights": "average"
+    },
+    "speciation": {
+      "kind": "purge",
+      "initial_kind": "purge",
+      "subsequent_kind": "standard",
+      "target_species": 8,
+      "min_threshold": 0.05,
+      "max_threshold": 0.6,
+      "threshold_step": 0.025,
+      "similarity": "percentage",
+      "c1": 1.0,
+      "c2": 1.0,
+      "c3": 0.4,
+      "purge_keep": 10,
+      "purge_extra_mutations": 3
+    },
+    "optimizer": {
+      "enabled": false,
+      "lr": 0.1,
+      "weight_decay_l2": 0.0,
+      "weight_decay_l1": 0.0,
+      "method": "adam",
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_eps": 1e-08,
+      "momentum": 0.9,
+      "rmsprop_decay": 0.99
+    }
+  },
+  "best_genome_summary": {
+    "n_nodes": 8,
+    "n_conns": 11,
+    "fitness": 500.0
+  }
+}

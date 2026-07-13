@@ -1,0 +1,272 @@
+{
+  "name": "Blackjack-v1_xover_combine",
+  "env": "Blackjack-v1",
+  "best_fitness_train": 0.7,
+  "eval_mean": -0.22,
+  "eval_std": 0.9547774609824008,
+  "solved": false,
+  "threshold": -0.2,
+  "elapsed_s": 3.694979190826416,
+  "best_genome": {
+    "id": 914,
+    "fitness": 0.7,
+    "n_nodes": 8,
+    "n_conns": 20,
+    "nodes": [
+      {
+        "id": 0,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 1,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 2,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 3,
+        "kind": "output",
+        "activation": "sigmoid"
+      },
+      {
+        "id": 4,
+        "kind": "output",
+        "activation": "sigmoid"
+      },
+      {
+        "id": 5,
+        "kind": "bias",
+        "activation": "relu"
+      },
+      {
+        "id": 9,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 12,
+        "kind": "hidden",
+        "activation": "tanh"
+      }
+    ],
+    "conns": [
+      {
+        "innov": 0,
+        "src": 0,
+        "dst": 5,
+        "weight": -2.242318560657518
+      },
+      {
+        "innov": 1,
+        "src": 2,
+        "dst": 4,
+        "weight": -1.2234905116680181
+      },
+      {
+        "innov": 2,
+        "src": 2,
+        "dst": 5,
+        "weight": -0.8517653675627219
+      },
+      {
+        "innov": 3,
+        "src": 5,
+        "dst": 3,
+        "weight": -0.11642326148912957
+      },
+      {
+        "innov": 4,
+        "src": 1,
+        "dst": 3,
+        "weight": -0.03689046171583807
+      },
+      {
+        "innov": 5,
+        "src": 0,
+        "dst": 3,
+        "weight": 2.192573168602963
+      },
+      {
+        "innov": 8,
+        "src": 2,
+        "dst": 3,
+        "weight": -0.37275814873465596
+      },
+      {
+        "innov": 9,
+        "src": 1,
+        "dst": 5,
+        "weight": -2.5970835284445397
+      },
+      {
+        "innov": 12,
+        "src": 1,
+        "dst": 4,
+        "weight": -2.3666921493321036
+      },
+      {
+        "innov": 18,
+        "src": 0,
+        "dst": 4,
+        "weight": -0.5183260761366214
+      },
+      {
+        "innov": 24,
+        "src": 2,
+        "dst": 9,
+        "weight": 2.211901490306354
+      },
+      {
+        "innov": 26,
+        "src": 0,
+        "dst": 9,
+        "weight": 1.5118958797091473
+      },
+      {
+        "innov": 27,
+        "src": 5,
+        "dst": 9,
+        "weight": -0.29082982539803903
+      },
+      {
+        "innov": 38,
+        "src": 0,
+        "dst": 12,
+        "weight": 0.09954526363260219
+      },
+      {
+        "innov": 39,
+        "src": 12,
+        "dst": 3,
+        "weight": 3.708573706342281
+      },
+      {
+        "innov": 62,
+        "src": 1,
+        "dst": 9,
+        "weight": 0.826532531693573
+      },
+      {
+        "innov": 63,
+        "src": 9,
+        "dst": 4,
+        "weight": 0.6437835220815551
+      },
+      {
+        "innov": 123,
+        "src": 12,
+        "dst": 5,
+        "weight": 1.9704107558630422
+      },
+      {
+        "innov": 11,
+        "src": 5,
+        "dst": 4,
+        "weight": 1.8555601557457335
+      },
+      {
+        "innov": 40,
+        "src": 1,
+        "dst": 12,
+        "weight": 0.2152695291370109
+      }
+    ]
+  },
+  "genome_viz_path": "results/ablations/Blackjack-v1_xover_combine_genome.png",
+  "config": {
+    "n_inputs": 3,
+    "n_outputs": 2,
+    "input_activation": "relu",
+    "output_activation": "sigmoid",
+    "hidden_activation": "tanh",
+    "bias_enabled": true,
+    "forbid_loops": true,
+    "seed": 3925,
+    "init": {
+      "n_conn_multiplier": 1.5,
+      "weight_init_multiplier": 2.0,
+      "n_neurons_range": [
+        0,
+        2
+      ]
+    },
+    "mutation": {
+      "weight_select": "pct_shuffled",
+      "weight_pct": 1.0,
+      "weight_mod": "gaussian",
+      "weight_std": 0.3,
+      "weight_prob": 1.0,
+      "conn_select": "pct_shuffled",
+      "conn_pct": 0.0,
+      "conn_mod": "gaussian",
+      "conn_std": 0.665,
+      "neuron_select": "pct_shuffled",
+      "neuron_pct": 0.0,
+      "neuron_mod": "incoming_one",
+      "prune_select": "pct_shuffled",
+      "prune_pct": 0.0,
+      "prune_prob": 0.0
+    },
+    "policy": {
+      "kind": "per_type",
+      "prune_prob": 0.03,
+      "neuron_prob": 0.069,
+      "conn_prob": 0.3,
+      "weight_prob": 1.0,
+      "single_prune": 0.05,
+      "single_neuron": 0.1,
+      "single_conn": 0.25,
+      "single_weight": 0.6,
+      "nested_schedule": []
+    },
+    "generation": {
+      "pop_size": 50,
+      "asexual_pct": 0.75,
+      "crossover_pct": 0.25,
+      "interspecies": 1,
+      "elitism": 2,
+      "cull_pct": 0.33
+    },
+    "crossover": {
+      "topology": "combine",
+      "weights": "average"
+    },
+    "speciation": {
+      "kind": "purge",
+      "initial_kind": "purge",
+      "subsequent_kind": "standard",
+      "target_species": 8,
+      "min_threshold": 0.05,
+      "max_threshold": 0.5,
+      "threshold_step": 0.025,
+      "similarity": "percentage",
+      "c1": 1.0,
+      "c2": 1.0,
+      "c3": 0.4,
+      "purge_keep": 10,
+      "purge_extra_mutations": 3
+    },
+    "optimizer": {
+      "enabled": false,
+      "lr": 0.1,
+      "weight_decay_l2": 0.0,
+      "weight_decay_l1": 0.0,
+      "method": "adam",
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_eps": 1e-08,
+      "momentum": 0.9,
+      "rmsprop_decay": 0.99
+    }
+  },
+  "best_genome_summary": {
+    "n_nodes": 8,
+    "n_conns": 20,
+    "fitness": 0.7
+  }
+}

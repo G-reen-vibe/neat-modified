@@ -9,7 +9,5 @@ build/
 .DS_Store
 *.log
 checkpoints/
-results/
 *.mp4
-*.gif
 .env

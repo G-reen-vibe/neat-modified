@@ -1,0 +1,296 @@
+{
+  "name": "MountainCar-v0_no_neuron",
+  "env": "MountainCar-v0",
+  "best_fitness_train": -98.6,
+  "eval_mean": -125.6,
+  "eval_std": 30.332161149512576,
+  "solved": false,
+  "threshold": -110.0,
+  "elapsed_s": 17.607616186141968,
+  "best_genome": {
+    "id": 571,
+    "fitness": -98.6,
+    "n_nodes": 8,
+    "n_conns": 24,
+    "nodes": [
+      {
+        "id": 0,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 1,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 2,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 3,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 4,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 5,
+        "kind": "bias",
+        "activation": "relu"
+      },
+      {
+        "id": 7,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 8,
+        "kind": "hidden",
+        "activation": "tanh"
+      }
+    ],
+    "conns": [
+      {
+        "innov": 2,
+        "src": 5,
+        "dst": 3,
+        "weight": -2.080151293015098
+      },
+      {
+        "innov": 1,
+        "src": 1,
+        "dst": 3,
+        "weight": 1.2332693083097244
+      },
+      {
+        "innov": 6,
+        "src": 0,
+        "dst": 3,
+        "weight": 0.6575379407997305
+      },
+      {
+        "innov": 0,
+        "src": 5,
+        "dst": 2,
+        "weight": 1.1073974063519092
+      },
+      {
+        "innov": 4,
+        "src": 0,
+        "dst": 2,
+        "weight": 1.407242902942726
+      },
+      {
+        "innov": 5,
+        "src": 0,
+        "dst": 4,
+        "weight": 2.1123875992149803
+      },
+      {
+        "innov": 11,
+        "src": 5,
+        "dst": 4,
+        "weight": -3.1936114146532724
+      },
+      {
+        "innov": 17,
+        "src": 1,
+        "dst": 7,
+        "weight": 3.320377227075775
+      },
+      {
+        "innov": 18,
+        "src": 7,
+        "dst": 2,
+        "weight": 0.6786502394578872
+      },
+      {
+        "innov": 3,
+        "src": 1,
+        "dst": 2,
+        "weight": 1.0375166206867228
+      },
+      {
+        "innov": 20,
+        "src": 7,
+        "dst": 4,
+        "weight": 4.670002450089677
+      },
+      {
+        "innov": 24,
+        "src": 7,
+        "dst": 5,
+        "weight": 0.046601460422642765
+      },
+      {
+        "innov": 16,
+        "src": 0,
+        "dst": 5,
+        "weight": 1.8761820303713668
+      },
+      {
+        "innov": 23,
+        "src": 7,
+        "dst": 3,
+        "weight": 1.5821522578666132
+      },
+      {
+        "innov": 21,
+        "src": 0,
+        "dst": 7,
+        "weight": -0.38079295531666724
+      },
+      {
+        "innov": 7,
+        "src": 1,
+        "dst": 4,
+        "weight": 4.283750159000178
+      },
+      {
+        "innov": 25,
+        "src": 1,
+        "dst": 8,
+        "weight": -1.345627727184815
+      },
+      {
+        "innov": 26,
+        "src": 8,
+        "dst": 5,
+        "weight": 5.469027375903789
+      },
+      {
+        "innov": 27,
+        "src": 8,
+        "dst": 3,
+        "weight": 1.8681366909391066
+      },
+      {
+        "innov": 28,
+        "src": 8,
+        "dst": 4,
+        "weight": -4.468402865877629
+      },
+      {
+        "innov": 29,
+        "src": 7,
+        "dst": 8,
+        "weight": -4.468466364790291
+      },
+      {
+        "innov": 30,
+        "src": 8,
+        "dst": 2,
+        "weight": 1.2866380846522505
+      },
+      {
+        "innov": 8,
+        "src": 1,
+        "dst": 5,
+        "weight": 1.1435839040009084
+      },
+      {
+        "innov": 31,
+        "src": 0,
+        "dst": 8,
+        "weight": 1.0890995895563955
+      }
+    ]
+  },
+  "genome_viz_path": "results/ablations/MountainCar-v0_no_neuron_genome.png",
+  "config": {
+    "n_inputs": 2,
+    "n_outputs": 3,
+    "input_activation": "relu",
+    "output_activation": "tanh",
+    "hidden_activation": "tanh",
+    "bias_enabled": true,
+    "forbid_loops": true,
+    "seed": 2656,
+    "init": {
+      "n_conn_multiplier": 3.0,
+      "weight_init_multiplier": 2.0,
+      "n_neurons_range": [
+        0,
+        2
+      ]
+    },
+    "mutation": {
+      "weight_select": "pct_shuffled",
+      "weight_pct": 1.0,
+      "weight_mod": "gaussian",
+      "weight_std": 0.6,
+      "weight_prob": 1.0,
+      "conn_select": "pct_shuffled",
+      "conn_pct": 0.0,
+      "conn_mod": "gaussian",
+      "conn_std": 0.8,
+      "neuron_select": "pct_shuffled",
+      "neuron_pct": 0.0,
+      "neuron_mod": "incoming_one",
+      "prune_select": "pct_shuffled",
+      "prune_pct": 0.0,
+      "prune_prob": 0.0
+    },
+    "policy": {
+      "kind": "per_type",
+      "prune_prob": 0.02,
+      "neuron_prob": 0.0,
+      "conn_prob": 0.5,
+      "weight_prob": 1.0,
+      "single_prune": 0.05,
+      "single_neuron": 0.1,
+      "single_conn": 0.25,
+      "single_weight": 0.6,
+      "nested_schedule": []
+    },
+    "generation": {
+      "pop_size": 40,
+      "asexual_pct": 0.75,
+      "crossover_pct": 0.25,
+      "interspecies": 1,
+      "elitism": 3,
+      "cull_pct": 0.6
+    },
+    "crossover": {
+      "topology": "fitter",
+      "weights": "average"
+    },
+    "speciation": {
+      "kind": "purge",
+      "initial_kind": "purge",
+      "subsequent_kind": "standard",
+      "target_species": 12,
+      "min_threshold": 0.05,
+      "max_threshold": 0.5,
+      "threshold_step": 0.025,
+      "similarity": "percentage",
+      "c1": 1.0,
+      "c2": 1.0,
+      "c3": 0.4,
+      "purge_keep": 10,
+      "purge_extra_mutations": 3
+    },
+    "optimizer": {
+      "enabled": false,
+      "lr": 0.1,
+      "weight_decay_l2": 0.0,
+      "weight_decay_l1": 0.0,
+      "method": "adam",
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_eps": 1e-08,
+      "momentum": 0.9,
+      "rmsprop_decay": 0.99
+    }
+  },
+  "best_genome_summary": {
+    "n_nodes": 8,
+    "n_conns": 24,
+    "fitness": -98.6
+  }
+}

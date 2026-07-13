@@ -1,0 +1,47 @@
+[
+  {
+    "name": "CartPole-v1_mut_weight_only",
+    "description": "Only weight mutation (no topology changes)",
+    "best_fitness_train": 500.0,
+    "eval_mean": 356.1,
+    "eval_std": 55.649707995640014,
+    "solved": false,
+    "elapsed_s": 3.9390909671783447
+  },
+  {
+    "name": "CartPole-v1_mut_weight_conn",
+    "description": "Weight + connection mutation (grow only)",
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "solved": true,
+    "elapsed_s": 2.5190937519073486
+  },
+  {
+    "name": "CartPole-v1_mut_weight_neuron",
+    "description": "Weight + neuron mutation (split only)",
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "solved": true,
+    "elapsed_s": 3.2016687393188477
+  },
+  {
+    "name": "CartPole-v1_mut_weight_conn_neuron",
+    "description": "Weight + conn + neuron (no pruning)",
+    "best_fitness_train": 500.0,
+    "eval_mean": 500.0,
+    "eval_std": 0.0,
+    "solved": true,
+    "elapsed_s": 3.2983853816986084
+  },
+  {
+    "name": "CartPole-v1_mut_conn_only",
+    "description": "Only connection mutation (topology-only, no weight learning)",
+    "best_fitness_train": 500.0,
+    "eval_mean": 484.8,
+    "eval_std": 39.96198193283211,
+    "solved": true,
+    "elapsed_s": 4.0460124015808105
+  }
+]

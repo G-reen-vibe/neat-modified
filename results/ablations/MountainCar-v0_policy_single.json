@@ -1,0 +1,301 @@
+{
+  "name": "MountainCar-v0_policy_single",
+  "env": "MountainCar-v0",
+  "best_fitness_train": -100.2,
+  "eval_mean": -105.6,
+  "eval_std": 11.403508232118746,
+  "solved": true,
+  "threshold": -110.0,
+  "elapsed_s": 17.244738578796387,
+  "best_genome": {
+    "id": 440,
+    "fitness": -100.2,
+    "n_nodes": 9,
+    "n_conns": 24,
+    "nodes": [
+      {
+        "id": 0,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 1,
+        "kind": "input",
+        "activation": "relu"
+      },
+      {
+        "id": 2,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 3,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 4,
+        "kind": "output",
+        "activation": "tanh"
+      },
+      {
+        "id": 5,
+        "kind": "bias",
+        "activation": "relu"
+      },
+      {
+        "id": 7,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 11,
+        "kind": "hidden",
+        "activation": "tanh"
+      },
+      {
+        "id": 6,
+        "kind": "hidden",
+        "activation": "tanh"
+      }
+    ],
+    "conns": [
+      {
+        "innov": 2,
+        "src": 1,
+        "dst": 3,
+        "weight": 2.2243653402005363
+      },
+      {
+        "innov": 7,
+        "src": 0,
+        "dst": 3,
+        "weight": -2.2896482410722796
+      },
+      {
+        "innov": 3,
+        "src": 0,
+        "dst": 5,
+        "weight": 0.5956181132711256
+      },
+      {
+        "innov": 6,
+        "src": 1,
+        "dst": 4,
+        "weight": 0.8037323087054067
+      },
+      {
+        "innov": 5,
+        "src": 0,
+        "dst": 2,
+        "weight": -0.6341939246745847
+      },
+      {
+        "innov": 13,
+        "src": 0,
+        "dst": 4,
+        "weight": -3.350445796043516
+      },
+      {
+        "innov": 4,
+        "src": 1,
+        "dst": 2,
+        "weight": -0.5808945316880096
+      },
+      {
+        "innov": 17,
+        "src": 1,
+        "dst": 7,
+        "weight": 2.7716567407016677
+      },
+      {
+        "innov": 18,
+        "src": 7,
+        "dst": 5,
+        "weight": -2.4389244542234105
+      },
+      {
+        "innov": 0,
+        "src": 5,
+        "dst": 3,
+        "weight": -1.2751202967232806
+      },
+      {
+        "innov": 23,
+        "src": 7,
+        "dst": 2,
+        "weight": -0.9659813725291706
+      },
+      {
+        "innov": 20,
+        "src": 7,
+        "dst": 4,
+        "weight": -1.585606285452072
+      },
+      {
+        "innov": 19,
+        "src": 7,
+        "dst": 3,
+        "weight": 0.11376862777538943
+      },
+      {
+        "innov": 21,
+        "src": 0,
+        "dst": 7,
+        "weight": 0.1173064957074087
+      },
+      {
+        "innov": 16,
+        "src": 1,
+        "dst": 5,
+        "weight": 0.2905057976351065
+      },
+      {
+        "innov": 43,
+        "src": 5,
+        "dst": 11,
+        "weight": 0.416543994782096
+      },
+      {
+        "innov": 44,
+        "src": 11,
+        "dst": 2,
+        "weight": 0.03527522344813758
+      },
+      {
+        "innov": 46,
+        "src": 7,
+        "dst": 11,
+        "weight": -5.072792863169951
+      },
+      {
+        "innov": 47,
+        "src": 11,
+        "dst": 4,
+        "weight": -2.1454921322581426
+      },
+      {
+        "innov": 48,
+        "src": 0,
+        "dst": 11,
+        "weight": 0.3532118806851303
+      },
+      {
+        "innov": 49,
+        "src": 1,
+        "dst": 11,
+        "weight": -0.3959248606732867
+      },
+      {
+        "innov": 8,
+        "src": 5,
+        "dst": 2,
+        "weight": 2.1672090757757756
+      },
+      {
+        "innov": 9,
+        "src": 5,
+        "dst": 6,
+        "weight": 1.0
+      },
+      {
+        "innov": 10,
+        "src": 6,
+        "dst": 4,
+        "weight": 3.16135869357635
+      }
+    ]
+  },
+  "genome_viz_path": "results/ablations/MountainCar-v0_policy_single_genome.png",
+  "config": {
+    "n_inputs": 2,
+    "n_outputs": 3,
+    "input_activation": "relu",
+    "output_activation": "tanh",
+    "hidden_activation": "tanh",
+    "bias_enabled": true,
+    "forbid_loops": true,
+    "seed": 3613,
+    "init": {
+      "n_conn_multiplier": 3.0,
+      "weight_init_multiplier": 2.0,
+      "n_neurons_range": [
+        0,
+        2
+      ]
+    },
+    "mutation": {
+      "weight_select": "pct_shuffled",
+      "weight_pct": 1.0,
+      "weight_mod": "gaussian",
+      "weight_std": 0.6,
+      "weight_prob": 1.0,
+      "conn_select": "pct_shuffled",
+      "conn_pct": 0.0,
+      "conn_mod": "gaussian",
+      "conn_std": 0.8,
+      "neuron_select": "pct_shuffled",
+      "neuron_pct": 0.0,
+      "neuron_mod": "incoming_one",
+      "prune_select": "pct_shuffled",
+      "prune_pct": 0.0,
+      "prune_prob": 0.0
+    },
+    "policy": {
+      "kind": "single",
+      "prune_prob": 0.02,
+      "neuron_prob": 0.12,
+      "conn_prob": 0.5,
+      "weight_prob": 1.0,
+      "single_prune": 0.05,
+      "single_neuron": 0.1,
+      "single_conn": 0.25,
+      "single_weight": 0.6,
+      "nested_schedule": []
+    },
+    "generation": {
+      "pop_size": 40,
+      "asexual_pct": 0.75,
+      "crossover_pct": 0.25,
+      "interspecies": 1,
+      "elitism": 3,
+      "cull_pct": 0.6
+    },
+    "crossover": {
+      "topology": "fitter",
+      "weights": "average"
+    },
+    "speciation": {
+      "kind": "purge",
+      "initial_kind": "purge",
+      "subsequent_kind": "standard",
+      "target_species": 12,
+      "min_threshold": 0.05,
+      "max_threshold": 0.5,
+      "threshold_step": 0.025,
+      "similarity": "percentage",
+      "c1": 1.0,
+      "c2": 1.0,
+      "c3": 0.4,
+      "purge_keep": 10,
+      "purge_extra_mutations": 3
+    },
+    "optimizer": {
+      "enabled": false,
+      "lr": 0.1,
+      "weight_decay_l2": 0.0,
+      "weight_decay_l1": 0.0,
+      "method": "adam",
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_eps": 1e-08,
+      "momentum": 0.9,
+      "rmsprop_decay": 0.99
+    }
+  },
+  "best_genome_summary": {
+    "n_nodes": 9,
+    "n_conns": 24,
+    "fitness": -100.2
+  }
+}
